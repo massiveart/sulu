@@ -76,9 +76,8 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
 
         $environmentDev = $webspace->getPortals()[0]->getEnvironment('dev');
         $this->assertEquals('dev', $environmentDev->getType());
-        $this->assertEquals(2, count($environmentDev->getUrls()));
+        $this->assertEquals(1, count($environmentDev->getUrls()));
         $this->assertEquals('sulu.lo', $environmentDev->getUrls()[0]->getUrl());
-        $this->assertEquals('sulu-with-slash.lo', $environmentDev->getUrls()[1]->getUrl());
 
         $webspace = $this->loader->load(
             __DIR__ . '/../../../../Resources/DataFixtures/Webspace/valid/massiveart.xml'
@@ -384,5 +383,19 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($devUrl->getCountry());
         $this->assertNull($devUrl->getRedirect());
         $this->assertNull($devUrl->getSegment());
+    }
+
+    public function testUrlWithTrailingSlash()
+    {
+        $webspace = $this->loader->load(
+            __DIR__ . '/../../../../Resources/DataFixtures/Webspace/valid/sulu.io_url_with_slash.xml'
+        );
+
+        $environmentDev = $webspace->getPortals()[0]->getEnvironment('dev');
+        $this->assertEquals('dev', $environmentDev->getType());
+        $this->assertEquals(2, count($environmentDev->getUrls()));
+        $this->assertEquals('sulu.lo', $environmentDev->getUrls()[0]->getUrl());
+        $this->assertEquals('sulu-with-slash.lo', $environmentDev->getUrls()[1]->getUrl());
+
     }
 }
