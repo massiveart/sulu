@@ -2,6 +2,7 @@ CHANGELOG for Sulu
 ==================
 
 * dev-develop
+    * BUGFIX      #725 [Webspace]       Fixed trailing slash in defining url in webspace config
     * FEATURE     #702 [AdminBundle]    Added sortings to user settings and changed default url for activities
     * BUGFIX      #697 [ContactBundle]  Set VAT number field optional
 
