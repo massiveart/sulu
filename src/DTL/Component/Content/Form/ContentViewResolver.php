@@ -3,7 +3,7 @@
 namespace DTL\Component\Content\Form;
 
 use DTL\Component\Content\Form\ContentView;
-use DTL\Bundle\ContentBundle\Document\FormDocument;
+use DTL\Bundle\ContentBundle\Document\ContentDocument;
 use DTL\Component\Content\Form\ContentTypeInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\FormInterface;
@@ -28,11 +28,11 @@ class ContentViewResolver
     /**
      * Resolve the given structure document into a content view
      *
-     * @param FormDocument $documnet
+     * @param ContentDocument $documnet
      */
-    public function resolve(FormDocument $document)
+    public function resolve(ContentDocument $document)
     {
-        $formType = $document->getFormType();
+        $formType = $document->getContentType();
 
         if (!$formType) {
             throw new \RuntimeException(sprintf(
@@ -42,7 +42,7 @@ class ContentViewResolver
         }
 
         $form = $this->factory->create($formType);
-        $form->setData($document->getContentData());
+        $form->setData($document->getContent());
 
         $contentView = new ContentView();
 
@@ -61,7 +61,7 @@ class ContentViewResolver
     /**
      * Create a view iterator for the given content documents
      *
-     * @param FormDocument[] $documents
+     * @param ContentDocument[] $documents
      */
     public function createIterator($documents)
     {

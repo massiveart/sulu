@@ -45,7 +45,7 @@ class ContentViewResolverTest extends ProphecyTestCase
         parent::setUp();
 
         $this->factory = $this->prophesize('Symfony\Component\Form\FormFactoryInterface');
-        $this->document1 = $this->prophesize('DTL\Bundle\ContentBundle\Document\FormDocument');
+        $this->document1 = $this->prophesize('DTL\Bundle\ContentBundle\Document\ContentDocument');
         $this->form = $this->prophesize('Symfony\Component\Form\FormInterface');
 
         $children = array();
@@ -87,8 +87,8 @@ class ContentViewResolverTest extends ProphecyTestCase
      */
     public function testResolve($formName, $data)
     {
-        $this->document1->getFormType()->willReturn($formName);
-        $this->document1->getContentData()->willReturn($data);
+        $this->document1->getContentType()->willReturn($formName);
+        $this->document1->getContent()->willReturn($data);
         $this->factory->create($formName)->willReturn($this->form);
         $this->form->setData($data)->shouldBeCalled();
         $this->form->all()->willReturn($this->formChildren);

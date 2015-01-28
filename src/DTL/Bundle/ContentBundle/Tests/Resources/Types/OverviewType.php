@@ -12,6 +12,8 @@ class OverviewType extends AbstractType
         $builder->add('title', 'text');
         $builder->add('url', 'text');
         $builder->add('article', 'text');
+        $builder->add('contactEmail', 'email');
+        $builder->add('cost', 'money');
     }
 
     public function getName()

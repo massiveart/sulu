@@ -11,6 +11,7 @@
 namespace DTL\Bundle\ContentBundle\Document;
 
 use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCR;
+use DTL\Component\Content\Model\ContentInterface;
 
 /**
  * Base Structure class.
@@ -21,7 +22,7 @@ use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCR;
  *     translator="attribute"
  * )
  */
-class FormDocument
+class ContentDocument implements ContentInterface
 {
     /**
      * @PHPCR\Locale()
@@ -51,7 +52,7 @@ class FormDocument
     /**
      * @PHPCR\String(translated=true, translated=true)
      */
-    private $formType;
+    private $contentType;
 
     /**
      * @PHPCR\Long(nullable=true)
@@ -79,7 +80,7 @@ class FormDocument
      *
      * @see DTL\Component\Content\EventSubscriber\PhpcrOdmStructureSubscriber
      */
-    private $contentData = array();
+    private $content = array();
 
     public function getParent() 
     {
@@ -111,14 +112,14 @@ class FormDocument
         $this->title = $title;
     }
 
-    public function getFormType() 
+    public function getContentType() 
     {
-        return $this->formType;
+        return $this->contentType;
     }
     
-    public function setFormType($formType)
+    public function setContentType($contentType)
     {
-        $this->formType = $formType;
+        $this->contentType = $contentType;
     }
 
     public function getCreator() 
@@ -161,14 +162,14 @@ class FormDocument
         $this->updated = $updated;
     }
 
-    public function getContentData()
+    public function getContent()
     {
-        return $this->contentData;
+        return $this->content;
     }
 
-    public function setContentData($contentData)
+    public function setContent($content)
     {
-        $this->contentData = $contentData;
+        $this->content = $content;
     }
 
     public function getName() 

@@ -31,9 +31,10 @@ class SandboxTest extends SuluTestCase
         $page1->setName('page');
         $page1->setParent($parent);
         $page1->setTitle('Gastronomy');
-        $page1->setFormType('overview');
-        $page1->setContentData(array(
+        $page1->setContentType('overview');
+        $page1->setContent(array(
             'title' => 'bar',
+            'url' => 'http://foobar',
         ));
 
         $this->dm->persist($page1);
@@ -41,12 +42,35 @@ class SandboxTest extends SuluTestCase
         $this->page1 = $page1;
     }
 
-    public function testPersist()
+    public function testContentView()
     {
         $page = $this->dm->find(null, '/cmf/sulu_io/contents/page');
 
         $resolver = $this->getContainer()->get('dtl_content.form.content_view_resolver');
-        $contentView = $resolver->resolve($page);
-        var_dump($contentView);die();;
+        $resolver->resolve($page);
+    }
+
+    public function testPage()
+    {
+        $page = $this->dm->find(null, '/cmf/sulu_io/contents/page');
+
+        $factory = $this->container->get('form.factory');
+        $form = $factory->create('page', $page);
+
+        $data = array(
+            'title' => 'boo',
+            'state' => 'published',
+            'content' => array(
+                'article' => 'Hello this is article',
+                'contactEmail' => 'daniel@dantleech.com',
+            ),
+        );
+
+        $form->submit($data);
+
+        $data = $page->getContent();
+
+        $this->dm->persist($page);
+        $this->dm->flush();
     }
 }

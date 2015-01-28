@@ -18,7 +18,7 @@ use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCR;
  * @PHPCR\Document(
  * )
  */
-class PageDocument extends FormDocument
+class PageDocument extends ContentDocument
 {
     /**
      * Published state

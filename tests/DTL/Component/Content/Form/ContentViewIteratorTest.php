@@ -14,7 +14,7 @@ use DTL\Component\Content\Form\ContentView;
 use DTL\Component\Content\Form\ContentViewIterator;
 use DTL\Component\Content\Form\ContentViewResolver;
 use Prophecy\PhpUnit\ProphecyTestCase;
-use DTL\Bundle\ContentBundle\Document\FormDocument;
+use DTL\Bundle\ContentBundle\Document\ContentDocument;
 
 class ContentViewIteratorTest extends ProphecyTestCase
 {
@@ -39,12 +39,12 @@ class ContentViewIteratorTest extends ProphecyTestCase
     private $contentView2;
 
     /**
-     * @var FormDocument
+     * @var ContentDocument
      */
     private $document1;
 
     /**
-     * @var FormDocument
+     * @var ContentDocument
      */
     private $document2;
 
@@ -53,8 +53,8 @@ class ContentViewIteratorTest extends ProphecyTestCase
         parent::setUp();
 
         $this->resolver = $this->prophesize('DTL\Component\Content\Form\ContentViewResolver');
-        $this->document1 = $this->prophesize('DTL\Bundle\ContentBundle\Document\FormDocument');
-        $this->document2 = $this->prophesize('DTL\Bundle\ContentBundle\Document\FormDocument');
+        $this->document1 = $this->prophesize('DTL\Bundle\ContentBundle\Document\ContentDocument');
+        $this->document2 = $this->prophesize('DTL\Bundle\ContentBundle\Document\ContentDocument');
         $this->contentView1 = $this->prophesize('DTL\Component\Content\Form\ContentView');
         $this->contentView1->getValue()->willReturn('one');
         $this->contentView2 = $this->prophesize('DTL\Component\Content\Form\ContentView');
