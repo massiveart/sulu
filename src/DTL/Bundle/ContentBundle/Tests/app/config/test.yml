@@ -2,6 +2,11 @@ framework:
     form:
         enabled: true
 
+twig:
+    form:
+        resources:
+            - 'ContentBundle:content:sulu.html.twig'
+
 doctrine_phpcr:
     odm:
         auto_mapping: true

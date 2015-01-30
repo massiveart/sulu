@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\Form\Type;
+namespace DTL\Component\Content\Form\Type\Structure;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormEvents;

@@ -31,6 +31,7 @@ class ContentExtension extends Extension
         $loader->load('phpcr_odm.xml');
         $loader->load('serializer.xml');
         $loader->load('form.xml');
+        $loader->load('form_content_types.xml');
     }
 }
 
