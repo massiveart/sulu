@@ -15,11 +15,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class ResourceLocatorType extends AbstractContentType
 {
-    public function getParent()
-    {
-        return 'text';
-    }
-
     public function getName()
     {
         return 'resource_locator';

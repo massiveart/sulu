@@ -13,13 +13,8 @@ namespace DTL\Bundle\ContentBundle\Form\Type\Content;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class TextLineType extends AbstractContentType
+class TextLineType extends AbstractContentContentType
 {
-    public function getParent()
-    {
-        return 'text';
-    }
-
     public function getName()
     {
         return 'text_line';

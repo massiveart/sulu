@@ -12,12 +12,31 @@ namespace DTL\Bundle\ContentBundle\Form\Type\Content;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class TextAreaType extends AbstractContentType
 {
-    public function getParent()
+    public function setDefaultOptions(OptionsResolverInterface $options)
     {
-        return 'text';
+        parent::setDefaultOptions($options);
+
+        $options->setDefaults(array(
+            'placeholder' => '',
+        ));
+
+        $options->setAllowedTypes(array(
+            'placeholder' => array('string', 'array')
+        ));
+
+        $options->setNormalizers(array(
+            'placeholder' => function ($options, $value) {
+                if (!is_array($value)) {
+                    return array(
+                        $options['locale'] => $value
+                    );
+                }
+            }
+        ));
     }
 
     public function getName()

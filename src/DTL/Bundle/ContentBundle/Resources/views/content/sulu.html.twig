@@ -1,4 +1,4 @@
-{% block resource_locator_widget %}
+{% block sulu_resource_locator_widget %}
 <div id="{{ id|raw }}"
      class="preview-update trigger-save-button"
      data-property='{{ property|json_encode }}' 
@@ -9,16 +9,35 @@
      data-type-instance-name="{{ id }}"
      data-aura-history-api="/admin/api/nodes/<%=content.id%>/resourcelocators?language={{ locale }}&webspace={{ webspace_key }}"
      data-aura-content-id="<%=options.id%>"
-     {% if property.mandatory %}data-validation-required="true"{% endif %} ></div>
+     {% if property.mandatory %}data-validation-required="true"{% endif %}
+>
+</div>
 {% endblock %}
 
-{% block text_area_widget %}
+{% block sulu_text_area_widget %}
+<textarea id="{{ id|raw }}"
+    data-property='{{ property|json_encode }}'
+    class="form-element preview-update trigger-save-button hide-in-sortmode"
+    data-mapper-property="{{ name }}"
+    placeholder="{{ placeholder }}"
+    {% if property.mandatory %}data-validation-required="true"{% endif %}
+/>
+{% endblock %}
+
+{% block text_editor_widget %}
 <textarea id="{{ id|raw }}"
           data-property='{{ property|json_encode }}'
-          class="form-element preview-update trigger-save-button hide-in-sortmode"
-          data-mapper-property="{{ property.name }}"
-          placeholder="{{ property.getPlaceholder(userLocale) }}"
-          {% if property.mandatory %}data-validation-required="true"{% endif %}></textarea>
-
-<div class="block-content" data-sort-mode-id="{{ id|raw }}"></div>
+    class="form-element hidden"
+    data-type="textEditor"
+    data-type-instance-name="{{ id }}"
+    data-aura-component="ckeditor@husky"
+    data-aura-height="300"
+    data-aura-god-mode="{{ god_mode ? 'true' : 'false' }}"
+    data-aura-table-enabled="{{ table_enabled ? 'true' : 'false' }}"
+    data-aura-links-enabled="{{ links_enabled ? 'true' : 'false' }}"
+    data-aura-paste-from-word="{{ paste_from_word ? 'true' : 'false' }}"
+    data-mapper-property="{{ name }}"
+    data-aura-instance-name="{{ name }}"
+    placeholder="{{ placeholder }}"
+/>
 {% endblock %}

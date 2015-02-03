@@ -23,18 +23,76 @@ use DTL\Component\Content\Form\ContentView;
  */
 abstract class AbstractContentType extends AbstractType implements ContentTypeInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $options)
     {
         $options->setRequired(array(
             'webspace_key',
             'locale',
+            'labels',
+        ));
+
+        $options->setDefaults(array(
+            'legacy' => true,
+            'tags' => array(),
+            'priority' => 1,
+            'max_occurs' => 999,
+            'min_occurs' => 1,
+            'translated' => true,
+            'labels' => array(),
+        ));
+
+        $options->setAllowedTypes(array(
+            'tags' => 'array'
+        ));
+
+        $options->setNormalizers(array(
+            'tags' => function ($options, $value) {
+                foreach ($value as &$tag) {
+                    if (!is_array($tag)) {
+                        $tag = array(
+                            'name' => $tag,
+                        );
+                    }
+
+                    if (!isset($tag['priority'])) {
+                        $tag['priority'] = 1;
+                    }
+                }
+
+                return $value;
+            }
         ));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->webspace_key = $options['webspace_key'];
-        $view->locale = $options['locale'];
+        $view->vars['webspace_key'] = $options['webspace_key'];
+        $view->vars['locale'] = $options['locale'];
+
+        if (true === $options['legacy']) {
+            // remove form_ prefix
+            $view->vars['id'] = substr($view->vars['id'], 5);
+
+            $view->vars['property'] = array(
+                'name' => $form->getName(),
+                'metadata' => array(
+                    'title' => $options['labels'],
+                ),
+                'mandatory' => $options['required'],
+                'multilingual' => $options['translated'],
+                'minOccurs' => $options['min_occurs'],
+                'maxOccurs' => $options['max_occurs'],
+                'contentTypeName' => $this->getName(),
+                'params' => array(),
+                'tags' => $options['tags'],
+            );
+        }
     }
 
     /**
@@ -42,5 +100,13 @@ abstract class AbstractContentType extends AbstractType implements ContentTypeIn
      */
     public function buildContentView(ContentView $view, FormInterface $form)
     {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getName()
+    {
+        return 'content';
     }
 }
