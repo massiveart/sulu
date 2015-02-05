@@ -33,5 +33,5 @@ interface ContentTypeInterface extends FormTypeInterface
      * @param ContentView $view
      * @param mixed $data
      */
-    public function buildContentView(ContentView $view, FormInterface $form);
+    public function buildContentView(ContentView $view, $data);
 }

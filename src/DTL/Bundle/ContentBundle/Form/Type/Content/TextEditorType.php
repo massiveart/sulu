@@ -15,6 +15,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
+use DTL\Component\Content\Form\ContentView;
 
 class TextEditorType extends AbstractContentType
 {

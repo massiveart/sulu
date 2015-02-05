@@ -29,7 +29,22 @@ class ResourceLocatorTypeTest extends AbstractContentTypeTestCase
     /**
      * {@inheritDoc}
      */
-    public function provideContentView()
+    public function provideContentViewValue()
+    {
+        return array(
+            array(
+                array(
+                ),
+                null,
+                null,
+            ),
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function provideContentViewAttributes()
     {
         return array(
             array(

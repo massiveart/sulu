@@ -15,6 +15,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class TextLineType extends AbstractContentContentType
 {
+    /**
+     * {@inheritDoc}
+     */
     public function getName()
     {
         return 'text_line';

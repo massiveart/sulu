@@ -37,7 +37,7 @@ class TextEditorTypeTest extends AbstractContentTypeTestCase
     /**
      * {@inheritDoc}
      */
-    public function provideContentView()
+    public function provideContentViewAttributes()
     {
         return array(
             array(
@@ -45,6 +45,29 @@ class TextEditorTypeTest extends AbstractContentTypeTestCase
                 ),
                 array(
                 ),
+                array(
+                ),
+            ),
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function provideContentViewValue()
+    {
+        return array(
+            array(
+                array(
+                ),
+                'Hello',
+                'Hello',
+            ),
+            array(
+                array(
+                ),
+                null,
+                null,
             ),
         );
     }

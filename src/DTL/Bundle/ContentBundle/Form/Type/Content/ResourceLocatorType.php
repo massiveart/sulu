@@ -12,6 +12,7 @@ namespace DTL\Bundle\ContentBundle\Form\Type\Content;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use DTL\Component\Content\Form\ContentView;
 
 class ResourceLocatorType extends AbstractContentType
 {

@@ -82,6 +82,8 @@ class ContentDocument implements ContentInterface
      */
     private $content = array();
 
+    private $path;
+
     public function getParent() 
     {
         return $this->parent;

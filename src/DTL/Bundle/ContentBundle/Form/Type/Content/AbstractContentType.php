@@ -98,8 +98,9 @@ abstract class AbstractContentType extends AbstractType implements ContentTypeIn
     /**
      * {@inheritDoc}
      */
-    public function buildContentView(ContentView $view, FormInterface $form)
+    public function buildContentView(ContentView $view, $data)
     {
+        $view->setValue($data);
     }
 
     /**

@@ -20,10 +20,10 @@ class ContentResolvedType extends ResolvedFormType implements ContentResolvedTyp
      * @see DTL\Component\Content\Form\ContentTypeInterface#buildContentView
      *
      * @param ContentView $view
-     * @param ContentTypeInterface $contentType
+     * @param mixed $data
      */
-    public function buildContentView(ContentView $view, FormInterface $contentType)
+    public function buildContentView(ContentView $view, $data)
     {
-        return $this->getInnerType()->buildContentView($view, $contentType);
+        return $this->getInnerType()->buildContentView($view, $data);
     }
 }

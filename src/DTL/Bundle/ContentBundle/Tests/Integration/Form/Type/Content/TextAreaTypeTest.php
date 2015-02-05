@@ -65,7 +65,28 @@ class TextAreaTypeTest extends AbstractContentTypeTestCase
     /**
      * {@inheritDoc}
      */
-    public function provideContentView()
+    public function provideContentViewValue()
+    {
+        return array(
+            array(
+                array(
+                ),
+                null,
+                null,
+            ),
+            array(
+                array(
+                ),
+                'This is some text in my area',
+                'This is some text in my area',
+            ),
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function provideContentViewAttributes()
     {
         return array(
             array(

@@ -18,6 +18,9 @@ use Symfony\Component\Form\FormInterface;
 
 class TextAreaType extends AbstractContentType
 {
+    /**
+     * {@inheritDoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $options)
     {
         parent::setDefaultOptions($options);
@@ -43,11 +46,17 @@ class TextAreaType extends AbstractContentType
         ));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['placeholder'] = $options['placeholder'];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getName()
     {
         return 'text_area';

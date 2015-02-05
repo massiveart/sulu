@@ -5,18 +5,15 @@ namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Content;
 use Sulu\Bundle\TestBundle\Testing\SuluTestCase;
 use Symfony\Component\Form\FormInterface;
 use DTL\Component\Content\Form\ContentView;
+use DTL\Bundle\ContentBundle\Document\PageDocument;
 
+/**
+ * Abstract test class for all content types
+ *
+ * @author Daniel Leech <daniel@dantleech.com>
+ */
 abstract class AbstractContentTypeTestCase extends SuluTestCase
 {
-    protected function createForm($options)
-    {
-        $form = $this->getContainer()->get('form.factory')->createBuilder()
-            ->add('test_type', $this->getType(), $options)
-            ->getForm();
-
-        return $form;
-    }
-
     /**
      * Provider for testFormView
      *
@@ -46,17 +43,17 @@ abstract class AbstractContentTypeTestCase extends SuluTestCase
     /**
      * Provide for the content view test
      */
-    abstract public function provideContentView();
+    abstract public function provideContentViewAttributes();
 
     /**
      * Test that the view is properly configured
      *
-     * @dataProvider provideContentView
+     * @dataProvider provideContentViewAttributes
      *
      * @param $options Options for the content view
      * @param $expectedAttributes Expected content view attributes
      */
-    public function testContentView($options, $expectedAttributes)
+    public function testContentViewAttributes($options, $expectedAttributes)
     {
         $options = $this->completeOptions($options);
         $form = $this->createForm($options);
@@ -81,10 +78,63 @@ abstract class AbstractContentTypeTestCase extends SuluTestCase
         $form = $this->createForm($options);
         $view = $form->createView();
 
-        $templating = $this->getContainer()->get('twig');
-        return $templating->render(__DIR__ . '/views/test.html.twig', array(
+        $twig = $this->getContainer()->get('twig');
+        $twig->enableDebug();
+
+        $result = $twig->render(__DIR__ . '/views/test.html.twig', array(
             'view' => $view['test_type'],
         ));
+
+        $this->assertContains('data-mapper-property', $result);
+    }
+
+    abstract function provideContentViewValue();
+
+    /**
+     * Assert the value of a content view
+     *
+     * Override assertContentViewValue for non-scalar
+     * comparisons.
+     *
+     * @dataProvider provideContentViewValue
+     *
+     * @param array $options
+     * @param mixed $data
+     * @param mixed $expectedValue
+     */
+    public function testContentViewValue(array $options, $data, $expectedValue)
+    {
+        $options = $this->completeOptions($options);
+        $form = $this->createForm($options);
+
+        $contentView = new ContentView();
+
+        $formType = $form['test_type']->getConfig()->getType();
+        $this->assertInstanceOf('DTL\Component\Content\Form\ContentResolvedTypeInterface', $formType);
+        $formType->buildContentView($contentView, $data);
+        $this->assertContentViewValue($contentView, $expectedValue);
+    }
+
+    public function assertContentViewValue($view, $expectedValue)
+    {
+        $this->assertEquals($expectedValue, $view->getValue());
+    }
+
+    /**
+     * Create form with a single field "test_type" using this
+     * tests content type.
+     *
+     * @param array $options Options for the content form
+     *
+     * @return FormInterface
+     */
+    private function createForm($options)
+    {
+        $form = $this->getContainer()->get('dtl_content.form.factory')->createBuilder()
+            ->add('test_type', $this->getType(), $options)
+            ->getForm();
+
+        return $form;
     }
 
     /**

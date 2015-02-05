@@ -21,5 +21,5 @@ interface ContentResolvedTypeInterface extends ResolvedFormTypeInterface
      * @param ContentView $view
      * @param ContentTypeInterface $contentType
      */
-    public function buildContentView(ContentView $view, FormInterface $contentType);
+    public function buildContentView(ContentView $view, $data);
 }
