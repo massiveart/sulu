@@ -13,6 +13,8 @@ namespace DTL\Bundle\ContentBundle\Form\Type\Content;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
 
 class TextAreaType extends AbstractContentType
 {
@@ -35,8 +37,15 @@ class TextAreaType extends AbstractContentType
                         $options['locale'] => $value
                     );
                 }
+
+                return $value;
             }
         ));
+    }
+
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['placeholder'] = $options['placeholder'];
     }
 
     public function getName()

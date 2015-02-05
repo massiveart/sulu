@@ -2,50 +2,78 @@
 
 namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Content;
 
+use DTL\Bundle\ContentBundle\Form\Type\Content\TextAreaType;
+
 class TextAreaTypeTest extends AbstractContentTypeTestCase
 {
     public function getType()
     {
-        return 'text_area';
+        return new TextAreaType();
     }
 
-    public function testContentTypeView()
+    /**
+     * {@inheritDoc}
+     */
+    public function provideFormView()
     {
-        $form = $this->createForm(array(
-                'locale' => 'de',
-                'webspace_key' => 'sulu_io',
-                'labels' => array(
-                    'en' => 'Text area',
+        return array(
+            array(
+                array(
                 ),
-                'required' => false,
-        ));
+                array(
+                ),
+            ),
+            array(
+                array(
+                    'placeholder' => 'Hello',
+                ),
+                array(
+                    'placeholder' => array(
+                        'de' => 'Hello',
+                    ),
+                ),
+            ), 
+            array(
+                array(
+                    'locale' => 'fr',
+                    'placeholder' => 'Hello',
+                ),
+                array(
+                    'placeholder' => array(
+                        'fr' => 'Hello',
+                    ),
+                ),
+            ), 
+            array(
+                array(
+                    'locale' => 'fr',
+                    'placeholder' => array(
+                        'de' => 'Willkommen',
+                        'fr' => 'Bienvenue',
+                    ),
+                ),
+                array(
+                    'placeholder' => array(
+                        'de' => 'Willkommen',
+                        'fr' => 'Bienvenue',
+                    ),
+                ),
+            ),
+        );
+    }
 
-        $this->assertView($form, '
-            <textarea id="text_area"
-                data-property=\':property\'
-                class="form-element preview-update trigger-save-button hide-in-sortmode"
-                data-mapper-property="text_area"
-                placeholder=""
-            />', array(
-                ':property' => htmlentities(json_encode(
-                    array(
-                        'name' => 'text_area',
-                        'metadata' => array(
-                            'title' => array(
-                                'en' => 'Text area',
-                            ),
-                        ),
-                        'mandatory' => false,
-                        'multilingual' => true,
-                        'minOccurs' => 1,
-                        'maxOccurs' => 999,
-                        'contentTypeName' => 'text_area',
-                        'params' => array(),
-                        'tags' => array(
-                        ),
-                    )
-                )),
-            )
+    /**
+     * {@inheritDoc}
+     */
+    public function provideContentView()
+    {
+        return array(
+            array(
+                array(
+                ),
+                array(
+                ),
+            ),
         );
     }
 }
