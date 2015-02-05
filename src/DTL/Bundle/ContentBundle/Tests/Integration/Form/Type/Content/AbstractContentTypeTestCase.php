@@ -115,6 +115,14 @@ abstract class AbstractContentTypeTestCase extends SuluTestCase
         $this->assertContentViewValue($contentView, $expectedValue);
     }
 
+    /**
+     * Assertion for the content view value test.
+     *
+     * Override to assert non-scalar values
+     *
+     * @param ContentView $view
+     * @param mixed $expectedValue
+     */
     public function assertContentViewValue($view, $expectedValue)
     {
         $this->assertEquals($expectedValue, $view->getValue());
