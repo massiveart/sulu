@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
+    >
+
+    <parameters>
+        <parameter key="dtl_content.routing_auto.adapter.sulu_phpcr.class">DTL\Bundle\ContentBundle\RoutingAuto\SuluPhpcrAdapter</parameter>
+    </parameters>
+
+    <services>
+        <service id="dtl_content.routing_auto.adapter.sulu_phpcr" class="%dtl_content.routing_auto.adapter.sulu_phpcr.class%">
+            <tag name="cmf_routing_auto.adapter" alias="sulu_phpcr" />
+            <argument type="service" id="doctrine_phpcr.odm.document_manager" />
+            <argument type="service" id="sulu.phpcr.session" />
+            <argument type="service" id="sulu_core.webspace.request_analyzer.admin" />
+        </service>
+    </services>
+
+</container>
+
+

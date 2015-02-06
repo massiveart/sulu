@@ -12,6 +12,7 @@ class AppKernel extends SuluTestKernel
             parent::registerBundles(),
             array(
                 new DTL\Bundle\ContentBundle\ContentBundle(),
+                new Symfony\Cmf\Bundle\RoutingAutoBundle\CmfRoutingAutoBundle(),
             )
         );
     }

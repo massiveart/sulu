@@ -32,6 +32,7 @@ class ContentExtension extends Extension
         $loader->load('serializer.xml');
         $loader->load('form.xml');
         $loader->load('form_content_types.xml');
+        $loader->load('routing_auto.xml');
     }
 }
 

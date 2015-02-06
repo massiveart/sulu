@@ -75,6 +75,11 @@ class ContentDocument implements ContentInterface
     private $updated;
 
     /**
+     * @PHPCR\String()
+     */
+    private $resourceLocator;
+
+    /**
      * Content data.
      * This is not mapped, it is serialized by event listener.
      *
@@ -82,7 +87,15 @@ class ContentDocument implements ContentInterface
      */
     private $content = array();
 
+    /**
+     * @var string
+     */
     private $path;
+
+    /**
+     * @PHPCR\Uuid()
+     */
+    private $uuid;
 
     public function getParent() 
     {
@@ -188,5 +201,48 @@ class ContentDocument implements ContentInterface
     {
         return $this->path;
     }
+
+    public function getResourceLocator() 
+    {
+        return $this->resourceLocator;
+    }
     
+    public function setResourceLocator($resourceLocator)
+    {
+        $this->resourceLocator = $resourceLocator;
+    }
+
+    public function getLocale() 
+    {
+        return $this->locale;
+    }
+    
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+    }
+
+    public function getUuid() 
+    {
+        return $this->uuid;
+    }
+    
+    public function setUuid($uuid)
+    {
+        $this->uuid = $uuid;
+    }
+
+    public function getWebspace()
+    {
+        $match = preg_match('/^\/' . $this->getPath('base') . '\/(\w*)\/.*$/', $this->path, $matches);
+
+        if ($match) {
+            return $matches[1];
+        }
+
+        throw new \RuntimeException(sprintf(
+            'Could not determine webspace for content document at "%s"',
+            $this->path
+        ));
+    }
 }

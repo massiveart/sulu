@@ -17,19 +17,46 @@ use Sulu\Component\Webspace\Manager\WebspaceManager;
 use PHPCR\Util\NodeHelper;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use PHPCR\PathNotFoundException;
+use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
+use Doctrine\ODM\PHPCR\DocumentManager;
+use Sulu\Component\PHPCR\SessionManager\SessionManager;
+use Sulu\Component\Util\SuluNodeHelper;
+use Sulu\Component\Webspace\Analyzer\RequestAnalyzerInterface;
+use DTL\Bundle\ContentBundle\RoutingAuto\SuluPhpcrNodeAutoRoute;
 
 class SuluPhpcrAdapter implements AdapterInterface
 {
+    const TAG_NO_MULTILANG = '_no_lang';
+
+    /**
+     * @var DocumentManager
+     */
     private $documentManager;
-    private $basePath;
+
+    /**
+     * @var SessionManager
+     */
+    private $sessionManager;
+
+    /**
+     * @var RequestAnalyzerInterface
+     */
+    private $requestAnalyzer;
 
     /**
      * @param DocumentManager $documentManager
+     * @param SessionManager $sessionManager To retrieve the base path for the routes
      */
-    public function __construct(DocumentManager $documentManager, $basePath)
+    public function __construct(
+        DocumentManager $documentManager,
+        SessionManager $sessionManager,
+        RequestAnalyzerInterface $requestAnalyzer
+    )
     {
         $this->documentManager = $documentManager;
-        $this->basePath = $basePath;
+        $this->sessionManager = $sessionManager;
+        $this->requestAnalyzer = $requestAnalyzer;
     }
 
     /**
@@ -37,7 +64,7 @@ class SuluPhpcrAdapter implements AdapterInterface
      */
     public function getLocales($contentDocument)
     {
-        return $contnetDocument->getLocale();
+        return null;
     }
 
     /**
@@ -60,7 +87,14 @@ class SuluPhpcrAdapter implements AdapterInterface
      */
     public function migrateAutoRouteChildren(AutoRouteInterface $srcAutoRoute, AutoRouteInterface $destAutoRoute)
     {
-        // TODO
+        $session = $this->getPhpcrSession();
+        $srcNode = $srcAutoRoute->getNode();
+        $destNode = $destAutoRoute->getNode();
+        $srcChildren = $srcNode->getNodes();
+
+        foreach ($srcChildren as $srcChild) {
+            $session->move($srcChild->getPath(), $destNode->getPath() . '/' . $srcChild->getName());
+        }
     }
 
     /**
@@ -77,24 +111,31 @@ class SuluPhpcrAdapter implements AdapterInterface
     public function createAutoRoute($uri, $contentDocument, $autoRouteTag)
     {
         $session = $this->getPhpcrSession();
-        $path = $this->baseRoutePath;
+        $path = rtrim($this->sessionManager->getRoutePath(
+            $this->requestAnalyzer->getCurrentWebspace()->getKey(),
+            $this->requestAnalyzer->getCurrentLocalization()
+        ), '/');
 
         try {
-            $parentNode = $session->getNode($path);
+            $session->getNode($path);
         } catch (PathNotFoundException $e) {
             throw new \RuntimeException(sprintf('The "route_basepath" configuration points to a non-existant path "%s".',
                 $path
             ));
         }
 
+        $uri = sprintf('%s/%s', $path, $uri);
+
         $node = NodeHelper::createPath($session, $uri);
 
+        $contentNode = $session->getNodeByIdentifier($contentDocument->getUuid());
+
         $node->addMixin('sulu:path');
-        $node->setProperty('sulu:content', $contentDocument->getUuid());
-        $node->setProperty('sulu:history', false);
+        $node->setProperty(SuluPhpcrNodeAutoRoute::PROPERTY_CONTENT, $contentNode);
+        $node->setProperty(SuluPhpcrNodeAutoRoute::PROPERTY_HISTORY, false);
         $node->setProperty('sulu:created', new \DateTime());
 
-        return new PhpcrNodeAutoRoute($node);
+        return new SuluPhpcrNodeAutoRoute($node);
     }
 
     /**
@@ -103,8 +144,8 @@ class SuluPhpcrAdapter implements AdapterInterface
     public function createRedirectRoute(AutoRouteInterface $referringAutoRoute, AutoRouteInterface $newRoute)
     {
         $referringRouteNode = $referringAutoRoute->getNode();
-        $referringRouteNode->setProperty('sulu:histroy', true);
-        $referringRouteNode->setProperty('sulu:content', $newRoute->getNode());
+        $referringRouteNode->setProperty(SuluPhpcrNodeAutoRoute::PROPERTY_HISTORY, true);
+        $referringRouteNode->setProperty(SuluPhpcrNodeAutoRoute::PROPERTY_CONTENT, $newRoute->getNode());
     }
 
     /**
@@ -136,7 +177,7 @@ class SuluPhpcrAdapter implements AdapterInterface
                 continue;
             }
 
-            $referrers[] = new PhpcrNodeAutoRoute($reference);
+            $referrers[] = new SuluPhpcrNodeAutoRoute($reference);
         }
 
         return $referrers;
@@ -147,7 +188,12 @@ class SuluPhpcrAdapter implements AdapterInterface
      */
     public function findRouteForUri($uri)
     {
-        $path = $this->getPathFromUri($uri);
+        $locale = $this->requestAnalyzer->getCurrentLocalization();
+        $webspace = $this->requestAnalyzer->getCurrentWebspace()->getKey();
+        $path = sprintf('%s%s',
+            rtrim($this->sessionManager->getRoutePath($webspace, $locale), '/'),
+            $uri
+        );
 
         try {
             $node = $this->getPhpcrSession()->getNode($path);
@@ -155,16 +201,11 @@ class SuluPhpcrAdapter implements AdapterInterface
             return null;
         }
 
-        return new PhpcrNodeAutoRoute($node);
+        return new SuluPhpcrNodeAutoRoute($node);
     }
 
     private function getPhpcrSession()
     {
         return $this->documentManager->getPhpcrSession();
-    }
-
-    private function getPathFromUri($uri)
-    {
-        return $this->basePath . $uri;
     }
 }

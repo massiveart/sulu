@@ -1,0 +1,5 @@
+DTL\Bundle\ContentBundle\Document\PageDocument:
+    uri_schema: /{url}/{title}
+    token_providers:
+        url: [content_method, { method: getResourceLocator, slugify: false  }]
+        title: [content_method, { method: getTitle }]

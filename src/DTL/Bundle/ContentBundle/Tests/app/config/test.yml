@@ -14,6 +14,7 @@ doctrine_phpcr:
             de: [ 'en' ]
 
 
-
-
-
+cmf_routing_auto:
+    adapter: sulu_phpcr
+    persistence:
+        phpcr: ~
