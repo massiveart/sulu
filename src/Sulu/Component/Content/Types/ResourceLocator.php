@@ -94,6 +94,7 @@ class ResourceLocator extends ComplexContentType implements ResourceLocatorInter
     }
 
     /**
+     * NOT USED
      * {@inheritdoc}
      */
     public function getResourceLocatorByUuid($uuid, $webspaceKey, $languageCode, $segmentKey = null)
