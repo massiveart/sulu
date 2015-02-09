@@ -13,19 +13,14 @@ namespace DTL\Bundle\ContentBundle\Document;
 use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCR;
 
 /**
- * Page Structure class
- *
- * @PHPCR\Document(
- * )
+ * Page document class
  */
-class PageDocument extends ContentDocument
+class PageDocument extends Document
 {
     /**
-     * Published state
-     *
-     * @PHPCR\String()
+     * @var integer
      */
-    protected $state = 'unpublished';
+    protected $state = 0;
 
     public function getState() 
     {
