@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping
+    xmlns="http://doctrine-project.org/schemas/phpcr-odm/phpcr-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/phpcr-odm/phpcr-mapping
+    https://github.com/doctrine/phpcr-odm/raw/master/doctrine-phpcr-odm-mapping.xsd"
+    >
+
+    <document name="DTL\Bundle\ContentBundle\Document\Route" referenceable="true">
+        <mixins>
+            <mixin type="sulu:path" />
+        </mixins>
+        <id name="path">
+            <generator strategy="PARENT"/>
+        </id>
+        <nodename name="name"/>
+        <parent-document name="parent"/>
+        <children name="children"/>
+
+        <field name="content" property="sulu:content" type="reference" />
+        <field name="history" property="sulu:history" type="boolean" />
+        <field name="tag" property="sulu:autoroutetag" type="string" nullable="true"/>
+        <field name="created" property="sulu:created" type="string" />
+    </document>
+
+</doctrine-mapping>

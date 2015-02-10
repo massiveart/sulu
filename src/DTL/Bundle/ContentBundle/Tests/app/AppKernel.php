@@ -11,7 +11,7 @@ class AppKernel extends SuluTestKernel
         return array_merge(
             parent::registerBundles(),
             array(
-                new DTL\Bundle\ContentBundle\ContentBundle(),
+                new DTL\Bundle\ContentBundle\DtlContentBundle(),
                 new Symfony\Cmf\Bundle\RoutingAutoBundle\CmfRoutingAutoBundle(),
             )
         );

@@ -30,8 +30,10 @@ class PageDocumentTest extends SuluTestCase
         return array(
             array(
                 array(
-                    'Path' => '/cmf/sulu_io/content/foobar',
+                    'Path' => '/cmf/sulu_io/contents/foobar',
                     'Title' => 'Foobar',
+                    'StructureType' => 'overview',
+                    'ResourceLocator' => 'foo/bar',
                     'Creator' => 2,
                     'Changer' => 3,
                     'Created' => new \DateTime('2015-02-09'),
@@ -61,7 +63,6 @@ class PageDocumentTest extends SuluTestCase
         $this->manager->detach($page);
 
         $document = $this->manager->findOneByTitle($data['Title']);
-
         foreach ($data as $field => $expectedValue) {
             $this->assertEqulals(
                 $expectedValue,

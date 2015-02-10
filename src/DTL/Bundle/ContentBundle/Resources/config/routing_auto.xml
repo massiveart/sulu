@@ -10,10 +10,10 @@
 
     <services>
         <service id="dtl_content.routing_auto.adapter.sulu_phpcr" class="%dtl_content.routing_auto.adapter.sulu_phpcr.class%">
-            <tag name="cmf_routing_auto.adapter" alias="sulu_phpcr" />
             <argument type="service" id="doctrine_phpcr.odm.document_manager" />
             <argument type="service" id="sulu.phpcr.session" />
             <argument type="service" id="sulu_core.webspace.request_analyzer.admin" />
+            <tag name="cmf_routing_auto.adapter" alias="sulu_phpcr" />
         </service>
     </services>
 

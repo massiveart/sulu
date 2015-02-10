@@ -13,8 +13,8 @@
           <field name="title" type="string" translated="true" />
           <field name="structureType" type="string" translated="true" />
           <field name="resourceLocator" type="string" translated="true" />
-          <field name="creator" type="integer" translated="true" />
-          <field name="changer" type="integer" translated="true" />
+          <field name="creator" type="long" translated="true" />
+          <field name="changer" type="long" translated="true" />
           <field name="created" type="date" translated="true" />
           <field name="changed" type="date" translated="true" />
     </mapped-superclass>

@@ -9,10 +9,11 @@ twig:
 
 doctrine_phpcr:
     odm:
-        auto_mapping: true
         locales:
-            de: [ 'en' ]
-
+            de: [ 'en', 'fr' ]
+        document_managers:
+            default:
+                auto_mapping: true
 
 cmf_routing_auto:
     adapter: sulu_phpcr
