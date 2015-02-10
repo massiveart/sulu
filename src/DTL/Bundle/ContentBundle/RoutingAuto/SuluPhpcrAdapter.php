@@ -117,9 +117,8 @@ class SuluPhpcrAdapter extends PhpcrOdmAdapter
     /**
      * {@inheritDoc}
      */
-    public function findRouteForUriContext(UriContext $uriContext)
+    public function findRouteForUri($uri, UriContext $uriContext)
     {
-        $uri = $uriContext->getUri();
         $subject = $uriContext->getSubjectObject();
         $webspace = $subject->getWebspaceKey();
         $locale = $subject->getLocale();

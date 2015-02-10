@@ -11,12 +11,12 @@
 namespace DTL\Bundle\ContentBundle\Document;
 
 use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCR;
-use DTL\Component\Content\Model\ContentInterface;
+use DTL\Component\Content\Model\DocumentInterface;
 
 /**
  * Base document class.
  */
-class Document implements ContentInterface
+class Document implements DocumentInterface
 {
     /**
      * @var string
@@ -37,6 +37,11 @@ class Document implements ContentInterface
      * @var mixed
      */
     private $parent;
+
+    /**
+     * @var object
+     */
+    private $parentDocument;
 
     /**
      * @var ChildrenCollection
@@ -88,6 +93,11 @@ class Document implements ContentInterface
      */
     private $content = array();
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
     public function getTitle() 
     {
         return $this->title;
@@ -108,10 +118,15 @@ class Document implements ContentInterface
     {
         return $this->path;
     }
-    
-    public function setPath($path)
+
+    public function setParent($parent)
     {
-        $this->path = $path;
+        $this->parent = $parent;
+    }
+
+    public function getParent() 
+    {
+        return $this->parent;
     }
 
     public function getChildren() 
@@ -208,5 +223,10 @@ class Document implements ContentInterface
         }
 
         return null;
+    }
+
+    public function __toString()
+    {
+        return $this->path;
     }
 }

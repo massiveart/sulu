@@ -17,7 +17,7 @@ use DTL\Bundle\ContentBundle\Document\ContentDocument;
 use Doctrine\ODM\PHPCR\DocumentManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\ManagerEventArgs;
-use DTL\Component\Content\Model\ContentInterface;
+use DTL\Component\Content\Model\DocumentInterface;
 
 class ContentSerializerSubscriber implements EventSubscriber
 {
@@ -126,6 +126,6 @@ class ContentSerializerSubscriber implements EventSubscriber
      */
     private function isContent($object)
     {
-        return $object instanceof ContentInterface;
+        return $object instanceof DocumentInterface;
     }
 }

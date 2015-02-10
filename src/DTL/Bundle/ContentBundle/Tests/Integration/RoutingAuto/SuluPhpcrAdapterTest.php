@@ -25,28 +25,13 @@ use Symfony\Component\HttpFoundation\Request;
 class SuluPhpcrAdapter extends SuluTestCase
 {
     private $content;
+    private $documentManager;
 
     public function setUp()
     {
         $this->autoRouteManager = $this->getContainer()->get('cmf_routing_auto.auto_route_manager');
-        $this->session = $this->getContainer()->get('doctrine_phpcr.session');
-        $this->requestAnaluzer = $this->getContainer()->get('sulu_core.webspace.request_analyzer.admin');
+        $this->manager = $this->getContainer()->get('doctrine_phpcr.odm.document_manager');
         $this->initPhpcr();
-
-        $contentParent = $this->session->getNode('/cmf/sulu_io/contents');
-        $content = $contentParent->addNode('animals');
-        $content->addMixin('sulu:content');
-        $this->content = $content;
-        $this->session->save();
-
-        $this->webspace = 'sulu_io';
-        $this->locale = 'de';
-
-        $request = new Request();
-        $request->query->set('webspace', $this->webspace);
-        $request->query->set('language', $this->locale);
-
-        $this->requestAnaluzer->analyze($request);
     }
 
     public function provideAdapter()
@@ -66,11 +51,7 @@ class SuluPhpcrAdapter extends SuluTestCase
     public function testAdapter($resourceLocator, $title, $expectedUrl)
     {
         $uriContext = $this->createUriContexts($resourceLocator, $title);
-
         $this->assertEquals($expectedUrl, $uriContext->getUri());
-
-        $expectedPath = sprintf('/cmf/%s/routes/%s%s', $this->webspace, $this->locale, $expectedUrl);
-        $this->session->getNode($expectedPath);
     }
 
     public function testRedirect()
@@ -85,7 +66,7 @@ class SuluPhpcrAdapter extends SuluTestCase
         $page = new PageDocument();
         $page->setResourceLocator($resourceLocator);
         $page->setTitle($title);
-        $page->setUuid($this->content->getIdentifier());
+        $this->manager->persist($page);
 
         $uriContextCollection = new UriContextCollection($page);
         $this->autoRouteManager->buildUriContextCollection($uriContextCollection);

@@ -5,6 +5,7 @@
 
     <parameters>
         <parameter key="dtl_content.event_subscriber.phpcr_odm.structure.class">DTL\Component\Content\EventSubscriber\ContentSerializerSubscriber</parameter>
+        <parameter key="dtl_content.event_subscriber.phpcr_odm.document_name.class">DTL\Component\Content\EventSubscriber\DocumentNameSubscriber</parameter>
         <parameter key="dtl_content.initializer.class">DTL\Bundle\ContentBundle\Initializer\PhpcrOdmInitializer</parameter>
     </parameters>
 
@@ -12,6 +13,12 @@
         <service id="dtl_content.event_subscriber.phpcr_odm.structure" class="%dtl_content.event_subscriber.phpcr_odm.structure.class%">
             <argument type="service" id="doctrine_phpcr.odm.document_manager" />
             <argument type="service" id="dtl_content.serializer.flat" />
+            <tag name="doctrine_phpcr.event_subscriber" />
+        </service>
+
+        <service id="dtl_content.event_subscriber.phpcr_odm.document_name" class="%dtl_content.event_subscriber.phpcr_odm.document_name.class%">
+            <argument type="service" id="doctrine_phpcr.odm.document_manager" />
+            <argument type="service" id="cmf_routing_auto.slugifier" />
             <tag name="doctrine_phpcr.event_subscriber" />
         </service>
 

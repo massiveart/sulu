@@ -23,14 +23,14 @@ class PageDocumentTest extends SuluTestCase
     {
         $this->manager = $this->getContainer()->get('doctrine_phpcr.odm.document_manager');
         $this->initPhpcr();
+        $this->parent = $this->manager->find(null, '/cmf/sulu_io/contents');
     }
 
-    public function provideDocument()
+    public function provideMapping()
     {
         return array(
             array(
                 array(
-                    'Path' => '/cmf/sulu_io/contents/foobar',
                     'Title' => 'Foobar',
                     'Locale' => 'de',
                     'StructureType' => 'overview',
@@ -47,7 +47,6 @@ class PageDocumentTest extends SuluTestCase
             ),
             array(
                 array(
-                    'Path' => '/cmf/sulu_io/contents/foobar',
                     'Title' => 'Foobar',
                     'Locale' => 'en',
                     'StructureType' => 'overview',
@@ -70,11 +69,17 @@ class PageDocumentTest extends SuluTestCase
     }
 
     /**
-     * @dataProvider provideDocument
+     * Assert that the fields are correctly mapped and that
+     * they persist correctly.
+     *
+     * @param array $data Value map for page document
+     *
+     * @dataProvider provideMapping
      */
-    public function testDocument($data)
+    public function testMapping($data)
     {
         $page = new PageDocument();
+        $page->setParent($this->parent);
 
         foreach ($data as $field => $value) {
             $page->{'set' . $field}($value);
@@ -92,5 +97,59 @@ class PageDocumentTest extends SuluTestCase
                 $document->{'get' . $field}()
             );
         }
+    }
+
+    /**
+     * Assert that we change the name of the document PHPCR node
+     * when a node with the same name already exists
+     */
+    public function testConflictResolution()
+    {
+        $page = $this->createPage('foobar');
+        $this->manager->persist($page);
+        $this->manager->flush();
+
+        $this->assertEquals('foobar', $page->getName());
+
+        $page = $this->createPage('foobar');
+        $this->manager->persist($page);
+        $this->manager->flush();
+
+        $this->assertEquals('foobar-1', $page->getName());
+
+        $page = $this->createPage('foobar');
+        $this->manager->persist($page);
+        $this->manager->flush();
+
+        $this->assertEquals('foobar-2', $page->getName());
+    }
+
+    /**
+     * Create a page document
+     *
+     * @param string $title
+     */
+    private function createPage($title)
+    {
+        $page = new PageDocument();
+        $page->setParent($this->parent);
+        $page->setTitle($title);
+        $page->setLocale('de');
+        $page->setResourceLocator('foo/bar');
+        $page->setStructureType('overview');
+        $page->setCreator(1);
+        $page->setChanger(1);
+        $page->setCreated(new \DateTime());
+        $page->setChanged(new \DateTime());
+        $page->setContent(array(
+            'foo' => array(
+                'bar' => 'foo',
+            ),
+            'bar' => array(
+                'baz' => 'god',
+            ),
+        ));
+
+        return $page;
     }
 }

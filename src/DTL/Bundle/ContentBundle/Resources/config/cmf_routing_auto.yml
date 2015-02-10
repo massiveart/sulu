@@ -3,3 +3,4 @@ DTL\Bundle\ContentBundle\Document\PageDocument:
     token_providers:
         url: [content_method, { method: getResourceLocator, slugify: false  }]
         title: [content_method, { method: getTitle }]
+    conflict_resolver: auto_increment
