@@ -91,11 +91,12 @@ class SuluPhpcrAdapter extends PhpcrOdmAdapter
                 $document->setNodeName($segment);
                 $this->dm->persist($document);
             }
+
             $parentDocument = $document;
         }
 
         $document = new Route();
-        $document->setContent($contentDocument->getUuid());
+        $document->setContent($contentDocument);
         $document->setName($headName);
         $document->setParent($parentDocument);
         $document->setType(AutoRouteInterface::TYPE_PRIMARY);

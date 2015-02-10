@@ -32,6 +32,7 @@ class PageDocumentTest extends SuluTestCase
                 array(
                     'Path' => '/cmf/sulu_io/contents/foobar',
                     'Title' => 'Foobar',
+                    'Locale' => 'de',
                     'StructureType' => 'overview',
                     'ResourceLocator' => 'foo/bar',
                     'Creator' => 2,
@@ -40,6 +41,27 @@ class PageDocumentTest extends SuluTestCase
                     'Changed' => new \DateTime('2015-02-09'),
                     'Content' => array(
                         'email' => 'daniel@dantleech.com',
+                        'telephone' => '00441305100100',
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    'Path' => '/cmf/sulu_io/contents/foobar',
+                    'Title' => 'Foobar',
+                    'Locale' => 'en',
+                    'StructureType' => 'overview',
+                    'ResourceLocator' => 'foo/bar',
+                    'Creator' => 2,
+                    'Changer' => 3,
+                    'Created' => new \DateTime('2015-02-09'),
+                    'Changed' => new \DateTime('2015-02-09'),
+                    'Content' => array(
+                        'smart-content' => array(
+                            'tags' => array('one', 'two', 'three'),
+                            'sort' => array('direction' => 'asc', 'field' => 'boo'),
+                            'source' => 'boo',
+                        ),
                         'telephone' => '00441305100100',
                     ),
                 ),
@@ -62,11 +84,12 @@ class PageDocumentTest extends SuluTestCase
         $this->manager->flush();
         $this->manager->detach($page);
 
-        $document = $this->manager->findOneByTitle($data['Title']);
+        $document = $this->manager->find(null, $page->getPath());
+
         foreach ($data as $field => $expectedValue) {
-            $this->assertEqulals(
+            $this->assertEquals(
                 $expectedValue,
-                $page->{'get' . $field}()
+                $document->{'get' . $field}()
             );
         }
     }
