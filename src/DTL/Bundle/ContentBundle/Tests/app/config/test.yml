@@ -11,6 +11,7 @@ doctrine_phpcr:
     odm:
         locales:
             de: [ 'en', 'fr' ]
+        translation_namespace: i18n
         document_managers:
             default:
                 auto_mapping: true
