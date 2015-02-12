@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<template xmlns="http://schemas.sulu.io/template/template"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+
+    <view>overview.html.twig</view>
+    <controller>SomeController</controller>
+    <cacheLifetime>2400</cacheLifetime>
+
+    <meta>
+        <label lang="de">Übersicht</label>
+        <label lang="en">Overview</label>
+    </meta>
+
+    <properties>
+        <property name="title" type="text_line" mandatory="true">
+            <meta>
+                <label lang="de">Titel</label>
+                <label lang="en">Title</label>
+            </meta>
+
+            <tag name="sulu.search.field" role="label"/>
+
+            <tag name="sulu.rlp.part"/>
+        </property>
+
+        <property name="url" type="resource_locator" mandatory="true">
+            <meta>
+                <label lang="de">Adresse</label>
+                <label lang="en">Resource locator</label>
+            </meta>
+
+            <tag name="sulu.rlp"/>
+        </property>
+
+        <property name="smartcontent" type="smart_content">
+            <meta>
+                <label lang="de">Smart-Content</label>
+                <label lang="en">Smart-Content</label>
+            </meta>
+
+            <params>
+                <param name="max_per_page" value="5"/>
+
+                <param name="properties" type="collection">
+                    <param name="label" value="label"/>
+                    <param name="article" value="article"/>
+                    <param name="ext_label" value="excerpt.label"/>
+                    <param name="ext_tags" value="excerpt.tags"/>
+                    <param name="ext_images" value="excerpt.images"/>
+                </param>
+            </params>
+        </property>
+
+        <property name="article" type="text_editor">
+            <meta>
+                <label lang="de">Artikel</label>
+                <label lang="en">Article</label>
+            </meta>
+
+            <tag name="sulu.search.field" role="description"/>
+        </property>
+    </properties>
+</template>
+
