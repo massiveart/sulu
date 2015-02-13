@@ -33,15 +33,17 @@ class PageDocumentTest extends SuluTestCase
                 array(
                     'Title' => 'Foobar',
                     'Locale' => 'de',
-                    'StructureType' => 'overview',
+                    'StructureType' => 'contact',
                     'ResourceLocator' => 'foo/bar',
                     'Creator' => 2,
                     'Changer' => 3,
                     'Created' => new \DateTime('2015-02-09'),
                     'Changed' => new \DateTime('2015-02-09'),
                     'Content' => array(
+                        'name' => 'Daniel Leech',
                         'email' => 'daniel@dantleech.com',
                         'telephone' => '00441305100100',
+                        'information' => 'Deutsch Informationen',
                     ),
                 ),
             ),
@@ -49,7 +51,7 @@ class PageDocumentTest extends SuluTestCase
                 array(
                     'Title' => 'Foobar',
                     'Locale' => 'en',
-                    'StructureType' => 'overview',
+                    'StructureType' => 'contact',
                     'ResourceLocator' => 'foo/bar',
                     'Creator' => 2,
                     'Changer' => 3,
@@ -79,12 +81,7 @@ class PageDocumentTest extends SuluTestCase
     public function testMapping($data)
     {
         $page = new PageDocument();
-        $page->setParent($this->parent);
-
-        foreach ($data as $field => $value) {
-            $page->{'set' . $field}($value);
-        }
-
+        $this->mapPage($page, $data);
         $this->manager->persist($page);
         $this->manager->flush();
         $this->manager->detach($page);
@@ -97,6 +94,21 @@ class PageDocumentTest extends SuluTestCase
                 $document->{'get' . $field}()
             );
         }
+    }
+
+    public function testLocalization()
+    {
+        $calls = $this->provideMapping();
+        $page = new PageDocument();
+
+        foreach ($calls as $args) {
+            $data = reset($args);
+            $this->mapPage($page, $data);
+            $this->manager->persist($page);
+            $this->manager->bindTranslation($page, $page->getLocale());
+        }
+
+        $this->manager->flush();
     }
 
     /**
@@ -136,19 +148,25 @@ class PageDocumentTest extends SuluTestCase
         $page->setTitle($title);
         $page->setLocale('de');
         $page->setResourceLocator('foo/bar');
-        $page->setStructureType('overview');
+        $page->setStructureType('contact');
         $page->setCreator(1);
         $page->setChanger(1);
         $page->setCreated(new \DateTime());
         $page->setChanged(new \DateTime());
         $page->setContent(array(
-            'foo' => array(
-                'bar' => 'foo',
-            ),
-            'bar' => array(
-                'baz' => 'god',
-            ),
+            'email' => 'dan',
         ));
+
+        return $page;
+    }
+
+    private function mapPage($page, $data)
+    {
+        $page->setParent($this->parent);
+
+        foreach ($data as $field => $value) {
+            $page->{'set' . $field}($value);
+        }
 
         return $page;
     }

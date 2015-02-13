@@ -27,12 +27,34 @@ class DtlContentExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('phpcr_odm.xml');
         $loader->load('serializer.xml');
         $loader->load('form.xml');
         $loader->load('form_content_types.xml');
         $loader->load('routing_auto.xml');
+        $loader->load('structure.xml');
+
+        $this->processStructure($config['structure'], $container);
+    }
+
+    private function processStructure($config, ContainerBuilder $container)
+    {
+        $this->processPaths($config['paths'], $container);
+    }
+
+    private function processPaths($config, ContainerBuilder $container)
+    {
+        $typePaths = array();
+
+        foreach ($config as $path) {
+            $typePaths[$path['type']] = $path['path'];
+        }
+
+        $container->setParameter('dtl_content.structure.paths', $typePaths);
     }
 }
 

@@ -52,10 +52,10 @@ class FlatSerializer implements SerializerInterface
         $data = $document->getContent();
         $type = $document->getStructureType();
 
-        $structure = $this->structureFactory->getStructure($type);
+        $structure = $this->structureFactory->getStructure($document->getDocumentType(), $type);
 
-        $localizedProps = $structure->getLocalizedProperties();
-        $nonLocalizedProps = $structure->getNonLocalizedProperties();
+        $localizedProps = array();
+        $nonLocalizedProps = array();
 
         foreach ($data as $key => $value) {
             $isTranslated = $structure->getProperty($key)->localized;
@@ -89,19 +89,17 @@ class FlatSerializer implements SerializerInterface
         $node = $document->getPhpcrNode();
         $type = $document->getStructureType();
 
-        $structure = $this->structureFactory->getStructure($type);
+        $structure = $this->structureFactory->getStructure($document->getDocumentType(), $type);
 
-        $localized = array();
         $nodeProperties = $node->getProperties();
         $flatData = array();
 
-        foreach ($structure->getLocalizedProperties() as $name => $property) {
+        foreach (array_keys($structure->getLocalizedProperties()) as $name) {
             $prefix = $this->propertyNameEncoder->encodeLocalized($name, $document->getLocale());
             $flatData = array_merge($flatData, $this->extractProperties($name, $prefix, $nodeProperties));
         }
 
-        $nonLocalized = array();
-        foreach ($structure->getNonLocalizedProperties() as $name => $property) {
+        foreach (array_keys($structure->getNonLocalizedProperties()) as $name) {
             $prefix = $this->propertyNameEncoder->encode($name);
             $flatData = array_merge($flatData, $this->extractProperties($name, $prefix, $nodeProperties));
         }

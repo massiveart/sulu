@@ -17,13 +17,37 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\FileLocator;
 use Doctrine\Common\Inflector\Inflector;
 
+/**
+ * Create new (mapped) structures using the provided loader.
+ */
 class StructureFactory
 {
+    /**
+     * @var array
+     */
     private $typePaths = array();
+
+    /**
+     * @var string
+     */
     private $cachePath;
+
+    /**
+     * @var LoaderInterface
+     */
     private $loader;
+
+    /**
+     * @var boolean
+     */
     private $debug;
 
+    /**
+     * @param LoaderInterface $loader
+     * @param array $typePaths
+     * @param mixed $cachePath
+     * @param mixed $debug
+     */
     public function __construct(LoaderInterface $loader, array $typePaths, $cachePath, $debug = false)
     {
         $this->typePaths = $typePaths;
@@ -32,6 +56,12 @@ class StructureFactory
         $this->debug = $debug;
     }
 
+    /**
+     * Return the structure of the given $type and $structureType
+     *
+     * @param mixed $type The primary system type, e.g. page, snippet
+     * @param mixed $structureType The secondary user type
+     */
     public function getStructure($type, $structureType)
     {
         if (!isset($this->typePaths[$type])) {

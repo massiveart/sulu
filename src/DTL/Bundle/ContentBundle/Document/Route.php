@@ -65,6 +65,8 @@ class Route implements RouteObjectInterface, AutoRouteInterface
      */
     private $created;
 
+    private $autoRouteTag;
+
     /**
      * Get the repository path of this url entry
      */

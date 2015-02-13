@@ -21,6 +21,7 @@
         <field name="history" property="sulu:history" type="boolean" />
         <field name="tag" property="sulu:autoroutetag" type="string" nullable="true"/>
         <field name="created" property="sulu:created" type="string" />
+        <field name="autoRouteTag" property="sulu:autoroutetag" type="string" nullable="true"/>
     </document>
 
 </doctrine-mapping>

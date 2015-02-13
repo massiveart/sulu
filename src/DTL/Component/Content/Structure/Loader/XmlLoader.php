@@ -41,6 +41,7 @@ class XmlLoader implements LoaderInterface
         $xpath->registerNamespace('x', 'http://schemas.sulu.io/template/template');
 
         $structure = $this->loadStructure($xpath);
+        $structure->resource = $resource;
 
         return $structure;
     }
@@ -119,7 +120,7 @@ class XmlLoader implements LoaderInterface
         $types = $this->loadTypes('x:types/x:type', $tags, $xpath, $node);
 
         if (count($types)) {
-            $property['formOptions']['types'] = $types;
+            $property->formOptions['types'] = $types;
         }
 
         $cssClass = $this->getValueFromXPath('@cssClass', $xpath, $node);
@@ -266,7 +267,7 @@ class XmlLoader implements LoaderInterface
 
         /** @var \DOMElement $node */
         foreach ($xpath->query($path, $context) as $node) {
-            $value = $this->loadType($templateKey, $xpath, $node, $tags);
+            $value = $this->loadType($xpath, $node, $tags);
             $result[$value['name']] = $value;
         }
 
@@ -281,7 +282,7 @@ class XmlLoader implements LoaderInterface
         $result = $this->loadValues($xpath, $node, array('name'));
 
         $result['meta'] = $this->loadMeta('x:meta/x:*', $xpath, $node);
-        $result['properties'] = $this->loadProperties($templateKey, 'x:properties/x:*', $tags, $xpath, $node);
+        $result['properties'] = $this->loadProperties('x:properties/x:*', $tags, $xpath, $node);
 
         return $result;
     }

@@ -31,4 +31,34 @@ class PageDocument extends Document
     {
         $this->state = $state;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDocumentType()
+    {
+        return 'page';
+    }
+
+    public function getLocales()
+    {
+        $locales = array();
+
+        $node = $this->getPhpcrNode();
+        if (!$node) {
+            return array($this->getLocale());
+        }
+
+        foreach ($node->getProperties() as $property) {
+            /** @var PropertyInterface $property */
+            preg_match('/^' . 'i18n' . ':([a-zA-Z_]*?)-title/', $property->getName(), $matches);
+
+            if ($matches) {
+                $locales[$matches[1]] = $matches[1];
+            }
+        }
+
+        return array_values($locales);
+    }
+
 }

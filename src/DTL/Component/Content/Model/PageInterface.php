@@ -24,18 +24,12 @@ interface PageInterface extends DocumentInterface
      *
      * @return string
      */
-    public function getResourceLocator() 
-    {
-        return $this->resourceLocator;
-    }
+    public function getResourceLocator();
 
     /**
      * Set the resource locator
      *
      * @param string
      */
-    public function setResourceLocator($resourceLocator)
-    {
-        $this->resourceLocator = $resourceLocator;
-    }
+    public function setResourceLocator($resourceLocator);
 }

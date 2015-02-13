@@ -16,6 +16,13 @@ use DTL\Component\Content\Structure\Property;
 class Structure
 {
     /**
+     * The resource from which this structure was loaded
+     *
+     * @var string
+     */
+    public $resource;
+
+    /**
      * Translated label of this structure
      *
      * array('de'=> 'Wilkommen', 'fr' => 'Bienvenue')
@@ -82,8 +89,8 @@ class Structure
     {
         if (!isset($this->properties[$name])) {
             throw new \InvalidArgumentException(sprintf(
-                'Unknown property "%s" in structure: %s',
-                $name, json_encode($this)
+                'Unknown property "%s" in structure loaded from: "%s"',
+                $name, $this->resource
             ));
         }
 

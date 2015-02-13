@@ -175,4 +175,12 @@ interface DocumentInterface
      * @return PHPCR\NodeInterface
      */
     public function getPhpcrNode();
+
+    /**
+     * Return the document type, e.g. "page" or "snippet". This value
+     * should be constant.
+     *
+     * @return string
+     */
+    public function getDocumentType();
 }

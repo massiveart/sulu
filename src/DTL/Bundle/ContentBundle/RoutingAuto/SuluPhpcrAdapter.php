@@ -64,11 +64,11 @@ class SuluPhpcrAdapter extends PhpcrOdmAdapter
     /**
      * {@inheritDoc}
      */
-    public function createAutoRoute($uri, $contentDocument, $autoRouteTag)
+    public function createAutoRoute(UriContext $uriContext, $contentDocument, $autoRouteTag)
     {
         $path = rtrim($this->sessionManager->getRoutePath(
             $contentDocument->getWebspaceKey(),
-            $contentDocument->getLocale()
+            $uriContext->getLocale()
         ), '/');
 
         try {
@@ -79,7 +79,7 @@ class SuluPhpcrAdapter extends PhpcrOdmAdapter
             ));
         }
 
-        $segments = preg_split('#/#', $uri, null, PREG_SPLIT_NO_EMPTY);
+        $segments = preg_split('#/#', $uriContext->getUri(), null, PREG_SPLIT_NO_EMPTY);
         $headName = array_pop($segments);
         foreach ($segments as $segment) {
             $path .= '/' . $segment;
@@ -101,6 +101,7 @@ class SuluPhpcrAdapter extends PhpcrOdmAdapter
         $document->setParent($parentDocument);
         $document->setType(AutoRouteInterface::TYPE_PRIMARY);
         $document->setCreated(new \DateTime());
+        $document->setAutoRouteTag($autoRouteTag);
 
         return $document;
     }
@@ -121,7 +122,7 @@ class SuluPhpcrAdapter extends PhpcrOdmAdapter
     {
         $subject = $uriContext->getSubjectObject();
         $webspace = $subject->getWebspaceKey();
-        $locale = $subject->getLocale();
+        $locale = $uriContext->getLocale();
         $path = sprintf('%s%s',
             rtrim($this->sessionManager->getRoutePath($webspace, $locale), '/'),
             $uri

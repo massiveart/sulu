@@ -9,6 +9,7 @@
           <parent-document name="parent" />
           <children name="children" />
           <locale name="locale" />
+          <node name="node" />
 
           <field name="title" type="string" translated="true" />
           <field name="structureType" type="string" translated="true" />

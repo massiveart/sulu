@@ -73,7 +73,7 @@ class ContentSerializerSubscriber implements EventSubscriber
         }
 
         $node = $this->documentManager->getNodeForDocument($document);
-        $data = $this->serializer->deserialize($node, $document);
+        $data = $this->serializer->deserialize($document);
         $document->setContent($data);
     }
 

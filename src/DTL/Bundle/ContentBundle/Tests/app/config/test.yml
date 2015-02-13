@@ -22,14 +22,8 @@ cmf_routing_auto:
         phpcr: ~
 
 dtl_content:
-    structure_map:
-        page:
-            template_paths:
-                - "%kernel.dir%/Resources/pages"
-                - "%kernel.dir%/../vendor/sulu/sulu/content/foo/templates"
-            loader: page
-
-        snippet:
-            template_paths:
-                - "%kernel.dir%/Resources/snippets"
-            loader: snippet
+    structure:
+        paths:
+            -
+                path: "%kernel.root_dir%/Resources/pages"
+                type: "page"
