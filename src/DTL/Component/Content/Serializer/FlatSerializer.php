@@ -11,6 +11,9 @@
 namespace DTL\Component\Content\Serializer;
 
 use PHPCR\NodeInterface;
+use DTL\Component\Content\Serializer\PropertyNameEncoderInterface;
+use DTL\Component\Content\Model\DocumentInterface;
+use DTL\Component\Content\Structure\StructureFactory;
 
 /**
  * Serialize content data into a series of properties in a single node.
@@ -18,64 +21,159 @@ use PHPCR\NodeInterface;
 class FlatSerializer implements SerializerInterface
 {
     const ARRAY_DELIM = '.';
-    const NS = 'cont';
 
     /**
-     * {@inheritDoc}
+     * @var StructureFactory
      */
-    public function serialize($data, NodeInterface $node)
+    private $structureFactory;
+
+    /**
+     * @var PropertyNameEncoderInterface
+     */
+    private $propertyNameEncoder;
+
+    /**
+     * @param StructureFactory $structureFactory
+     */
+    public function __construct(
+        StructureFactory $structureFactory, 
+        PropertyNameEncoderInterface $propertyNameEncoder)
     {
-        $res = $this->flatten($data);
-
-        foreach ($res as $propName => $propValue) {
-            $node->setProperty($propName, $propValue);
-        }
-
-        return $node;
+        $this->structureFactory = $structureFactory;
+        $this->propertyNameEncoder = $propertyNameEncoder;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function deserialize(NodeInterface $node)
+    public function serialize(DocumentInterface $document)
     {
-        $flatData = array();
-        foreach ($node->getProperties(self::NS . ':*') as $propName => $prop) {
-            $propName = substr($propName, strlen(self::NS) + 1);
-            $flatData[$propName] = $prop->getValue();
+        $node = $document->getPhpcrNode();
+        $data = $document->getContent();
+        $type = $document->getStructureType();
+
+        $structure = $this->structureFactory->getStructure($type);
+
+        $localizedProps = $structure->getLocalizedProperties();
+        $nonLocalizedProps = $structure->getNonLocalizedProperties();
+
+        foreach ($data as $key => $value) {
+            $isTranslated = $structure->getProperty($key)->localized;
+
+            if ($isTranslated) {
+                $localizedProps[$key] = $value;
+                continue;
+            }
+
+            $nonLocalizedProps[$key] = $value;
         }
 
-        $res = array();
+        foreach ($this->flatten($localizedProps) as $propName => $propValue) {
+            $propName = $this->propertyNameEncoder->encodeLocalized($propName, $document->getLocale());
+            $node->setProperty($propName, $propValue);
+        }
+
+        foreach ($this->flatten($nonLocalizedProps) as $propName => $propValue) {
+            $propName = $this->propertyNameEncoder->encode($propName);
+            $node->setProperty($propName, $propValue);
+        }
+
+        return $document;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function deserialize(DocumentInterface $document)
+    {
+        $node = $document->getPhpcrNode();
+        $type = $document->getStructureType();
+
+        $structure = $this->structureFactory->getStructure($type);
+
+        $localized = array();
+        $nodeProperties = $node->getProperties();
+        $flatData = array();
+
+        foreach ($structure->getLocalizedProperties() as $name => $property) {
+            $prefix = $this->propertyNameEncoder->encodeLocalized($name, $document->getLocale());
+            $flatData = array_merge($flatData, $this->extractProperties($name, $prefix, $nodeProperties));
+        }
+
+        $nonLocalized = array();
+        foreach ($structure->getNonLocalizedProperties() as $name => $property) {
+            $prefix = $this->propertyNameEncoder->encode($name);
+            $flatData = array_merge($flatData, $this->extractProperties($name, $prefix, $nodeProperties));
+        }
+
+        $result = array();
         foreach ($flatData as $key => $value) {
             $keys = explode(self::ARRAY_DELIM, $key);
-            $res = array_merge_recursive(
-                $res,
-                $this->blowUp($keys, $value, $res)
+            $result = array_merge_recursive(
+                $result,
+                $this->blowUp($keys, $value, $result)
             );
         }
 
-        return $res;
+        return $result;
+    }
+
+    /**
+     * Extract the properties which match the given prefix, e.g.
+     *
+     *     i18n:de-animals.types
+     *     cont:foo.bar.doo
+     *     cont:title
+     *
+     * @param string $name
+     * @param string $prefix
+     * @param array $nodeProperties
+     *
+     * @return array Normalized key value array for properties which match the prefix
+     */
+    private function extractProperties($name, $prefix, &$nodeProperties)
+    {
+        $flatData = array();
+        foreach ($nodeProperties as $propName => $prop) {
+            if ($propName === $prefix) {
+                $flatData[$name] = $prop->getValue();
+                continue;
+            }
+
+            if (0 !== strpos($propName, $prefix . self::ARRAY_DELIM)) {
+                continue;
+            }
+
+            $propName = substr($propName, strlen($prefix . self::ARRAY_DELIM));
+            $flatData[$name . '.' . $propName] = $prop->getValue();
+        }
+
+        return $flatData;
     }
 
     /**
      * Convert the given multidimensional array into a flat array
+     *
+     * @param mixed $value
+     * @param array $ancestors
+     * @param array $result
      */
-    private function flatten($value, $ancestors = array(), $res = array())
+    private function flatten($value, $ancestors = array(), $result = array())
     {
         foreach ($value as $key => $value) {
             $currentAncestors = $ancestors;
             array_push($currentAncestors, $key);
 
             if (is_array($value)) {
-                $res = $this->flatten($value, $currentAncestors, $res);
+                $result = $this->flatten($value, $currentAncestors, $result);
                 continue;
             }
 
-            $key = self::NS . ':' . implode(self::ARRAY_DELIM, $currentAncestors);
-            $res[$key] = $value;
+            $key = implode(self::ARRAY_DELIM, $currentAncestors);
+            $result[$key] = $value;
         }
 
-        return $res;
+        return $result;
     }
 
     /**

@@ -16,7 +16,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormBuilderInterface;
 use DTL\Bundle\ContentBundle\Document\ContentDocument;
 
-abstract class AbstractContentType extends AbstractType
+abstract class AbstractDocumentType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

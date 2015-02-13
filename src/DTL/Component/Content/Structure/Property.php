@@ -46,7 +46,7 @@ class Property
     /**
      * @var boolean
      */
-    public $translated = false;
+    public $localized = false;
 
     /**
      * @var array

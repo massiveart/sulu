@@ -11,20 +11,36 @@
 namespace DTL\Component\Content\Serializer;
 
 use Prophecy\PhpUnit\ProphecyTestCase;
+use DTL\Component\Content\Structure\Structure;
+use DTL\Component\Content\Structure\Property;
+use DTL\Component\Content\Serializer\PropertyNameEncoder;
 
 class FlatSerializerTest extends ProphecyTestCase
 {
     public function setUp()
     {
         parent::setUp();
-        $this->serializer = new FlatSerializer();
+        $this->structureFactory = $this->prophesize('DTL\Component\Content\Structure\StructureFactory');
+        $this->structure = new Structure();
+        $this->document = $this->prophesize('DTL\Component\Content\Model\DocumentInterface');
         $this->node = $this->prophesize('PHPCR\NodeInterface');
+        $this->encoder = new PropertyNameEncoder('i18n', 'cont');
+
+        $this->structureFactory->getStructure('test')->willReturn(
+            $this->structure
+        );
+
+        $this->serializer = new FlatSerializer(
+            $this->structureFactory->reveal(),
+            $this->encoder
+        );
     }
 
     public function provideSerializer()
     {
         return array(
             array(
+                'de',
                 array(
                     'some_number' => 1234,
                     'animals' => array(
@@ -42,9 +58,20 @@ class FlatSerializerTest extends ProphecyTestCase
                     ),
                 ),
                 array(
+                    'some_number' => array(
+                        'localized' => false,
+                    ),
+                    'animals' => array(
+                        'localized' => true,
+                    ),
+                    'options' => array(
+                        'localized' => false,
+                    ),
+                ),
+                array(
                     'cont:some_number' => 1234,
-                    'cont:animals' . FlatSerializer::ARRAY_DELIM . 'title' => 'Smart content',
-                    'cont:animals' . FlatSerializer::ARRAY_DELIM . 'sort_method' => 'asc',
+                    'i18n:de-animals' . FlatSerializer::ARRAY_DELIM . 'title' => 'Smart content',
+                    'i18n:de-animals' . FlatSerializer::ARRAY_DELIM . 'sort_method' => 'asc',
                     'cont:options' . FlatSerializer::ARRAY_DELIM . 'numbers' . FlatSerializer::ARRAY_DELIM . '0' => 'two',
                     'cont:options' . FlatSerializer::ARRAY_DELIM . 'numbers' . FlatSerializer::ARRAY_DELIM . '1' => 'three',
                     'cont:options' . FlatSerializer::ARRAY_DELIM . 'foo' . FlatSerializer::ARRAY_DELIM . 'bar' => 'baz',
@@ -55,22 +82,49 @@ class FlatSerializerTest extends ProphecyTestCase
     }
 
     /**
+     * @param string $locale Locale to use for the document
+     * @param array $data Content data which the document will return
+     * @param array $propertyMetadatas Metadata for the structure properties
+     * @param array $expectedResult Expected result
+     *
      * @dataProvider provideSerializer
      */
-    public function testSerialize($data, $expectedRes)
+    public function testSerialize($locale, $data, $propertyMetadatas, $expectedResult)
     {
-        foreach ($expectedRes as $propName => $propValue) {
+        $this->document->getStructureType()->willReturn('test');
+        $this->document->getPhpcrNode()->willReturn($this->node);
+        $this->document->getLocale()->willReturn($locale);
+        $this->document->getContent()->willReturn($data);
+
+        $this->loadMetadata($propertyMetadatas);
+
+        foreach ($expectedResult as $propName => $propValue) {
             $this->node->setProperty($propName, $propValue)->shouldBeCalled();
         }
 
-        $this->serializer->serialize($data, $this->node->reveal());
+        $this->serializer->serialize($this->document->reveal());
     }
 
     /**
      * @dataProvider provideSerializer
      */
-    public function testDeserialize($expectedRes, $data)
+    public function testDeserialize($locale, $expectedResult, $propertyMetadatas, $data)
     {
+        $this->document->getStructureType()->willReturn('test');
+        $this->document->getPhpcrNode()->willReturn($this->node);
+        $this->document->getLocale()->willReturn($locale);
+
+        $this->loadMetadata($propertyMetadatas);
+
+        $nodeProperties = array();
+        foreach ($data as $propName => $propValue) {
+            $nodeProperty = $this->prophesize('PHPCR\PropertyInterface');
+            $nodeProperty->getValue()->willReturn($propValue);
+            $nodeProperties[$propName] = $nodeProperty->reveal();
+        }
+
+        $this->node->getProperties()->willReturn($nodeProperties);
+
         $props = array();
         foreach ($data as $propName => $propValue) {
             $prop = $this->prophesize('Sulu\Component\Content\PropertyInterface');
@@ -78,10 +132,19 @@ class FlatSerializerTest extends ProphecyTestCase
             $props[$propName] = $prop;
         }
 
-        $this->node->getProperties(FlatSerializer::NS . ':*')->willReturn($props);
+        $res = $this->serializer->deserialize($this->document->reveal());
 
-        $res = $this->serializer->deserialize($this->node->reveal());
+        $this->assertEquals($expectedResult, $res);
+    }
 
-        $this->assertSame($expectedRes, $res);
+    private function loadMetadata($propertyMetadatas)
+    {
+        foreach ($propertyMetadatas as $propertyName => $propertyMetadata) {
+            $property = new Property();
+            foreach ($propertyMetadata as $attrName => $attrValue) {
+                $property->$attrName = $attrValue;
+            }
+            $this->structure->properties[$propertyName] = $property;
+        }
     }
 }

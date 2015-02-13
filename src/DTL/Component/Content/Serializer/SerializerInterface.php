@@ -11,6 +11,7 @@
 namespace DTL\Component\Content\Serializer;
 
 use PHPCR\NodeInterface;
+use DTL\Component\Content\Model\DocumentInterface;
 
 /**
  * Serialize / deserialize content from a PHPCR node
@@ -25,7 +26,7 @@ interface SerializerInterface
      *
      * @return NodeInterface
      */
-    public function serialize($data, NodeInterface $node);
+    public function serialize(DocumentInterface $document);
 
     /**
      * Extract the content data from the given node
@@ -34,6 +35,6 @@ interface SerializerInterface
      *
      * @return array
      */
-    public function deserialize(NodeInterface $node);
+    public function deserialize(DocumentInterface $document);
 }
 

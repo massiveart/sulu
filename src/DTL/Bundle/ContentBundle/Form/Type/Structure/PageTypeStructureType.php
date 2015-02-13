@@ -12,7 +12,7 @@ use DTL\Bundle\ContentBundle\Document\PageDocument;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class PageTypeStructureTypeTest extends SuluTestCase
+class PageTypeStructureType extends AbstractStructureType
 {
     public function setUp()
     {

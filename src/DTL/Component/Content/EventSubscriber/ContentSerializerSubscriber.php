@@ -73,7 +73,7 @@ class ContentSerializerSubscriber implements EventSubscriber
         }
 
         $node = $this->documentManager->getNodeForDocument($document);
-        $data = $this->serializer->deserialize($node);
+        $data = $this->serializer->deserialize($node, $document);
         $document->setContent($data);
     }
 
@@ -115,7 +115,7 @@ class ContentSerializerSubscriber implements EventSubscriber
 
         foreach ($this->serializationStack as $document) {
             $node = $this->documentManager->getNodeForDocument($document);
-            $this->serializer->serialize($document->getContent(), $node);
+            $this->serializer->serialize($document, $node);
         }
 
         $session->save();

@@ -20,3 +20,16 @@ cmf_routing_auto:
     adapter: sulu_phpcr
     persistence:
         phpcr: ~
+
+dtl_content:
+    structure_map:
+        page:
+            template_paths:
+                - "%kernel.dir%/Resources/pages"
+                - "%kernel.dir%/../vendor/sulu/sulu/content/foo/templates"
+            loader: page
+
+        snippet:
+            template_paths:
+                - "%kernel.dir%/Resources/snippets"
+            loader: snippet
