@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\Structure\Driver;
+namespace DTL\Component\Content\Structure\Loader;
 
 use Exception;
 use Sulu\Component\Content\Template\Exception\RequiredPropertyNameNotFoundException;
@@ -25,7 +25,7 @@ use DTL\Component\Content\Structure\Property;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class XmlDriver implements LoaderInterface
+class XmlLoader implements LoaderInterface
 {
     const SCHEME_PATH = '/schema/structure.xsd';
 
@@ -104,7 +104,7 @@ class XmlDriver implements LoaderInterface
     {
         $property = new Property();
         $property->required = $this->getBooleanValueFromXPath('@mandatory', $xpath, $node, false);
-        $property->translated = $this->getBooleanValueFromXPath('@multilingual', $xpath, $node, true);
+        $property->localized = $this->getBooleanValueFromXPath('@multilingual', $xpath, $node, true);
         $property->tags = $this->loadTags('x:tag', $tags, $xpath, $node);
         $property->label = $this->loadLabels('x:meta/x:label', $xpath, $node);
 

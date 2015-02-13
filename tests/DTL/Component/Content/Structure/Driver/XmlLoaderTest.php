@@ -9,21 +9,21 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\Structure\Driver;
+namespace DTL\Component\Content\Structure\Loader;
 
 use Prophecy\PhpUnit\ProphecyTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use DTL\Component\Content\Structure\StructureFactory;
-use DTL\Component\Content\Structure\Driver\XmlDriver;
+use DTL\Component\Content\Structure\Loader\XmlLoader;
 
-class XmlDriverTest extends ProphecyTestCase
+class XmlLoaderTest extends ProphecyTestCase
 {
-    private $xmlDriver;
+    private $xmlLoader;
 
     public function setUp()
     {
         parent::setUp();
-        $this->xmlDriver = new XmlDriver();
+        $this->xmlLoader = new XmlLoader();
     }
 
     public function provideLoad()
@@ -89,7 +89,7 @@ class XmlDriverTest extends ProphecyTestCase
      */
     public function testLoad($resource, $expectedStructure)
     {
-        $structure = $this->xmlDriver->load($resource);
+        $structure = $this->xmlLoader->load($resource);
         $this->assertRecursive($structure, $expectedStructure);
     }
 
