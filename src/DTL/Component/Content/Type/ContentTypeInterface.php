@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\Form;
+namespace DTL\Component\Content\Type;
 
 use Symfony\Component\Form\FormTypeInterface;
 use DTL\Component\Content\Form\ContentView;
@@ -20,7 +20,7 @@ use Symfony\Component\Form\FormInterface;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-interface ContentTypeInterface extends FormTypeInterface
+interface ContentTypeInterface
 {
     /**
      * Build the content view data.

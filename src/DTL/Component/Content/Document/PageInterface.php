@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\Model;
+namespace DTL\Component\Content\Document;
 
 use Doctrine\ODM\PHPCR\ChildrenCollection;
 
