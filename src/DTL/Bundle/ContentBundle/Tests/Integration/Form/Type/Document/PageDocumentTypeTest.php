@@ -31,10 +31,10 @@ class PageDocumentTypeTest extends SuluTestCase
     {
         $page = new PageDocument();
         $page->setStructureType('contact');
+
         $form = $this->factory->create('page', $page, array(
             'webspace_key' => 'sulu_io',
             'locale' => 'de',
-            'labels' => array('de' => 'Daniel', 'fr' => 'Daniel'),
         ));
 
         $view = $form->createView();

@@ -32,7 +32,7 @@ abstract class AbstractDocumentType extends AbstractType
         $options->setRequired(array(
             'webspace_key',
             'locale',
-            'labels',
+            'label',
         ));
     }
 

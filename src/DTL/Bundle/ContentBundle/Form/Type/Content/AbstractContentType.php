@@ -31,7 +31,7 @@ abstract class AbstractContentType extends AbstractType implements ContentTypeIn
         $options->setRequired(array(
             'webspace_key',
             'locale',
-            'labels',
+            'label',
         ));
 
         $options->setDefaults(array(
