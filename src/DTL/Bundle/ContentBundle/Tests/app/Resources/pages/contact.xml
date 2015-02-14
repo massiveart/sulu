@@ -13,7 +13,7 @@
         <property multilingual="false" name="name" type="text_line"/>
         <property multilingual="false" name="email" type="text_line"/>
         <property multilingual="false" name="telephone" type="text_line" />
-        <property name="information" type="text" />
-        <property name="smart-content" type="smart_content" />
+        <property name="information" type="text_line" />
+        <property name="smart-content" type="text_line" />
     </properties>
 </template>

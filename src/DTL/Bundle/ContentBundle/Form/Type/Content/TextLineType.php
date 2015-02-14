@@ -13,7 +13,7 @@ namespace DTL\Bundle\ContentBundle\Form\Type\Content;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class TextLineType extends AbstractContentContentType
+class TextLineType extends AbstractContentType
 {
     /**
      * {@inheritDoc}

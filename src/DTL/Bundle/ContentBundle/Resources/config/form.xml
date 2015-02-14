@@ -5,6 +5,7 @@
 
     <services>
         <!-- Custom form factory and registry for content reendering -->
+        <!-- Will probably remove all of this -->
         <service id="dtl_content.form.resolved_type_factory" class="DTL\Component\Content\Form\ResolvedFormTypeFactory"/>
 
         <service id="dtl_content.form.registry" class="%form.registry.class%">
@@ -19,8 +20,15 @@
             <argument type="service" id="dtl_content.form.resolved_type_factory" />
         </service>
 
+        <!-- Structure form type factory -->
+        <service id="dtl_content.form.factory.structure_type" class="DTL\Component\Content\Form\Factory\StructureFormTypeFactory">
+            <argument type="service" id="dtl_content.structure.factory" />
+            <argument type="service" id="form.factory" />
+        </service>
+
         <!-- Form structure types -->
-        <service id="dtl_content.form.type.page" class="DTL\Component\Content\Form\Type\PageType">
+        <service id="dtl_content.form.type.page" class="DTL\Bundle\ContentBundle\Form\Type\Document\PageDocumentType">
+            <argument type="service" id="dtl_content.form.factory.structure_type"/>
             <tag name="form.type" alias="page" />
         </service>
 

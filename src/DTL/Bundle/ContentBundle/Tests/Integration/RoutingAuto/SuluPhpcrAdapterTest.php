@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class SuluPhpcrAdapter extends SuluTestCase
+class SuluPhpcrAdapterTest extends SuluTestCase
 {
     private $content;
     private $documentManager;
@@ -32,6 +32,7 @@ class SuluPhpcrAdapter extends SuluTestCase
         $this->autoRouteManager = $this->getContainer()->get('cmf_routing_auto.auto_route_manager');
         $this->manager = $this->getContainer()->get('doctrine_phpcr.odm.document_manager');
         $this->initPhpcr();
+        $this->parent = $this->manager->find(null, '/cmf/sulu_io/contents');
     }
 
     public function provideAdapter()
@@ -57,24 +58,29 @@ class SuluPhpcrAdapter extends SuluTestCase
     public function testRedirect()
     {
         $this->createUriContexts('this', 'Foo bar');
-        $this->session->save();
         $this->createUriContexts('this-is-new', 'Foo bar');
     }
 
     private function createUriContexts($resourceLocator, $title)
     {
         $page = new PageDocument();
+        $page->setParent($this->parent);
         $page->setResourceLocator($resourceLocator);
+        $page->setStructureType('contact');
+        $page->setCreator(1);
+        $page->setChanger(1);
+        $page->setCreated(new \DateTime());
+        $page->setChanged(new \DateTime());
         $page->setTitle($title);
+        $page->setLocale('de');
         $this->manager->persist($page);
+        $this->manager->flush();
 
         $uriContextCollection = new UriContextCollection($page);
         $this->autoRouteManager->buildUriContextCollection($uriContextCollection);
         $this->autoRouteManager->handleDefunctRoutes();
         $uriContexts = $uriContextCollection->getUriContexts();
         $this->assertCount(1, $uriContexts);
-
-        $this->session->save();
 
         return reset($uriContexts);
     }

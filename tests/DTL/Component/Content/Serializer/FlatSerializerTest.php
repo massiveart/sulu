@@ -23,10 +23,11 @@ class FlatSerializerTest extends ProphecyTestCase
         $this->structureFactory = $this->prophesize('DTL\Component\Content\Structure\StructureFactory');
         $this->structure = new Structure();
         $this->document = $this->prophesize('DTL\Component\Content\Model\DocumentInterface');
+        $this->document->getDocumentType()->willReturn('page');
         $this->node = $this->prophesize('PHPCR\NodeInterface');
         $this->encoder = new PropertyNameEncoder('i18n', 'cont');
 
-        $this->structureFactory->getStructure('test')->willReturn(
+        $this->structureFactory->getStructure('page', 'test')->willReturn(
             $this->structure
         );
 
