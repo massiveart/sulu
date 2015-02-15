@@ -27,7 +27,7 @@ class BlockType extends AbstractContentType
     /**
      * {@inheritDoc}
      */
-    public function setFormDefaultOptions(OptionsResolverInterface $options)
+    public function setDefaultOptions(OptionsResolverInterface $options)
     {
         parent::setFormDefaultOptions($options);
 
@@ -58,11 +58,31 @@ class BlockType extends AbstractContentType
             }
             $builder->add($prototypeBuilder->getForm());
         }
+
+        // handle resize .. how does current system do it?
     }
 
     public function buildFrontView(FrontView $view, $data, $options)
     {
-        // how to get the default_type from the form configuration??
+        $defaultType = $options['default_type'];
+        $prototypes = $options['prototypes'];
+        $children = array();
+
+        foreach ($data as $prototypeName => $content) {
+
+            // if the prototype is not defined then it means the user
+            // has removed its definition from the structure resource but the
+            // content repository still has a reference to it. we must allow this.
+            if (!isset($prototypes[$prototypeName])) {
+                continue;
+            }
+
+            $prototype = $prototypes[$prototypeName];
+            $child = $this->frontBuilder->buildFromProperties($prototype['properties'], $content);
+            $children[] = $view;
+        }
+
+        $view->setChildren($children);
     }
 
     /**

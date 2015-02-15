@@ -26,12 +26,7 @@ class Property
     /**
      * @var array
      */
-    public $formOptions = array();
-
-    /**
-     * @var array
-     */
-    public $frontOptions = array();
+    public $options = array();
 
     /**
      * @var string

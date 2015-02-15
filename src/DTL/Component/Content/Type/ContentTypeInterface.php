@@ -20,6 +20,16 @@ use Symfony\Component\Form\FormInterface;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-interface ContentTypeInterface extends ContentTypeFormInterface, ContentTypeFrontInterface
+interface ContentTypeInterface extends FormTypeInterface
 {
+    /**
+     * Build the content front view.
+     *
+     * This is the data which will be finally available in the frontend
+     * view of this content type.
+     *
+     * @param FrontView $view
+     * @param mixed $data
+     */
+    public function buildFrontView(FrontView $view, $data);
 }

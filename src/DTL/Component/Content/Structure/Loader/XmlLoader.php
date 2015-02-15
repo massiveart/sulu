@@ -109,7 +109,7 @@ class XmlLoader implements LoaderInterface
         $property->tags = $this->loadTags('x:tag', $tags, $xpath, $node);
         $property->label = $this->loadLabels('x:meta/x:label', $xpath, $node);
 
-        $property->formOptions = $this->loadParams('x:params/x:param', $xpath, $node);
+        $property->options = $this->loadParams('x:params/x:param', $xpath, $node);
 
         $property->name = $this->getValueFromXPath('@name', $xpath, $node);
         $property->type = $this->getValueFromXPath('@type', $xpath, $node);
@@ -120,13 +120,13 @@ class XmlLoader implements LoaderInterface
         $types = $this->loadTypes('x:types/x:type', $tags, $xpath, $node);
 
         if (count($types)) {
-            $property->formOptions['types'] = $types;
+            $property->options['types'] = $types;
         }
 
         $cssClass = $this->getValueFromXPath('@cssClass', $xpath, $node);
 
         if ($cssClass) {
-            $property['formOptions']['cssClass'] = $cssClass;
+            $property['options']['cssClass'] = $cssClass;
         }
 
         $property->children  = $this->loadProperties('x:properties/x:*', $tags, $xpath, $node);

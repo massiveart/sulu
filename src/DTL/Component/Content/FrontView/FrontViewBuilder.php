@@ -9,7 +9,7 @@ use DTL\Component\Content\Document\DocumentInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Build ContentView object from Document and Structure data.
+ * Build ContentView object from Document and Structure data.)
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
@@ -38,7 +38,7 @@ class FrontViewBuilder
     }
 
     /**
-     * Resolve the given structure document into a content view
+     * Build a front view from a DocumentInterface instance
      *
      * @param DocumentInterface $documnet
      */
@@ -55,16 +55,26 @@ class FrontViewBuilder
 
         $structure = $this->structureFactory->getStructure($document->getDocumentType(), $structureType);
 
+        return $this->buildFromProperties($structure->properties, $document->getContent());
+    }
+
+    /**
+     * Build a front view from a collection of properties
+     *
+     * @param mixed $properties
+     * @param mixed $content
+     */
+    public function buildFromProperties(array $properties, $content)
+    {
         $frontView = new FrontView();
-        $contentData = $document->getContent();
 
         $children = array();
 
-        foreach ($structure->properties as $propertyName => $property) {
+        foreach ($properties as $propertyName => $property) {
             $propertyData = null;
 
-            if (isset($contentData[$propertyName])) {
-                $propertyData = $contentData[$propertyName];
+            if (isset($content[$propertyName])) {
+                $propertyData = $content[$propertyName];
             }
 
             $childFrontView = new FrontView();
