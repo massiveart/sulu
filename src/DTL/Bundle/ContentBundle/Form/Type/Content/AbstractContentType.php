@@ -48,8 +48,6 @@ abstract class AbstractContentType extends AbstractType implements ContentTypeIn
             'legacy' => true,
             'tags' => array(),
             'priority' => 1,
-            'max_occurs' => 999,
-            'min_occurs' => 1,
             'translated' => true,
             'labels' => array(),
         ));

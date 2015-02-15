@@ -1,0 +1,84 @@
+complex:
+    front:
+        cache_lifetime: 2400
+        view: ClientWebsiteBundle:templates:complex
+        controller: FooController
+
+    form:
+        label:
+            fr: Complexe
+            de: Komplex
+
+    properties:
+        title:
+            type: text_line
+            form:
+                type: text_line
+                required: true
+                title:
+                    de: Titel
+                    en: Title
+        url:
+            type: resource_locator
+            form:
+                required: true
+                label:
+                    de: Adresse
+                    en: URL
+            tags: [ 'sulu.rlp' ]
+        content:
+            type: section
+            form:
+                label:
+                    de: Inhalt
+                    en: Content
+                help: # was info_text .. is help better?
+                    de: Beriech fur den Inhalt
+                    en: Content Section
+                properties:
+                    article:
+                        type: text_editor
+                        required: true
+                        label:
+                            de: Artikel
+                            en: Article
+                    block:
+                        type: block
+                        form:
+                            
+                            default_type: editor
+                            min_occurs: 2
+                            max_occurs: 10
+                            required: true
+                            prototypes:
+                                editor:
+                                    form:
+                                        label:
+                                            de: Texteditor
+                                            en: Text editor
+                                    properties:
+                                        title:
+                                            type: text_line
+                                            required: true
+                                            tags:
+                                                - 'sulu.content.sortmode.show'
+                                        article:
+                                            type: text_editor
+                                            form:
+                                                required: true
+                                                label:
+                                                    de: Artikel
+                                                    en: Article
+                                title_only:
+                                    form:
+                                        label:
+                                            de: Nur ritle
+                                            en: Title only
+                                    properties:
+                                        title:
+                                            type: text_line
+                                            required: true
+                    name:
+                        type: text_line
+                        form:
+                            required: true

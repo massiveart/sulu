@@ -16,13 +16,6 @@ use DTL\Component\Content\Structure\Property;
 class Structure
 {
     /**
-     * The resource from which this structure was loaded
-     *
-     * @var string
-     */
-    public $resource;
-
-    /**
      * Translated label of this structure
      *
      * array('de'=> 'Wilkommen', 'fr' => 'Bienvenue')
@@ -36,29 +29,7 @@ class Structure
      *
      * @var string
      */
-    public $structureType;
-
-
-    /**
-     * Frontend template to use for this structure
-     *
-     * @var string
-     */
-    public $view;
-
-    /**
-     * Controller to use to render this structure
-     *
-     * @var string
-     */
-    public $controller;
-
-    /**
-     * Cache lifetime (only applies to "pages")
-     *
-     * @var integer
-     */
-    public $cacheLifetime;
+    public $type;
 
     /**
      * Tags for this structure (are these used?)
@@ -70,7 +41,7 @@ class Structure
     /**
      * @var PropertyMetadata[]
      */
-    public $properties;
+    public $children;
 
     public function __set($field, $value)
     {
@@ -85,11 +56,11 @@ class Structure
      *
      * @return string $name
      */
-    public function getProperty($name)
+    public function getChild($name)
     {
-        if (!isset($this->properties[$name])) {
+        if (!isset($this->children[$name])) {
             throw new \InvalidArgumentException(sprintf(
-                'Unknown property "%s" in structure loaded from: "%s"',
+                'Unknown child "%s" in structure loaded from: "%s"',
                 $name, $this->resource
             ));
         }
