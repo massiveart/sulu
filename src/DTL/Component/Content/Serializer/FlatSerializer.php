@@ -12,7 +12,7 @@ namespace DTL\Component\Content\Serializer;
 
 use PHPCR\NodeInterface;
 use DTL\Component\Content\Serializer\PropertyNameEncoderInterface;
-use DTL\Component\Content\Model\DocumentInterface;
+use DTL\Component\Content\Document\DocumentInterface;
 use DTL\Component\Content\Structure\StructureFactory;
 
 /**

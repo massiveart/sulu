@@ -25,7 +25,7 @@ class ContentSerializerSubscriberTest extends ProphecyTestCase
 
         $this->documentManager = $this->prophesize('Doctrine\ODM\PHPCR\DocumentManager');
         $this->serializer = $this->prophesize('DTL\Component\Content\Serializer\SerializerInterface');
-        $this->content = $this->prophesize('DTL\Component\Content\Model\ContentInterface');
+        $this->document = $this->prophesize('DTL\Component\Content\Document\DocumentInterface');
         $this->node = $this->prophesize('PHPCR\NodeInterface');
         $this->notContent = new \stdClass;
 
@@ -48,11 +48,11 @@ class ContentSerializerSubscriberTest extends ProphecyTestCase
 
     public function testPostLoad()
     {
-        $this->lifecycleEventArgs->getObject()->willReturn($this->content->reveal());
+        $this->lifecycleEventArgs->getObject()->willReturn($this->document->reveal());
 
-        $this->documentManager->getNodeForDocument($this->content)->willReturn($this->node);
-        $this->serializer->deserialize($this->node)->willReturn(array('foo' => 'bar'));
-        $this->content->setContent(array('foo' => 'bar'))->shouldBeCalled();
+        $this->documentManager->getNodeForDocument($this->document)->willReturn($this->node);
+        $this->serializer->deserialize($this->document)->willReturn(array('foo' => 'bar'));
+        $this->document->setContent(array('foo' => 'bar'))->shouldBeCalled();
 
         $this->subscriber->postLoad($this->lifecycleEventArgs->reveal());
     }
@@ -70,13 +70,13 @@ class ContentSerializerSubscriberTest extends ProphecyTestCase
      */
     public function testUpdate($method)
     {
-        $this->lifecycleEventArgs->getObject()->willReturn($this->content);
-        $this->documentManager->getNodeForDocument($this->content)->willReturn($this->node);
+        $this->lifecycleEventArgs->getObject()->willReturn($this->document);
+        $this->documentManager->getNodeForDocument($this->document)->willReturn($this->node);
         $this->documentManager->getPhpcrSession()->willReturn($this->phpcrSession);
         $this->managerEventArgs->getObjectManager()->willReturn($this->documentManager);
-        $this->content->getContent()->willReturn(array('foo' => 'bar'));
+        $this->document->getContent()->willReturn(array('foo' => 'bar'));
 
-        $this->serializer->serialize(array('foo' => 'bar'), $this->node)->shouldBeCalled();
+        $this->serializer->serialize($this->document)->shouldBeCalled();
 
         $this->subscriber->$method($this->lifecycleEventArgs->reveal());
         $this->subscriber->endFlush($this->managerEventArgs->reveal());

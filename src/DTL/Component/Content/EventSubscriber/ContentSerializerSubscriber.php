@@ -17,7 +17,7 @@ use DTL\Bundle\ContentBundle\Document\ContentDocument;
 use Doctrine\ODM\PHPCR\DocumentManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\ManagerEventArgs;
-use DTL\Component\Content\Model\DocumentInterface;
+use DTL\Component\Content\Document\DocumentInterface;
 
 class ContentSerializerSubscriber implements EventSubscriber
 {
@@ -68,7 +68,7 @@ class ContentSerializerSubscriber implements EventSubscriber
     {
         $document = $event->getObject();
 
-        if (false === $this->isContent($document)) {
+        if (false === $this->isDocument($document)) {
             return;
         }
 
@@ -91,7 +91,7 @@ class ContentSerializerSubscriber implements EventSubscriber
     {
         $document = $event->getObject();
 
-        if (false === $this->isContent($document)) {
+        if (false === $this->isDocument($document)) {
             return;
         }
 
@@ -115,7 +115,7 @@ class ContentSerializerSubscriber implements EventSubscriber
 
         foreach ($this->serializationStack as $document) {
             $node = $this->documentManager->getNodeForDocument($document);
-            $this->serializer->serialize($document, $node);
+            $this->serializer->serialize($document);
         }
 
         $session->save();
@@ -124,7 +124,7 @@ class ContentSerializerSubscriber implements EventSubscriber
     /**
      * @param mixed $object
      */
-    private function isContent($object)
+    private function isDocument($object)
     {
         return $object instanceof DocumentInterface;
     }

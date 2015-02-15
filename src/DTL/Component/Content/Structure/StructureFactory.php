@@ -20,7 +20,7 @@ use Doctrine\Common\Inflector\Inflector;
 /**
  * Create new (mapped) structures using the provided loader.
  */
-class StructureFactory
+class StructureFactory implements StructureFactoryInterface
 {
     /**
      * @var array
@@ -57,17 +57,14 @@ class StructureFactory
     }
 
     /**
-     * Return the structure of the given $type and $structureType
-     *
-     * @param mixed $type The primary system type, e.g. page, snippet
-     * @param mixed $structureType The secondary user type
+     * {@inheritDoc}
      */
     public function getStructure($type, $structureType)
     {
         if (!isset($this->typePaths[$type])) {
-            throw new \InvalidArgumentException(sprintf(
-                'Structure type "%s" is not mapped. Mapped structure types: "%s"',
-                $structureType,
+            throw new Exception\DocumentTypeNotFoundException(sprintf(
+                'Structure path for document type "%s" is not mapped. Mapped structure types: "%s"',
+                $type,
                 implode('", "', array_keys($this->typePaths))
             ));
         }
@@ -83,7 +80,17 @@ class StructureFactory
 
         if (!$cache->isFresh()) {
             $fileLocator = new FileLocator($this->typePaths[$type]);
-            $filePath = $fileLocator->locate(sprintf('%s.xml', $structureType));
+
+            try {
+                $filePath = $fileLocator->locate(sprintf('%s.xml', $structureType));
+            } catch (\InvalidArgumentException $e) {
+                throw new Exception\StructureTypeNotFoundException(sprintf(
+                    'Could not load structure type "%s" for document type "%s", looked in "%s"',
+                    $structureType,
+                    $type,
+                    implode('", "', $this->typePaths)
+                ));
+            }
 
             $metadata =  $this->loader->load($filePath);
             $resources = array(new FileResource($filePath));

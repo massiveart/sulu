@@ -11,7 +11,7 @@
 namespace DTL\Component\Content\Serializer;
 
 use PHPCR\NodeInterface;
-use DTL\Component\Content\Model\DocumentInterface;
+use DTL\Component\Content\Document\DocumentInterface;
 
 /**
  * Serialize / deserialize content from a PHPCR node

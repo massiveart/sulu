@@ -22,7 +22,7 @@ class FlatSerializerTest extends ProphecyTestCase
         parent::setUp();
         $this->structureFactory = $this->prophesize('DTL\Component\Content\Structure\StructureFactory');
         $this->structure = new Structure();
-        $this->document = $this->prophesize('DTL\Component\Content\Model\DocumentInterface');
+        $this->document = $this->prophesize('DTL\Component\Content\Document\DocumentInterface');
         $this->document->getDocumentType()->willReturn('page');
         $this->node = $this->prophesize('PHPCR\NodeInterface');
         $this->encoder = new PropertyNameEncoder('i18n', 'cont');
@@ -107,6 +107,14 @@ class FlatSerializerTest extends ProphecyTestCase
     }
 
     /**
+     * Note that this test uses the same data as testSerialize but swaps the data
+     * and expectedResult.
+     *
+     * @param mixed $locale
+     * @param mixed $expectedResult
+     * @param mixed $propertyMetadatas
+     * @param mixed $data
+     *
      * @dataProvider provideSerializer
      */
     public function testDeserialize($locale, $expectedResult, $propertyMetadatas, $data)

@@ -8,19 +8,19 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\Form;
+namespace DTL\Component\Content\FrontView;
 
 use Symfony\Component\Form\Exception\BadMethodCallException;
 
 /**
- * The ContentView object is the object which represents a content type
+ * The FrontView object is the object which represents a content type
  * within the frontend template.
  *
  * It is the analogue of the Symfony\Component\Form\FormView
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class ContentView implements \ArrayAccess, \IteratorAggregate, \Countable
+class FrontView implements \ArrayAccess, \IteratorAggregate, \Countable
 {
     /**
      * The contents primary value
@@ -39,7 +39,7 @@ class ContentView implements \ArrayAccess, \IteratorAggregate, \Countable
     /**
      * The parent view.
      *
-     * @var ContentView
+     * @var FrontView
      */
     private $parent;
 
@@ -50,7 +50,7 @@ class ContentView implements \ArrayAccess, \IteratorAggregate, \Countable
      */
     private $children = array();
 
-    public function __construct(ContentView $parent = null)
+    public function __construct(FrontView $parent = null)
     {
         $this->parent = $parent;
     }
@@ -116,7 +116,7 @@ class ContentView implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Return the children collection for this view. Each
-     * child should be an instance of ContentView
+     * child should be an instance of FrontView
      *
      * @return array|iterator
      */

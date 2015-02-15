@@ -29,6 +29,11 @@ class Property
     public $formOptions = array();
 
     /**
+     * @var array
+     */
+    public $frontOptions = array();
+
+    /**
      * @var string
      */
     public $type;
@@ -52,11 +57,6 @@ class Property
      * @var array
      */
     public $tags = array();
-
-    /**
-     * @var array
-     */
-    public $params = array();
 
     /**
      * @var integer

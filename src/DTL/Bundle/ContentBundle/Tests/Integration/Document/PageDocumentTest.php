@@ -74,6 +74,10 @@ class PageDocumentTest extends SuluTestCase
      * Assert that the fields are correctly mapped and that
      * they persist correctly.
      *
+     * Will set the given data on the Document, then save it, then load it
+     * and then assert that the loaded document has the same values as the
+     * initial data.
+     *
      * @param array $data Value map for page document
      *
      * @dataProvider provideMapping
@@ -160,6 +164,12 @@ class PageDocumentTest extends SuluTestCase
         return $page;
     }
 
+    /**
+     * Map an array of data to a Page document
+     *
+     * @param mixed $page
+     * @param mixed $data
+     */
     private function mapPage($page, $data)
     {
         $page->setParent($this->parent);

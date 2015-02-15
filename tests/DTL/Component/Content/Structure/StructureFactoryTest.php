@@ -41,8 +41,8 @@ class StructureFactoryTest extends ProphecyTestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Structure type "foo" is not mapped. Mapped structure types: "page
+     * @expectedException DTL\Component\Content\Structure\Exception\DocumentTypeNotFoundException
+     * @expectedExceptionMessage Structure path for document type "non_existing" is not mapped. Mapped structure types: "page
      */
     public function testGetMetadataBadType()
     {
@@ -50,11 +50,12 @@ class StructureFactoryTest extends ProphecyTestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException DTL\Component\Content\Structure\Exception\StructureTypeNotFoundException
+     * @expectedExceptionMessage Could not load structure type "overview_not_existing" for document type "page", looked in "
      */
     public function testGetMetadataNonExisting()
     {
-        $this->factory->getStructure('page', 'overview');
+        $this->factory->getStructure('page', 'overview_not_existing');
     }
 
     /**

@@ -24,9 +24,19 @@ use DTL\Component\Content\Form\ContentView;
 abstract class AbstractContentType extends AbstractType implements ContentTypeInterface
 {
     /**
+     * Content types have a dual role
+     *
      * {@inheritDoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $options)
+    final function setDefaultOptions(OptionsResolverInterface $options)
+    {
+        $this->setFormDefaultOptions($options);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFormDefaultOptions(OptionsResolverInterface $options)
     {
         $options->setRequired(array(
             'webspace_key',

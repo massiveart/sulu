@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\Form;
+namespace DTL\Component\Content\FrontView;
 
 use Symfony\Component\Form\Exception\BadMethodCallException;
 
@@ -21,25 +21,25 @@ use Symfony\Component\Form\Exception\BadMethodCallException;
  * By creating a content view iterator the developer will ensure that views are
  * lazy-loaded.
  */
-class ContentViewIterator implements \Iterator, \Countable
+class FrontViewIterator implements \Iterator, \Countable
 {
     /**
-     * @var ContentViewResolver
+     * @var FrontViewBuilder
      */
-    private $viewResolver;
+    private $viewBuilder;
 
     /**
-     * @var ContentDocument[]
+     * @var FrontDocument[]
      */
     private $documents;
 
     /**
-     * @param ContentViewResolver $viewResolver
-     * @param ContentDocument[] $documents
+     * @param FrontViewBuilder $viewBuilder
+     * @param FrontDocument[] $documents
      */
-    public function __construct(ContentViewResolver $viewResolver, $documents)
+    public function __construct(FrontViewBuilder $viewBuilder, $documents)
     {
-        $this->viewResolver = $viewResolver;
+        $this->viewBuilder = $viewBuilder;
         $this->documents = new \ArrayIterator($documents);
     }
 
@@ -50,7 +50,7 @@ class ContentViewIterator implements \Iterator, \Countable
 
     public function current()
     {
-        return $this->viewResolver->resolve($this->documents->current());
+        return $this->viewBuilder->buildFor($this->documents->current());
     }
 
     public function next()

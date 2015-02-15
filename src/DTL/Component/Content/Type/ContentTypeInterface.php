@@ -20,18 +20,6 @@ use Symfony\Component\Form\FormInterface;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-interface ContentTypeInterface
+interface ContentTypeInterface extends ContentTypeFormInterface, ContentTypeFrontInterface
 {
-    /**
-     * Build the content view data.
-     * This is the data which will be finally available in the frontend
-     * view of this content type.
-     *
-     * NOTE: The content view should be wrapped in a proxy and so this will
-     *       be lazy-called.
-     *
-     * @param ContentView $view
-     * @param mixed $data
-     */
-    public function buildContentView(ContentView $view, $data);
 }

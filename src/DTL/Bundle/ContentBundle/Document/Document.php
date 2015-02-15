@@ -11,8 +11,8 @@
 namespace DTL\Bundle\ContentBundle\Document;
 
 use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCR;
-use DTL\Component\Content\Model\DocumentInterface;
-use DTL\Component\Content\Model\PageInterface;
+use DTL\Component\Content\Document\DocumentInterface;
+use DTL\Component\Content\Document\PageInterface;
 use PHPCR\NodeInterface;
 
 /**
