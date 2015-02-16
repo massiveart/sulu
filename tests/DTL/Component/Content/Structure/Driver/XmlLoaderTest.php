@@ -13,7 +13,7 @@ namespace DTL\Component\Content\Structure\Loader;
 
 use Prophecy\PhpUnit\ProphecyTestCase;
 use Symfony\Component\Filesystem\Filesystem;
-use DTL\Component\Content\Structure\StructureFactory;
+use DTL\Component\Content\Structure\Factory\StructureFactory;
 use DTL\Component\Content\Structure\Loader\XmlLoader;
 
 class XmlLoaderTest extends ProphecyTestCase
@@ -30,7 +30,7 @@ class XmlLoaderTest extends ProphecyTestCase
     {
         return array(
             array(
-                __DIR__ . '/../data/page/overview.xml',
+                __DIR__ . '/data/page/overview.xml',
                 array(
                     'view' => 'overview.html.twig',
                     'controller' => 'SomeController',
@@ -39,7 +39,7 @@ class XmlLoaderTest extends ProphecyTestCase
                         'de' => 'Übersicht',
                         'en' => 'Overview',
                     ),
-                    'properties' => array(
+                    'children' => array(
                         'title' => array(
                             'name' => 'title',
                             'type' => 'text_line',
@@ -67,7 +67,7 @@ class XmlLoaderTest extends ProphecyTestCase
                                 'de' => 'Smart-Content',
                                 'en' => 'Smart-Content',
                             ),
-                            'formOptions' => array(
+                            'options' => array(
                                 'max_per_page' => 5,
                                 'properties' => array(
                                     'label' => 'label',

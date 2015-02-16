@@ -3,7 +3,7 @@
 namespace DTL\Component\Content\FrontView;
 
 use DTL\Component\Content\Form\ContentView;
-use DTL\Component\Content\Structure\StructureFactoryInterface;
+use DTL\Component\Content\Structure\Factory\StructureFactoryInterface;
 use DTL\Component\Content\Type\ContentTypeRegistryInterface;
 use DTL\Component\Content\Document\DocumentInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -82,10 +82,10 @@ class FrontViewBuilder
 
             // resolve the options
             $optionsResolver = new OptionsResolver();
-            $contentType->setDefaultFrontOptions($optionsResolver);
-            $optionsResolver->resolve($property->frontOptions);
+            $contentType->setDefaultOptions($optionsResolver);
+            $options = $optionsResolver->resolve($property->options);
 
-            $contentType->buildFrontView($childFrontView, $propertyData);
+            $contentType->buildFrontView($childFrontView, $propertyData, $options);
         }
 
         $frontView->setChildren($children);

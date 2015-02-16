@@ -11,8 +11,7 @@
 namespace DTL\Component\Content\Type;
 
 use Symfony\Component\Form\FormTypeInterface;
-use DTL\Component\Content\Form\ContentView;
-use Symfony\Component\Form\FormInterface;
+use DTL\Component\Content\FrontView\FrontView;
 
 /**
  * Form types implementing this interface become valid Sulu
@@ -31,5 +30,5 @@ interface ContentTypeInterface extends FormTypeInterface
      * @param FrontView $view
      * @param mixed $data
      */
-    public function buildFrontView(FrontView $view, $data);
+    public function buildFrontView(FrontView $view, $data, array $options);
 }

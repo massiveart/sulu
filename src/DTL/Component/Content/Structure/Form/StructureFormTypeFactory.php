@@ -13,7 +13,7 @@ namespace DTL\Component\Content\Structure\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\ResolvedFormTypeInterface;
 use Symfony\Component\Form\ResolvedFormType;
-use DTL\Component\Content\Structure\StructureFactory;
+use DTL\Component\Content\Structure\Factory\StructureFactory;
 use Symfony\Component\Form\FormFactoryInterface;
 use DTL\Component\Content\Model\DocumentInterface;
 

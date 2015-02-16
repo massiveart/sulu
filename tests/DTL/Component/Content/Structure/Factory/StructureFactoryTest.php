@@ -9,11 +9,11 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\Structure;
+namespace DTL\Component\Content\Structure\Factory;
 
 use Prophecy\PhpUnit\ProphecyTestCase;
 use Symfony\Component\Filesystem\Filesystem;
-use DTL\Component\Content\Structure\StructureFactory;
+use DTL\Component\Content\Structure\Factory\StructureFactory;
 
 class StructureFactoryTest extends ProphecyTestCase
 {
@@ -41,7 +41,7 @@ class StructureFactoryTest extends ProphecyTestCase
     }
 
     /**
-     * @expectedException DTL\Component\Content\Structure\Exception\DocumentTypeNotFoundException
+     * @expectedException DTL\Component\Content\Structure\Factory\Exception\DocumentTypeNotFoundException
      * @expectedExceptionMessage Structure path for document type "non_existing" is not mapped. Mapped structure types: "page
      */
     public function testGetMetadataBadType()
@@ -50,7 +50,7 @@ class StructureFactoryTest extends ProphecyTestCase
     }
 
     /**
-     * @expectedException DTL\Component\Content\Structure\Exception\StructureTypeNotFoundException
+     * @expectedException DTL\Component\Content\Structure\Factory\Exception\StructureTypeNotFoundException
      * @expectedExceptionMessage Could not load structure type "overview_not_existing" for document type "page", looked in "
      */
     public function testGetMetadataNonExisting()

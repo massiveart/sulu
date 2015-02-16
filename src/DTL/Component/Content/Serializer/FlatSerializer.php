@@ -13,7 +13,7 @@ namespace DTL\Component\Content\Serializer;
 use PHPCR\NodeInterface;
 use DTL\Component\Content\Serializer\PropertyNameEncoderInterface;
 use DTL\Component\Content\Document\DocumentInterface;
-use DTL\Component\Content\Structure\StructureFactory;
+use DTL\Component\Content\Structure\Factory\StructureFactory;
 
 /**
  * Serialize content data into a series of properties in a single node.
@@ -58,7 +58,7 @@ class FlatSerializer implements SerializerInterface
         $nonLocalizedProps = array();
 
         foreach ($data as $key => $value) {
-            $isTranslated = $structure->getProperty($key)->localized;
+            $isTranslated = $structure->getChild($key)->localized;
 
             if ($isTranslated) {
                 $localizedProps[$key] = $value;

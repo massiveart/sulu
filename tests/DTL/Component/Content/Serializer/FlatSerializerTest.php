@@ -20,7 +20,7 @@ class FlatSerializerTest extends ProphecyTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->structureFactory = $this->prophesize('DTL\Component\Content\Structure\StructureFactory');
+        $this->structureFactory = $this->prophesize('DTL\Component\Content\Structure\Factory\StructureFactory');
         $this->structure = new Structure();
         $this->document = $this->prophesize('DTL\Component\Content\Document\DocumentInterface');
         $this->document->getDocumentType()->willReturn('page');
@@ -134,13 +134,6 @@ class FlatSerializerTest extends ProphecyTestCase
 
         $this->node->getProperties()->willReturn($nodeProperties);
 
-        $props = array();
-        foreach ($data as $propName => $propValue) {
-            $prop = $this->prophesize('Sulu\Component\Content\PropertyInterface');
-            $prop->getValue()->willReturn($propValue);
-            $props[$propName] = $prop;
-        }
-
         $res = $this->serializer->deserialize($this->document->reveal());
 
         $this->assertEquals($expectedResult, $res);
@@ -153,7 +146,7 @@ class FlatSerializerTest extends ProphecyTestCase
             foreach ($propertyMetadata as $attrName => $attrValue) {
                 $property->$attrName = $attrValue;
             }
-            $this->structure->properties[$propertyName] = $property;
+            $this->structure->children[$propertyName] = $property;
         }
     }
 }

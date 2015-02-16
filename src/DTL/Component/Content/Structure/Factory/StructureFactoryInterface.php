@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
  
-namespace DTL\Component\Content\Structure;
+namespace DTL\Component\Content\Structure\Factory;
 
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\Resource\FileResource;

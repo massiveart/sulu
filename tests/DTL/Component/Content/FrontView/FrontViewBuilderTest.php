@@ -46,7 +46,7 @@ class FrontViewBuilderTest extends ProphecyTestCase
     {
         parent::setUp();
 
-        $this->structureFactory = $this->prophesize('DTL\Component\Content\Structure\StructureFactoryInterface');
+        $this->structureFactory = $this->prophesize('DTL\Component\Content\Structure\Factory\StructureFactoryInterface');
         $this->document1 = $this->prophesize('DTL\Component\Content\Document\DocumentInterface');
         $this->contentTypeRegistry = $this->prophesize('DTL\Component\Content\Type\ContentTypeRegistryInterface');
 
@@ -93,15 +93,16 @@ class FrontViewBuilderTest extends ProphecyTestCase
             $propertyType = $propertyData['type'];
 
             if (!isset($contentTypes[$propertyType])) {
-                $contentTypes[$propertyType] = $this->prophesize('DTL\Component\Content\Type\ContentTypeFrontInterface');
+                $contentTypes[$propertyType] = $this->prophesize('DTL\Component\Content\Type\ContentTypeInterface');
             }
 
             $contentType = $contentTypes[$propertyType];
             $contentType->buildFrontView(
                 Argument::type('DTL\Component\Content\FrontView\FrontView'),
-                $data[$propertyName]
+                $data[$propertyName],
+                array()
             )->shouldBeCalled();
-            $contentType->setDefaultFrontOptions(
+            $contentType->setDefaultOptions(
                 Argument::type('Symfony\Component\OptionsResolver\OptionsResolverInterface')
             )->shouldBeCalled();
             $this->contentTypeRegistry->getType($propertyData['type'])->willReturn(

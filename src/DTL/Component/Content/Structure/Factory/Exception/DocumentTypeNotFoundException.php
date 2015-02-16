@@ -9,8 +9,8 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\Structure\Exception;
+namespace DTL\Component\Content\Structure\Factory\Exception;
 
-class StructureTypeNotFoundException extends \RuntimeException
+class DocumentTypeNotFoundException extends \RuntimeException
 {
 }

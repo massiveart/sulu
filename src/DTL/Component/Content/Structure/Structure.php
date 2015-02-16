@@ -16,6 +16,14 @@ use DTL\Component\Content\Structure\Property;
 class Structure
 {
     /**
+     * The resource from which this structure was loaded
+     * (useful for debugging)
+     *
+     * @var string
+     */
+    public $resource;
+
+    /**
      * Translated label of this structure
      *
      * array('de'=> 'Wilkommen', 'fr' => 'Bienvenue')
@@ -43,6 +51,27 @@ class Structure
      */
     public $children;
 
+    /**
+     * Frontend template to use for this structure
+     *
+     * @var string
+     */
+    public $view;
+
+    /**
+     * Controller to use to render this structure
+     *
+     * @var string
+     */
+    public $controller;
+
+    /**
+     * Cache lifetime (only applies to "pages")
+     *
+     * @var integer
+     */
+    public $cacheLifetime;
+
     public function __set($field, $value)
     {
         throw new \InvalidArgumentException(sprintf(
@@ -65,29 +94,29 @@ class Structure
             ));
         }
 
-        return $this->properties[$name];
+        return $this->children[$name];
     }
 
     /**
-     * Return all the localized properties
+     * Return all the localized children
      *
      * @return Property[]
      */
     public function getLocalizedProperties()
     {
-        return array_filter($this->properties, function (Property $property) {
+        return array_filter($this->children, function (Property $property) {
             return $property->localized === true;
         });
     }
 
     /**
-     * Return all the non-localized properties
+     * Return all the non-localized children
      *
      * @return Property[]
      */
     public function getNonLocalizedProperties()
     {
-        return array_filter($this->properties, function (Property $property) {
+        return array_filter($this->children, function (Property $property) {
             return $property->localized === false;
         });
     }
