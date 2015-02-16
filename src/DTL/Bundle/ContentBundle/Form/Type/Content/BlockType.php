@@ -14,6 +14,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use DTL\Component\Content\Form\ContentView;
 use DTL\Component\Content\FrontView\FrontView;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class BlockType extends AbstractContentType
 {
@@ -62,7 +63,7 @@ class BlockType extends AbstractContentType
         // handle resize .. how does current system do it?
     }
 
-    public function buildFrontView(FrontView $view, $data, $options)
+    public function buildFrontView(FrontView $view, $data, array $options)
     {
         $defaultType = $options['default_type'];
         $prototypes = $options['prototypes'];

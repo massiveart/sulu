@@ -12,7 +12,7 @@ namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Content;
 
 use Sulu\Bundle\TestBundle\Testing\SuluTestCase;
 use Symfony\Component\Form\FormInterface;
-use DTL\Component\Content\Form\ContentView;
+use DTL\Component\Content\FrontView\FrontView;
 use DTL\Bundle\ContentBundle\Document\PageDocument;
 
 /**
@@ -51,22 +51,21 @@ abstract class AbstractContentTypeTestCase extends SuluTestCase
     /**
      * Provide for the content view test
      */
-    abstract public function provideContentViewAttributes();
+    abstract public function provideFrontViewAttributes();
 
     /**
      * Test that the view is properly configured
      *
-     * @dataProvider provideContentViewAttributes
+     * @dataProvider provideFrontViewAttributes
      *
      * @param $options Options for the content view
      * @param $expectedAttributes Expected content view attributes
      */
-    public function testContentViewAttributes($options, $expectedAttributes)
+    public function testFrontViewAttributes($options, $expectedAttributes)
     {
         $options = $this->completeOptions($options);
-        $form = $this->createForm($options);
-        $contentView = new ContentView();
-        $this->getType()->buildContentView($contentView, $form);
+        $contentView = new FrontView();
+        $this->getType()->buildFrontView($contentView, null, $options);
 
         foreach ($expectedAttributes as $key => $value) {
             $this->assertEquals($value, $contentView->getAttribute($key));
@@ -96,31 +95,27 @@ abstract class AbstractContentTypeTestCase extends SuluTestCase
         $this->assertContains('data-mapper-property', $result);
     }
 
-    abstract function provideContentViewValue();
+    abstract function provideFrontViewValue();
 
     /**
      * Assert the value of a content view
      *
-     * Override assertContentViewValue for non-scalar
+     * Override assertFrontViewValue for non-scalar
      * comparisons.
      *
-     * @dataProvider provideContentViewValue
+     * @dataProvider provideFrontViewValue
      *
      * @param array $options
      * @param mixed $data
      * @param mixed $expectedValue
      */
-    public function testContentViewValue(array $options, $data, $expectedValue)
+    public function testFrontViewValue(array $options, $data, $expectedValue)
     {
         $options = $this->completeOptions($options);
-        $form = $this->createForm($options);
 
-        $contentView = new ContentView();
-
-        $formType = $form['test_type']->getConfig()->getType();
-        $this->assertInstanceOf('DTL\Component\Content\Form\ContentResolvedTypeInterface', $formType);
-        $formType->buildContentView($contentView, $data);
-        $this->assertContentViewValue($contentView, $expectedValue);
+        $contentView = new FrontView();
+        $this->getType()->buildFrontView($contentView, $data, $options);
+        $this->assertFrontViewValue($contentView, $expectedValue);
     }
 
     /**
@@ -128,10 +123,10 @@ abstract class AbstractContentTypeTestCase extends SuluTestCase
      *
      * Override to assert non-scalar values
      *
-     * @param ContentView $view
+     * @param FrontView $view
      * @param mixed $expectedValue
      */
-    public function assertContentViewValue($view, $expectedValue)
+    public function assertFrontViewValue($view, $expectedValue)
     {
         $this->assertEquals($expectedValue, $view->getValue());
     }

@@ -14,8 +14,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormBuilderInterface;
-use DTL\Component\Content\Model\DocumentInterface;
-use DTL\Component\Content\Form\Factory\StructureFormTypeFactory;
+use DTL\Component\Content\Document\DocumentInterface;
+use DTL\Component\Content\Structure\Form\StructureFormTypeFactory;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 abstract class AbstractDocumentType extends AbstractType

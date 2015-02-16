@@ -21,7 +21,7 @@ class TextAreaType extends AbstractContentType
     /**
      * {@inheritDoc}
      */
-    public function setDefaultFormOptions(OptionsResolverInterface $options)
+    public function setDefaultOptions(OptionsResolverInterface $options)
     {
         parent::setDefaultOptions($options);
 
@@ -43,13 +43,6 @@ class TextAreaType extends AbstractContentType
 
                 return $value;
             }
-        ));
-    }
-
-    public function setDefaultContentOptions(OptionsResolverInterface $options)
-    {
-        $this->setDefaults(array(
-            'page_size' => 10
         ));
     }
 

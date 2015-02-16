@@ -15,7 +15,7 @@ use Symfony\Component\Form\ResolvedFormTypeInterface;
 use Symfony\Component\Form\ResolvedFormType;
 use DTL\Component\Content\Structure\Factory\StructureFactory;
 use Symfony\Component\Form\FormFactoryInterface;
-use DTL\Component\Content\Model\DocumentInterface;
+use DTL\Component\Content\Document\DocumentInterface;
 
 /**
  * Creates forms for structures using the Metadata from
@@ -61,7 +61,7 @@ class StructureFormTypeFactory
         ));
 
 
-        foreach ($structure->properties as $name => $property) {
+        foreach ($structure->children as $name => $property) {
             $options['label'] = $property->label;
 
             $builder->add(
@@ -69,7 +69,7 @@ class StructureFormTypeFactory
                 $property->type,
                 array_merge(
                     $options,
-                    $property->formOptions
+                    $property->options
                 )
             );
         }
@@ -88,4 +88,3 @@ class StructureFormTypeFactory
         return $this->create($document->getDocumentType(), $document->getStructureType(), $options);
     }
 }
-

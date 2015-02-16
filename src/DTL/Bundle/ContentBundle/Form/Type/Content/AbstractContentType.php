@@ -12,11 +12,12 @@ namespace DTL\Bundle\ContentBundle\Form\Type\Content;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use DTL\Component\Content\Form\ContentTypeInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use DTL\Component\Content\Form\ContentView;
+use DTL\Component\Content\Type\ContentTypeInterface;
+use DTL\Component\Content\FrontView\FrontView;
 
 /**
  * Adds stubb implementation for content type interface contract
@@ -24,19 +25,9 @@ use DTL\Component\Content\Form\ContentView;
 abstract class AbstractContentType extends AbstractType implements ContentTypeInterface
 {
     /**
-     * Content types have a dual role
-     *
      * {@inheritDoc}
      */
-    final function setDefaultOptions(OptionsResolverInterface $options)
-    {
-        $this->setFormDefaultOptions($options);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setFormDefaultOptions(OptionsResolverInterface $options)
+    public function setDefaultOptions(OptionsResolverInterface $options)
     {
         $options->setRequired(array(
             'webspace_key',
@@ -47,6 +38,8 @@ abstract class AbstractContentType extends AbstractType implements ContentTypeIn
         $options->setDefaults(array(
             'legacy' => true,
             'tags' => array(),
+            'min_occurs' => 1,
+            'max_occurs' => 1,
             'priority' => 1,
             'translated' => true,
             'labels' => array(),
@@ -106,7 +99,7 @@ abstract class AbstractContentType extends AbstractType implements ContentTypeIn
     /**
      * {@inheritDoc}
      */
-    public function buildContentView(ContentView $view, $data)
+    public function buildFrontView(FrontView $view, $data, array $options)
     {
         $view->setValue($data);
     }

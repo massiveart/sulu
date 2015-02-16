@@ -11,12 +11,13 @@
 namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Content;
 
 use DTL\Bundle\ContentBundle\Form\Type\Content\TextAreaType;
+use DTL\Bundle\ContentBundle\Form\Type\Content\BlockType;
 
-class TextAreaTypeTest extends AbstractContentTypeTestCase
+class BlockTypeTest extends AbstractContentTypeTestCase
 {
     public function getType()
     {
-        return new TextAreaType();
+        return $this->getContainer()->get('dtl_content.form.type.block');
     }
 
     /**
@@ -37,7 +38,7 @@ class TextAreaTypeTest extends AbstractContentTypeTestCase
     /**
      * {@inheritDoc}
      */
-    public function provideContentViewValue()
+    public function provideFrontViewValue()
     {
         return array(
             array(
@@ -46,19 +47,13 @@ class TextAreaTypeTest extends AbstractContentTypeTestCase
                 null,
                 null,
             ),
-            array(
-                array(
-                ),
-                'This is some text in my area',
-                'This is some text in my area',
-            ),
         );
     }
 
     /**
      * {@inheritDoc}
      */
-    public function provideContentViewAttributes()
+    public function provideFrontViewAttributes()
     {
         return array(
             array(

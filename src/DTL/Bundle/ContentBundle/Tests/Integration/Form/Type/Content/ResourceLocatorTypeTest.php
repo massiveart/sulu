@@ -37,7 +37,7 @@ class ResourceLocatorTypeTest extends AbstractContentTypeTestCase
     /**
      * {@inheritDoc}
      */
-    public function provideContentViewValue()
+    public function provideFrontViewValue()
     {
         return array(
             array(
@@ -52,7 +52,7 @@ class ResourceLocatorTypeTest extends AbstractContentTypeTestCase
     /**
      * {@inheritDoc}
      */
-    public function provideContentViewAttributes()
+    public function provideFrontViewAttributes()
     {
         return array(
             array(

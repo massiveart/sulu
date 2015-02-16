@@ -5,7 +5,7 @@ framework:
 twig:
     form:
         resources:
-            - 'ContentBundle:content:sulu.html.twig'
+            - 'DtlContentBundle:content:sulu.html.twig'
 
 doctrine_phpcr:
     odm:
