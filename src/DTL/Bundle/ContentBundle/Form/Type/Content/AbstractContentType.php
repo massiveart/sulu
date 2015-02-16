@@ -103,12 +103,4 @@ abstract class AbstractContentType extends AbstractType implements ContentTypeIn
     {
         $view->setValue($data);
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return 'content';
-    }
 }

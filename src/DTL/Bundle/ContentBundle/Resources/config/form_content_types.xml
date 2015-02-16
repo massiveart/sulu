@@ -18,12 +18,12 @@
         </service>
 
         <service id="dtl_content.form.type.text_line" class="DTL\Bundle\ContentBundle\Form\Type\Content\TextLineType">
-            <tag name="dtl_content.form.type" alias="text_line" content-type="dtl_content."/>
+            <tag name="dtl_content.form.type" alias="text_line" />
         </service>
 
-        <service id="dtl_content.form.type.block" class="DTL\Bundle\ContentBundle\Form\Type\Content\TextLineType">
-            <tag name="dtl_content.form.type" alias="text_line" content-type="dtl_content."/>
-            <argument type="service" id="dtl_content.form.factory.structure_type" />
+        <service id="dtl_content.form.type.block" class="DTL\Bundle\ContentBundle\Form\Type\Content\BlockType">
+            <argument type="service" id="dtl_content.front_view.builder" />
+            <tag name="dtl_content.form.type" alias="block" />
         </service>
 
     </services>

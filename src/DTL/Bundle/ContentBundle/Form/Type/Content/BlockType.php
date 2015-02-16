@@ -94,4 +94,3 @@ class BlockType extends AbstractContentType
         return 'block';
     }
 }
-

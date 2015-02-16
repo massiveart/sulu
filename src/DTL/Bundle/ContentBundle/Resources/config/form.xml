@@ -45,9 +45,9 @@
             <tag name="form.type" alias="snippet" />
         </service>
 
-        <!-- Content view resolver (for frontend) -->
-        <service id="dtl_content.form.content_view_resolver" class="DTL\Component\Content\Form\ContentViewResolver">
-            <argument type="service" id="dtl_content.form.factory"/>
+        <!-- FrontViewBuilder -->
+        <service id="dtl_content.front_view.builder" class="DTL\Component\Content\FrontView\FrontViewBuilder">
+            <argument type="service" id="dtl_content.structure.factory"/>
         </service>
 
     </services>
