@@ -65,11 +65,9 @@ class UpgradeInternalLinksCommand extends ContainerAwareCommand
             $this->upgradeWebspace($webspace, $output);
         }
 
-        if ($this->getContainer()->has('sulu_snippet.repository')) {
-            $output->writeln('<info> Upgrade Snippets: </info>');
-            foreach ($this->webspaceManager->getAllLocalizations() as $localization) {
-                $this->upgradeSnippets($output, $localization);
-            }
+        $output->writeln('<info> Upgrade Snippets: </info>');
+        foreach ($this->webspaceManager->getAllLocalizations() as $localization) {
+            $this->upgradeSnippets($output, $localization);
         }
 
         $this->session->save();
