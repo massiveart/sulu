@@ -40,14 +40,20 @@ class BlockTypeTest extends AbstractContentTypeTestCase
             array(
                 $this->getOptions(),
                 array(
-                    'title' => 'Foobar',
-                    'body' => 'Body body',
+                    'type' => 'editor',
+                    'block' => array(
+                        'title' => 'Foobar',
+                        'body' => 'Body body',
+                    ),
                 ),
                 array(
-                    'title' => 'Foobar',
-                    'body' => 'Body body',
-                )
-            )
+                    'type' => 'editor',
+                    'block' => array(
+                        'title' => 'Foobar',
+                        'body' => 'Body body',
+                    ),
+                ),
+            ),
         );
     }
 

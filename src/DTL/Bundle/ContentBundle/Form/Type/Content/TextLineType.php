@@ -12,9 +12,22 @@ namespace DTL\Bundle\ContentBundle\Form\Type\Content;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class TextLineType extends AbstractContentType
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function setDefaultOptions(OptionsResolverInterface $options)
+    {
+        parent::setDefaultOptions($options);
+        $options->setDefaults(array(
+            'compound' => false,
+        ));
+
+    }
+
     /**
      * {@inheritDoc}
      */

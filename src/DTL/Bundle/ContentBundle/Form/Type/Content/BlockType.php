@@ -16,9 +16,13 @@ use DTL\Component\Content\Form\ContentView;
 use DTL\Component\Content\FrontView\FrontView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use DTL\Component\Content\FrontView\FrontViewBuilder;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
 
 class BlockType extends AbstractContentType
 {
+    const TYPE_KEY = 'type';
+
     private $frontBuilder;
 
     public function __construct(FrontViewBuilder $frontBuilder)
@@ -44,8 +48,8 @@ class BlockType extends AbstractContentType
         $options->setNormalizer('prototypes', function ($options, $prototypes) {
             $normalizedPrototypes = array();
 
-            foreach ($prototypes as $prototype) {
-                $normalizedPrototypes[] = array_merge(array(
+            foreach ($prototypes as $name => $prototype) {
+                $normalizedPrototypes[$name] = array_merge(array(
                     'type' => null,
                     'options' => array(),
                     'properties' => array(),
@@ -62,8 +66,17 @@ class BlockType extends AbstractContentType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $prototypeForms = array();
+        $builder->add('type', 'text_line', array(
+            'webspace_key' => $options['webspace_key'],
+            'locale' => $options['locale'],
+        ));
+
         foreach ($options['prototypes'] as $name => $prototype) {
-            $prototypeBuilder = $builder->create($name, 'form', $prototype['options']);
+            $prototypeOptions = $prototype['options'];
+            $prototypeOptions['auto_initialize'] = false;
+            $prototypeBuilder = $builder->create('block', 'form', $prototypeOptions);
+
             foreach ($prototype['properties'] as $propName => $prop) {
 
                 $propOptions = $prop['options'];
@@ -72,10 +85,36 @@ class BlockType extends AbstractContentType
 
                 $prototypeBuilder->add($propName, $prop['type'], $propOptions);
             }
-            $builder->add($prototypeBuilder);
+            $prototypeForms[$name] = $prototypeBuilder->getForm();
         }
 
-        // handle resize .. how does current system do it?
+        $builder->setAttribute('prototypes', $prototypeForms);
+
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $block = $event->getData();
+
+            if (!isset($block[self::TYPE_KEY])) {
+                throw new \RuntimeException(sprintf(
+                    'Block data must have the "%s" key set in order to determine the correct block type',
+                    self::TYPE_KEY
+                ));
+            }
+
+            $blockType = $block[self::TYPE_KEY];
+
+            $form = $event->getForm();
+            $prototypes = $form->getConfig()->getAttribute('prototypes');
+
+            if (!isset($prototypes[$blockType])) {
+                throw new \RuntimeException(sprintf(
+                    'The block type "%s" is not known, known types: "%s"',
+                    $blockType, implode('", "', array_keys($prototypes))
+                ));
+            }
+
+            $prototype = $prototypes[$blockType];
+            $form->add($prototype);
+        });
     }
 
     public function buildFrontView(FrontView $view, $data, array $options)
