@@ -15,6 +15,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use DTL\Component\Content\Form\ContentView;
 use DTL\Component\Content\FrontView\FrontView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use DTL\Component\Content\FrontView\FrontViewBuilder;
 
 class BlockType extends AbstractContentType
 {
@@ -30,21 +31,30 @@ class BlockType extends AbstractContentType
      */
     public function setDefaultOptions(OptionsResolverInterface $options)
     {
-        parent::setFormDefaultOptions($options);
-
-        $options->setDefaults(array(
-            'min_occurs' => 1,
-            'max_occurs' => 1,
-        ));
-
+        parent::setDefaultOptions($options);
         $options->setRequired(array(
             'default_type',
             'prototypes',
         ));
 
-        $options->setTypes(array(
+        $options->setAllowedTypes(array(
             'prototypes' => 'array',
         ));
+
+        $options->setNormalizer('prototypes', function ($options, $prototypes) {
+            $normalizedPrototypes = array();
+
+            foreach ($prototypes as $prototype) {
+                $normalizedPrototypes[] = array_merge(array(
+                    'type' => null,
+                    'options' => array(),
+                    'properties' => array(),
+                ), $prototype);
+            }
+
+            return $normalizedPrototypes;
+        });
+
     }
 
     /**
@@ -53,11 +63,16 @@ class BlockType extends AbstractContentType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         foreach ($options['prototypes'] as $name => $prototype) {
-            $prototypeBuilder = $builder->create($name, $prototype['type'], $prototype['options']);
+            $prototypeBuilder = $builder->create($name, 'form', $prototype['options']);
             foreach ($prototype['properties'] as $propName => $prop) {
-                $prototypeBuilder->add($propName, $prop['type'], $prop['options']);
+
+                $propOptions = $prop['options'];
+                $propOptions['webspace_key'] = $options['webspace_key'];
+                $propOptions['locale'] = $options['locale'];
+
+                $prototypeBuilder->add($propName, $prop['type'], $propOptions);
             }
-            $builder->add($prototypeBuilder->getForm());
+            $builder->add($prototypeBuilder);
         }
 
         // handle resize .. how does current system do it?

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="dtl_content.type.registry.form.class">DTL\Component\Content\Type\Registry\FormContentTypeRegistry</parameter>
+    </parameters>
+
+    <services>
+        <service id="dtl_content.type.registry" class="%dtl_content.type.registry.form.class%">
+            <argument type="service" id="dtl_content.form.registry" />
+        </service>
+    </services>
+
+</container>
+
+
+

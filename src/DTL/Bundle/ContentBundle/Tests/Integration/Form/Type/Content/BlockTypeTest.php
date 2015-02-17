@@ -27,11 +27,27 @@ class BlockTypeTest extends AbstractContentTypeTestCase
     {
         return array(
             array(
-                array(
-                ),
+                $this->getOptions(),
                 array(
                 ),
             ),
+        );
+    }
+
+    public function provideFormSubmit()
+    {
+        return array(
+            array(
+                $this->getOptions(),
+                array(
+                    'title' => 'Foobar',
+                    'body' => 'Body body',
+                ),
+                array(
+                    'title' => 'Foobar',
+                    'body' => 'Body body',
+                )
+            )
         );
     }
 
@@ -60,6 +76,65 @@ class BlockTypeTest extends AbstractContentTypeTestCase
                 array(
                 ),
                 array(
+                ),
+            ),
+        );
+    }
+
+    private function getOptions()
+    {
+        return array(
+            'default_type' => 'editor',
+            'prototypes' => array(
+                'editor' => array(
+                    'options' => array(
+                        'label' => array(
+                            'en' => 'Text editor',
+                        ),
+                    ),
+                    'properties' => array(
+                        'title' => array(
+                            'type' => 'text_line',
+                            'options' => array(
+                                'label' => array(
+                                    'en' => 'Title',
+                                ),
+                            ),
+                        ),
+                        'body' => array(
+                            'type' => 'text_line',
+                            'options' => array(
+                                'label' => array(
+                                    'en' => 'Body',
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                'title_only' => array(
+                    'options' => array(
+                        'label' => array(
+                            'en' => 'Text editor',
+                        ),
+                    ),
+                    'properties' => array(
+                        'title' => array(
+                            'type' => 'text_line',
+                            'options' => array(
+                                'label' => array(
+                                    'en' => 'Title',
+                                ),
+                            ),
+                        ),
+                        'body' => array(
+                            'type' => 'text_line',
+                            'options' => array(
+                                'label' => array(
+                                    'en' => 'Body',
+                                ),
+                            ),
+                        ),
+                    ),
                 ),
             ),
         );

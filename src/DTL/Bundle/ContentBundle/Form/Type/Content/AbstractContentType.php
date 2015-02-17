@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use DTL\Component\Content\Form\ContentView;
 use DTL\Component\Content\Type\ContentTypeInterface;
 use DTL\Component\Content\FrontView\FrontView;
+use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
+use Symfony\Component\OptionsResolver\Options;
 
 /**
  * Adds stubb implementation for content type interface contract
@@ -36,13 +38,15 @@ abstract class AbstractContentType extends AbstractType implements ContentTypeIn
         ));
 
         $options->setDefaults(array(
-            'legacy' => true,
             'tags' => array(),
             'min_occurs' => 1,
             'max_occurs' => 1,
             'priority' => 1,
             'translated' => true,
             'labels' => array(),
+            'multiple' => function (Options $options) {
+                return $options['min_occurs'] !== $options['max_occurs'];
+            },
         ));
 
         $options->setAllowedTypes(array(
@@ -76,24 +80,22 @@ abstract class AbstractContentType extends AbstractType implements ContentTypeIn
         $view->vars['webspace_key'] = $options['webspace_key'];
         $view->vars['locale'] = $options['locale'];
 
-        if (true === $options['legacy']) {
-            // remove form_ prefix
-            $view->vars['id'] = substr($view->vars['id'], 5);
+        // remove form_ prefix
+        $view->vars['id'] = substr($view->vars['id'], 5);
 
-            $view->vars['property'] = array(
-                'name' => $form->getName(),
-                'metadata' => array(
-                    'title' => $options['labels'],
-                ),
-                'mandatory' => $options['required'],
-                'multilingual' => $options['translated'],
-                'minOccurs' => $options['min_occurs'],
-                'maxOccurs' => $options['max_occurs'],
-                'contentTypeName' => $this->getName(),
-                'params' => array(),
-                'tags' => $options['tags'],
-            );
-        }
+        $view->vars['property'] = array(
+            'name' => $form->getName(),
+            'metadata' => array(
+                'title' => $options['labels'],
+            ),
+            'mandatory' => $options['required'],
+            'multilingual' => $options['translated'],
+            'minOccurs' => $options['min_occurs'],
+            'maxOccurs' => $options['max_occurs'],
+            'contentTypeName' => $this->getName(),
+            'params' => array(),
+            'tags' => $options['tags'],
+        );
     }
 
     /**

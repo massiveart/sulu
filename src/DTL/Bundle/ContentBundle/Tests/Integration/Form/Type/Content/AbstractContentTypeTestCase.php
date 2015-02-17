@@ -95,6 +95,43 @@ abstract class AbstractContentTypeTestCase extends SuluTestCase
         $this->assertContains('data-mapper-property', $result);
     }
 
+    /**
+     * Provide data for testFormSubmit
+     */
+    abstract public function provideFormSubmit();
+
+    /**
+     * Test form submission in mapping
+     *
+     * @param array $options Options for the form
+     * @param mixed $data The data to submit to the form
+     * @param mixed $expectedData The data that the form should map to the data
+     *
+     * @dataProvider provideFormSubmit
+     */
+    public function testFormSubmit($options, $data, $expectedData)
+    {
+        $content = new \ArrayObject();
+        $options = $this->completeOptions($options);
+        $form = $this->createForm($options);
+        $form->setData($content);
+
+        $form->submit(array(
+            'test_type' => $data,
+        ));
+
+        if (!$form->isValid()) {
+            foreach ($form->getErrors(true, true) as $error) {
+                var_dump($error->getCause());
+            }
+        }
+
+        $this->assertTrue($form->isValid());
+    }
+
+    /**
+     * Provide data for testFrontViewValue
+     */
     abstract function provideFrontViewValue();
 
     /**
@@ -132,30 +169,13 @@ abstract class AbstractContentTypeTestCase extends SuluTestCase
     }
 
     /**
-     * Create form with a single field "test_type" using this
-     * tests content type.
-     *
-     * @param array $options Options for the content form
-     *
-     * @return FormInterface
-     */
-    private function createForm($options)
-    {
-        $form = $this->getContainer()->get('dtl_content.form.factory')->createBuilder()
-            ->add('test_type', $this->getType(), $options)
-            ->getForm();
-
-        return $form;
-    }
-
-    /**
      * Merge default options from the abstract type
      *
      * @param array $options
      *
      * @return array
      */
-    private function completeOptions($options)
+    protected function completeOptions(array $options)
     {
         return array_merge(array(
             'locale' => 'de',
@@ -170,5 +190,22 @@ abstract class AbstractContentTypeTestCase extends SuluTestCase
                 ),
             ),
         ), $options);
+    }
+
+    /**
+     * Create form with a single field "test_type" using this
+     * tests content type.
+     *
+     * @param array $options Options for the content form
+     *
+     * @return FormInterface
+     */
+    private function createForm($options)
+    {
+        $form = $this->getContainer()->get('dtl_content.form.factory')->createBuilder()
+            ->add('test_type', $this->getType(), $options)
+            ->getForm();
+
+        return $form;
     }
 }
