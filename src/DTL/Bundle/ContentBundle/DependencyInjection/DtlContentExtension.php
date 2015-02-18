@@ -38,6 +38,7 @@ class DtlContentExtension extends Extension
         $loader->load('form_content_types.xml');
         $loader->load('routing_auto.xml');
         $loader->load('structure.xml');
+        $loader->load('controller.xml');
 
         $this->processStructure($config['structure'], $container);
     }

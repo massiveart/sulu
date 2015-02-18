@@ -84,6 +84,8 @@ class PropertyType extends AbstractType implements ContentTypeInterface
             'params' => array(),
             'tags' => $options['tags'],
         );
+
+        $view->vars['label'] = $options['label'];
     }
 
     /**

@@ -78,7 +78,7 @@ class StructureFactory implements StructureFactoryInterface
 
         $cache = new ConfigCache($cachePath, $this->debug);
 
-        if (!$cache->isFresh()) {
+        if ($this->debug || !$cache->isFresh()) {
             $fileLocator = new FileLocator($this->typePaths[$type]);
 
             try {

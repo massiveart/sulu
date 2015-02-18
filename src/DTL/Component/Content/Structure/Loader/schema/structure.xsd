@@ -20,7 +20,7 @@
             <xs:element name="meta">
                 <xs:complexType>
                     <xs:choice maxOccurs="unbounded">
-                        <xs:element type="langType" name="label"/>
+                        <xs:element type="langType" name="title"/>
                     </xs:choice>
                 </xs:complexType>
             </xs:element>
@@ -29,7 +29,7 @@
 
     <xs:complexType name="metaType">
         <xs:choice maxOccurs="unbounded">
-            <xs:element type="langType" name="label"/>
+            <xs:element type="langType" name="title"/>
             <xs:element type="langType" name="info_text"/>
             <xs:element type="langType" name="placeholder"/>
         </xs:choice>

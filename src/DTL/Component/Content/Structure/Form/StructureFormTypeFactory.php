@@ -61,16 +61,13 @@ class StructureFormTypeFactory
         ));
 
         foreach ($structure->children as $name => $property) {
-            $options['label'] = $property->label;
-
-            $builder->add(
-                $name,
-                $property->type,
-                array_merge(
-                    $options,
-                    $property->options
-                )
-            );
+            $builder->add($name, 'collection', array(
+                'type' => $property->type,
+                'options' => $property->options,
+                'locale' => $options['locale'],
+                'webspace_key' => $options['webspace_key'],
+                'label' => $property->label,
+            ));
         }
 
         return $builder->getForm();

@@ -43,6 +43,8 @@ class CollectionType extends AbstractType implements ContentTypeInterface
         $resolver->setRequired(array(
             'type',
             'options',
+            'locale',
+            'webspace_key',
         ));
     }
 

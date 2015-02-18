@@ -7,9 +7,9 @@
      data-type="resourceLocator"
      data-aura-component="resource-locator@sulucontent"
      data-type-instance-name="{{ id }}"
-     data-aura-history-api="/admin/api/nodes/<%=content.id%>/resourcelocators?language={{ locale }}&webspace={{ webspace_key }}"
+     data-aura-history-api="/admin/api/nodes/<%=content.id%>/resourcelocators?language={{ locale }}&webspace={{ webspace }}"
      data-aura-content-id="<%=options.id%>"
-     {% if property.mandatory %}data-validation-required="true"{% endif %}
+     {% if property.required %}data-validation-required="true"{% endif %}
 >
 </div>
 {% endblock %}
@@ -20,7 +20,7 @@
     class="form-element preview-update trigger-save-button hide-in-sortmode"
     data-mapper-property="{{ name }}"
     placeholder="{{ placeholder['locale'] }}"
-    {% if property.mandatory %}data-validation-required="true"{% endif %}
+    {% if property.required %}data-validation-required="true"{% endif %}
 />
 {% endblock %}
 
@@ -30,7 +30,7 @@
     class="form-element preview-update trigger-save-button hide-in-sortmode"
     data-mapper-property="{{ name }}"
     placeholder="{{ placeholder['locale'] }}"
-    {% if property.mandatory %}data-validation-required="true"{% endif %}
+    {% if property.required %}data-validation-required="true"{% endif %}
 />
 {% endblock %}
 
@@ -52,9 +52,19 @@
 />
 {% endblock %}
 
+{%- block form_label -%}
+    <label for="title" class="pointer required" title="">
+        {% if label[locale] is defined %}
+            {{ label[locale] }}
+        {% else %}
+            {{ label|first }}
+        {% endif %}
+    </label>
+{%- endblock form_label -%}
+
 {% block block_widget %}
 <div id="{{ id|raw }}"
-          data-property='{{ property|json_encode }}'
+      data-property='{{ property|json_encode }}'
     data-mapper-property="{{ name }}"
 >
 </div>
@@ -68,3 +78,11 @@
     {% endif %}
     {{ form_widget(prototype) }}
 {% endblock %}
+
+{%- block form_row -%}
+    <div>
+        {{- form_label(form) -}}
+        {{- form_errors(form) -}}
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock form_row -%}

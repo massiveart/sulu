@@ -56,7 +56,7 @@ class XmlLoader implements LoaderInterface
         $structure->controller = $this->getValueFromXPath('/x:template/x:controller', $xpath);
         $structure->cacheLifetime = $this->getValueFromXPath('/x:template/x:cacheLifetime', $xpath);
         $structure->tags = $this->loadStructureTags('/x:template/x:tag', $xpath);
-        $structure->label = $this->loadLabels('/x:template/x:meta/x:label', $xpath);
+        $structure->label = $this->loadLabels('/x:template/x:meta/x:title', $xpath);
         $structure->children = $this->loadProperties('/x:template/x:properties/x:*', $tags, $xpath);
 
         return $structure;
@@ -107,7 +107,7 @@ class XmlLoader implements LoaderInterface
         $property->required = $this->getBooleanValueFromXPath('@mandatory', $xpath, $node, false);
         $property->localized = $this->getBooleanValueFromXPath('@multilingual', $xpath, $node, true);
         $property->tags = $this->loadTags('x:tag', $tags, $xpath, $node);
-        $property->label = $this->loadLabels('x:meta/x:label', $xpath, $node);
+        $property->label = $this->loadLabels('x:meta/x:title', $xpath, $node);
 
         $property->options = $this->loadParams('x:params/x:param', $xpath, $node);
 
