@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Bundle\ContentBundle\Form\Type\Content;
+namespace DTL\Bundle\ContentBundle\Form\Type\Property;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,9 +22,9 @@ use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
 use Symfony\Component\OptionsResolver\Options;
 
 /**
- * Adds stubb implementation for content type interface contract
+ * Base type for properties
  */
-abstract class AbstractContentType extends AbstractType implements ContentTypeInterface
+class PropertyType extends AbstractType implements ContentTypeInterface
 {
     /**
      * {@inheritDoc}
@@ -32,21 +32,14 @@ abstract class AbstractContentType extends AbstractType implements ContentTypeIn
     public function setDefaultOptions(OptionsResolverInterface $options)
     {
         $options->setRequired(array(
-            'webspace_key',
-            'locale',
             'label',
         ));
 
         $options->setDefaults(array(
             'tags' => array(),
-            'min_occurs' => 1,
-            'max_occurs' => 1,
             'priority' => 1,
             'translated' => true,
-            'labels' => array(),
-            'multiple' => function (Options $options) {
-                return $options['min_occurs'] !== $options['max_occurs'];
-            },
+            'label' => array()
         ));
 
         $options->setAllowedTypes(array(
@@ -77,22 +70,17 @@ abstract class AbstractContentType extends AbstractType implements ContentTypeIn
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['webspace_key'] = $options['webspace_key'];
-        $view->vars['locale'] = $options['locale'];
-
         // remove form_ prefix
         $view->vars['id'] = substr($view->vars['id'], 5);
 
         $view->vars['property'] = array(
             'name' => $form->getName(),
             'metadata' => array(
-                'title' => $options['labels'],
+                'label' => $options['label'],
             ),
-            'mandatory' => $options['required'],
-            'multilingual' => $options['translated'],
-            'minOccurs' => $options['min_occurs'],
-            'maxOccurs' => $options['max_occurs'],
-            'contentTypeName' => $this->getName(),
+            'required' => $options['required'],
+            'translated' => $options['translated'],
+            'structureTypeName' => $this->getName(),
             'params' => array(),
             'tags' => $options['tags'],
         );
@@ -104,5 +92,10 @@ abstract class AbstractContentType extends AbstractType implements ContentTypeIn
     public function buildFrontView(FrontView $view, $data, array $options)
     {
         $view->setValue($data);
+    }
+
+    public function getName()
+    {
+        return 'property';
     }
 }

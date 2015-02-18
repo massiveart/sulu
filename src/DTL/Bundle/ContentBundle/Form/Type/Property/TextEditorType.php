@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Bundle\ContentBundle\Form\Type\Content;
+namespace DTL\Bundle\ContentBundle\Form\Type\Property;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,7 +17,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use DTL\Component\Content\Form\ContentView;
 
-class TextEditorType extends AbstractContentType
+class TextEditorType extends AbstractType
 {
     /**
      * {@inheritDoc}
@@ -27,6 +27,7 @@ class TextEditorType extends AbstractContentType
         parent::setDefaultOptions($options);
 
         $options->setDefaults(array(
+            'compound' => false,
             'god_mode' => false,
             'tables_enabled' => true,
             'links_enabled' => true,
@@ -53,6 +54,14 @@ class TextEditorType extends AbstractContentType
     public function getName()
     {
         return 'text_editor';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getParent()
+    {
+        return 'property';
     }
 }
 

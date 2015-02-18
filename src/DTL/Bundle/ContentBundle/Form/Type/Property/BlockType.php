@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Bundle\ContentBundle\Form\Type\Content;
+namespace DTL\Bundle\ContentBundle\Form\Type\Property;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,7 +19,7 @@ use DTL\Component\Content\FrontView\FrontViewBuilder;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 
-class BlockType extends AbstractContentType
+class BlockType extends AbstractType
 {
     const TYPE_KEY = 'type';
 
@@ -35,7 +35,6 @@ class BlockType extends AbstractContentType
      */
     public function setDefaultOptions(OptionsResolverInterface $options)
     {
-        parent::setDefaultOptions($options);
         $options->setRequired(array(
             'default_type',
             'prototypes',
@@ -67,10 +66,8 @@ class BlockType extends AbstractContentType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $prototypeForms = array();
-        $builder->add('type', 'text_line', array(
-            'webspace_key' => $options['webspace_key'],
-            'locale' => $options['locale'],
-        ));
+
+        $builder->add('type', 'text_line');
 
         foreach ($options['prototypes'] as $name => $prototype) {
             $prototypeOptions = $prototype['options'];
@@ -78,11 +75,7 @@ class BlockType extends AbstractContentType
             $prototypeBuilder = $builder->create('block', 'form', $prototypeOptions);
 
             foreach ($prototype['properties'] as $propName => $prop) {
-
                 $propOptions = $prop['options'];
-                $propOptions['webspace_key'] = $options['webspace_key'];
-                $propOptions['locale'] = $options['locale'];
-
                 $prototypeBuilder->add($propName, $prop['type'], $propOptions);
             }
             $prototypeForms[$name] = $prototypeBuilder->getForm();
@@ -146,5 +139,13 @@ class BlockType extends AbstractContentType
     public function getName()
     {
         return 'block';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getParent()
+    {
+        return 'property';
     }
 }

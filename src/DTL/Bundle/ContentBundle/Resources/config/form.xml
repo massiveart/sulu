@@ -9,11 +9,9 @@
         <!-- DependencyInjectionExtension -->
         <service id="dtl_content.form.extension" class="%form.extension.class%" public="false">
             <argument type="service" id="service_container" />
-            <!-- All services with tag "form.type" are inserted here by FormPass -->
+            <!-- All services with tag "dtl_content.form.type" are inserted here by FormPass -->
             <argument type="collection" />
-            <!-- All services with tag "form.type_extension" are inserted here by FormPass -->
             <argument type="collection" />
-            <!-- All services with tag "form.type_guesser" are inserted here by FormPass -->
             <argument type="collection" />
         </service>
 

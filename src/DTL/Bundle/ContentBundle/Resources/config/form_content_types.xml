@@ -4,24 +4,27 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service id="dtl_content.form.type.property" class="DTL\Bundle\ContentBundle\Form\Type\Property\PropertyType">
+            <tag name="dtl_content.form.type" alias="property" />
+        </service>
 
-        <service id="dtl_content.form.type.resource_locator" class="DTL\Bundle\ContentBundle\Form\Type\Content\ResourceLocatorType">
+        <service id="dtl_content.form.type.resource_locator" class="DTL\Bundle\ContentBundle\Form\Type\Property\ResourceLocatorType">
             <tag name="dtl_content.form.type" alias="resource_locator" />
         </service>
 
-        <service id="dtl_content.form.type.text_area" class="DTL\Bundle\ContentBundle\Form\Type\Content\TextAreaType">
+        <service id="dtl_content.form.type.text_area" class="DTL\Bundle\ContentBundle\Form\Type\Property\TextAreaType">
             <tag name="dtl_content.form.type" alias="text_area" />
         </service>
 
-        <service id="dtl_content.form.type.text_editor" class="DTL\Bundle\ContentBundle\Form\Type\Content\TextEditorType">
+        <service id="dtl_content.form.type.text_editor" class="DTL\Bundle\ContentBundle\Form\Type\Property\TextEditorType">
             <tag name="dtl_content.form.type" alias="text_editor" />
         </service>
 
-        <service id="dtl_content.form.type.text_line" class="DTL\Bundle\ContentBundle\Form\Type\Content\TextLineType">
+        <service id="dtl_content.form.type.text_line" class="DTL\Bundle\ContentBundle\Form\Type\Property\TextLineType">
             <tag name="dtl_content.form.type" alias="text_line" />
         </service>
 
-        <service id="dtl_content.form.type.block" class="DTL\Bundle\ContentBundle\Form\Type\Content\BlockType">
+        <service id="dtl_content.form.type.block" class="DTL\Bundle\ContentBundle\Form\Type\Property\BlockType">
             <argument type="service" id="dtl_content.front_view.builder" />
             <tag name="dtl_content.form.type" alias="block" />
         </service>

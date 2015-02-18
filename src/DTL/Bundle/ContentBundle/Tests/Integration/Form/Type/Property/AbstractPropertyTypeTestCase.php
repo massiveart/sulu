@@ -8,19 +8,20 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Content;
+namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Property;
 
 use Sulu\Bundle\TestBundle\Testing\SuluTestCase;
 use Symfony\Component\Form\FormInterface;
 use DTL\Component\Content\FrontView\FrontView;
 use DTL\Bundle\ContentBundle\Document\PageDocument;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Abstract test class for all content types
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-abstract class AbstractContentTypeTestCase extends SuluTestCase
+abstract class AbstractPropertyTypeTestCase extends SuluTestCase
 {
     /**
      * Provider for testFormView
@@ -63,9 +64,13 @@ abstract class AbstractContentTypeTestCase extends SuluTestCase
      */
     public function testFrontViewAttributes($options, $expectedAttributes)
     {
+        $type = $this->getType();
         $options = $this->completeOptions($options);
         $contentView = new FrontView();
-        $this->getType()->buildFrontView($contentView, null, $options);
+        $resolver = new OptionsResolver();
+        $type->setDefaultOptions($resolver);
+        $resolver->resolve($options);
+        $type->buildFrontView($contentView, null, $options);
 
         foreach ($expectedAttributes as $key => $value) {
             $this->assertEquals($value, $contentView->getAttribute($key));
@@ -98,7 +103,16 @@ abstract class AbstractContentTypeTestCase extends SuluTestCase
     /**
      * Provide data for testFormSubmit
      */
-    abstract public function provideFormSubmit();
+    public function provideFormSubmit()
+    {
+        return array(
+            array(
+                $this->completeOptions(array()),
+                'hello',
+                'hello',
+            ),
+        );
+    }
 
     /**
      * Test form submission in mapping
@@ -178,9 +192,7 @@ abstract class AbstractContentTypeTestCase extends SuluTestCase
     protected function completeOptions(array $options)
     {
         return array_merge(array(
-            'locale' => 'de',
-            'webspace_key' => 'sulu_io',
-            'labels' => array(
+            'label' => array(
                 'de' => 'Adresse',
                 'en' => 'Resource Locator',
             ),
@@ -208,4 +220,6 @@ abstract class AbstractContentTypeTestCase extends SuluTestCase
 
         return $form;
     }
+
+    private function createFrontView($
 }

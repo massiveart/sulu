@@ -8,15 +8,15 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Content;
+namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Property;
 
 use DTL\Bundle\ContentBundle\Form\Type\Content\ResizeableType;
 
-class ResizeableTypeTest extends AbstractContentTypeTestCase
+class CollectionTypeTest extends AbstractPropertyTypeTestCase
 {
     public function getType()
     {
-        return new ResizeableType();
+        return 'collection';
     }
 
     /**

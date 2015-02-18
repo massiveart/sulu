@@ -60,7 +60,6 @@ class StructureFormTypeFactory
             'auto_initialize' => false, // auto initialize should only be for root nodes
         ));
 
-
         foreach ($structure->children as $name => $property) {
             $options['label'] = $property->label;
 

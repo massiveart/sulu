@@ -64,7 +64,7 @@ class FrontViewBuilder
      * @param mixed $properties
      * @param mixed $content
      */
-    public function buildFromProperties(array $properties, $content)
+    public function buildFromProperties(array $properties, $data)
     {
         $frontView = new FrontView();
 
@@ -73,23 +73,53 @@ class FrontViewBuilder
         foreach ($properties as $propertyName => $property) {
             $propertyData = null;
 
-            if (isset($content[$propertyName])) {
-                $propertyData = $content[$propertyName];
+            if (isset($data[$propertyName])) {
+                $propertyData = $data[$propertyName];
             }
 
-            $childFrontView = new FrontView();
-            $contentType = $this->registry->getType($property->type);
-
-            // resolve the options
-            $optionsResolver = new OptionsResolver();
-            $contentType->setDefaultOptions($optionsResolver);
-            $options = $optionsResolver->resolve($property->options);
-
-            $contentType->buildFrontView($childFrontView, $propertyData, $options);
+            $childFrontView = $this->buildType($property->type, $propertyData, $property->options);
+            $children[] = $childFrontView;
         }
 
         $frontView->setChildren($children);
 
         return $frontView;
+    }
+
+    public function buildType($propertyType, $data, $options)
+    {
+        $frontView = new FrontView();
+
+        $propertyType = $this->registry->getType($propertyType);
+
+        $typeChain = $this->getTypeChain($propertyType);
+
+        // resolve the options
+        foreach ($typeChain as $propertyType) {
+            $optionsResolver = new OptionsResolver();
+            $propertyType->setDefaultOptions($optionsResolver);
+        }
+
+        $options = $optionsResolver->resolve($options);
+
+        // resolve the options
+        foreach ($typeChain as $propertyType) {
+            $propertyType->buildFrontView($frontView, $data, $options);
+        }
+
+        return $frontView;
+    }
+
+    private function getTypeChain($propertyType, $parentTypes = array())
+    {
+        $parentTypes[] = $propertyType;
+        $parentType = $propertyType->getParent();
+
+        if (!$parentType) {
+            return $parentTypes;
+        }
+
+        $parentType = $this->registry->getType($parentType);
+        return $this->getTypeChain($parentType, $parentTypes);
     }
 }

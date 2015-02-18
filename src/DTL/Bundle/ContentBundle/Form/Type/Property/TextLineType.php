@@ -8,13 +8,13 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Bundle\ContentBundle\Form\Type\Content;
+namespace DTL\Bundle\ContentBundle\Form\Type\Property;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class TextLineType extends AbstractContentType
+class TextLineType extends AbstractType
 {
     /**
      * {@inheritDoc}
@@ -34,5 +34,13 @@ class TextLineType extends AbstractContentType
     public function getName()
     {
         return 'text_line';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getParent()
+    {
+        return 'property';
     }
 }

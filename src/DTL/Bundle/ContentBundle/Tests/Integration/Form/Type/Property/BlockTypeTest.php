@@ -8,16 +8,16 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Content;
+namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Property;
 
 use DTL\Bundle\ContentBundle\Form\Type\Content\TextAreaType;
 use DTL\Bundle\ContentBundle\Form\Type\Content\BlockType;
 
-class BlockTypeTest extends AbstractContentTypeTestCase
+class BlockTypeTest extends AbstractPropertyTypeTestCase
 {
     public function getType()
     {
-        return $this->getContainer()->get('dtl_content.form.type.block');
+        return 'dtl_content.form.type.block';
     }
 
     /**
@@ -66,7 +66,9 @@ class BlockTypeTest extends AbstractContentTypeTestCase
             array(
                 array(
                 ),
-                null,
+                array(
+
+                ),
                 null,
             ),
         );
@@ -79,8 +81,7 @@ class BlockTypeTest extends AbstractContentTypeTestCase
     {
         return array(
             array(
-                array(
-                ),
+                $this->getOptions(),
                 array(
                 ),
             ),
@@ -91,6 +92,10 @@ class BlockTypeTest extends AbstractContentTypeTestCase
     {
         return array(
             'default_type' => 'editor',
+            'label' => array(
+                'de' => 'Block editor',
+                'en' => 'Block editor',
+            ),
             'prototypes' => array(
                 'editor' => array(
                     'options' => array(

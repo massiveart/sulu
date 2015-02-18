@@ -8,11 +8,11 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Content;
+namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Property;
 
 use DTL\Bundle\ContentBundle\Form\Type\Content\ResourceLocatorType;
 
-class ResourceLocatorTypeTest extends AbstractContentTypeTestCase
+class ResourceLocatorTypeTest extends AbstractPropertyTypeTestCase
 {
     public function getType()
     {

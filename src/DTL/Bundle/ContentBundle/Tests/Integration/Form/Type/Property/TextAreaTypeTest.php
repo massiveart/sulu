@@ -8,11 +8,11 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Content;
+namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Property;
 
 use DTL\Bundle\ContentBundle\Form\Type\Content\TextAreaType;
 
-class TextAreaTypeTest extends AbstractContentTypeTestCase
+class TextAreaTypeTest extends AbstractPropertyTypeTestCase
 {
     public function getType()
     {
@@ -33,28 +33,6 @@ class TextAreaTypeTest extends AbstractContentTypeTestCase
             ),
             array(
                 array(
-                    'placeholder' => 'Hello',
-                ),
-                array(
-                    'placeholder' => array(
-                        'de' => 'Hello',
-                    ),
-                ),
-            ), 
-            array(
-                array(
-                    'locale' => 'fr',
-                    'placeholder' => 'Hello',
-                ),
-                array(
-                    'placeholder' => array(
-                        'fr' => 'Hello',
-                    ),
-                ),
-            ), 
-            array(
-                array(
-                    'locale' => 'fr',
                     'placeholder' => array(
                         'de' => 'Willkommen',
                         'fr' => 'Bienvenue',

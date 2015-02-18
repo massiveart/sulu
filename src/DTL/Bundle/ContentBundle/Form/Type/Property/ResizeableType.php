@@ -1,18 +1,15 @@
 <?php
 
-namespace DTL\Bundle\ContentBundle\Form\Type\Content;
+namespace DTL\Bundle\ContentBundle\Form\Type\Property;
 
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\Form\AbstractType;
-use DTL\Component\Content\Type\ContentTypeRegistryInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use DTL\Component\Content\Type\ContentTypeInterface;
 use DTL\Component\Content\FrontView\FrontView;
-use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
-use DTL\Bundle\ContentBundle\Form\DataTransformer\ResizeableTransformer;
 use DTL\Bundle\ContentBundle\Form\EventListener\ResizeableListener;
 
 /**

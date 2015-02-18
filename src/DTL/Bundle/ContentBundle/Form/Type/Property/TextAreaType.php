@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Bundle\ContentBundle\Form\Type\Content;
+namespace DTL\Bundle\ContentBundle\Form\Type\Property;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,29 +16,29 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
-class TextAreaType extends AbstractContentType
+class TextAreaType extends AbstractType
 {
     /**
      * {@inheritDoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $options)
     {
-        parent::setDefaultOptions($options);
-
         $options->setDefaults(array(
-            'placeholder' => '',
+            'compound' => false,
+            'placeholder' => array(),
         ));
 
         $options->setAllowedTypes(array(
-            'placeholder' => array('string', 'array')
+            'placeholder' => array('array')
         ));
 
         $options->setNormalizers(array(
             'placeholder' => function ($options, $value) {
                 if (!is_array($value)) {
-                    return array(
-                        $options['locale'] => $value
-                    );
+                    throw new \InvalidArgumentException(sprintf(
+                        'Placeholder value must be an array of translations, e.g. array("de" => "Wilkkommen", "en" => "Welcome"), got "%s"',
+                        print_r($value, true)
+                    ));
                 }
 
                 return $value;
@@ -60,5 +60,13 @@ class TextAreaType extends AbstractContentType
     public function getName()
     {
         return 'text_area';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getParent()
+    {
+        return 'property';
     }
 }

@@ -38,9 +38,7 @@ class FrontViewBuilderTest extends ProphecyTestCase
     /**
      * @var FormTypeInterface[]
      */
-    private $contentTypes;
-
-    private $formChildrenProphets = array();
+    private $propertyTypes;
 
     public function setUp()
     {
@@ -48,74 +46,53 @@ class FrontViewBuilderTest extends ProphecyTestCase
 
         $this->structureFactory = $this->prophesize('DTL\Component\Content\Structure\Factory\StructureFactoryInterface');
         $this->document1 = $this->prophesize('DTL\Component\Content\Document\DocumentInterface');
-        $this->contentTypeRegistry = $this->prophesize('DTL\Component\Content\Type\ContentTypeRegistryInterface');
-
-        $children = array();
-        $prodigies = array();
-
-        $this->frontChildren = $children;
-
+        $this->propertyTypeRegistry = $this->prophesize('DTL\Component\Content\Type\ContentTypeRegistryInterface');
         $this->structure = new Structure();
         $this->builder = new FrontViewBuilder(
             $this->structureFactory->reveal(),
-            $this->contentTypeRegistry->reveal()
+            $this->propertyTypeRegistry->reveal()
         );
     }
 
-    public function provideBuildFor()
+    public function testBuildFor()
     {
-        return array(
-            array(
-                'example',
-                array(
-                    'one' => 'hello',
-                    'two' => 'world',
-                ),
-                array(
-                    'one' => array(
-                        'type' => 'text_line',
-                    ),
-                    'two' => array(
-                        'type' => 'text_line',
-                    ),
-                ),
-            ),
+        $structureType = 'example';
+        $data = array(
+            'one' => 'hello',
+            'two' => 'world',
         );
-    }
+        $properties = array(
+            'one' => array('type' => 'text_line'),
+            'two' => array('type' => 'text_line'),
+        );
 
-    /**
-     * @dataProvider provideBuildFor
-     */
-    public function testBuildFor($structureType, $data, $structureProperties)
-    {
-        $contentTypes = array();
-        foreach ($structureProperties as $propertyName => $propertyData) {
-            $propertyType = $propertyData['type'];
+        $propertyTypes = array();
 
-            if (!isset($contentTypes[$propertyType])) {
-                $contentTypes[$propertyType] = $this->prophesize('DTL\Component\Content\Type\ContentTypeInterface');
-            }
+        $parentType = $this->prophesize('DTL\Component\Content\Type\ContentTypeInterface');
+        $parentType->getParent()->willReturn(null);
+        $parentType->buildFrontView(Argument::type('DTL\Component\Content\FrontView\FrontView'), $data['one'], array())->shouldBeCalled();
+        $parentType->buildFrontView(Argument::type('DTL\Component\Content\FrontView\FrontView'), $data['two'], array())->shouldBeCalled();
+        $parentType->setDefaultOptions(
+            Argument::type('Symfony\Component\OptionsResolver\OptionsResolverInterface')
+        )->shouldBeCalled();
 
-            $contentType = $contentTypes[$propertyType];
-            $contentType->buildFrontView(
-                Argument::type('DTL\Component\Content\FrontView\FrontView'),
-                $data[$propertyName],
-                array()
-            )->shouldBeCalled();
-            $contentType->setDefaultOptions(
-                Argument::type('Symfony\Component\OptionsResolver\OptionsResolverInterface')
-            )->shouldBeCalled();
-            $this->contentTypeRegistry->getType($propertyData['type'])->willReturn(
-                $contentType->reveal()
-            );
-        }
+        $textLineType = $this->prophesize('DTL\Component\Content\Type\ContentTypeInterface');
+        $textLineType->getParent()->willReturn('parent');
+        $textLineType->buildFrontView(Argument::type('DTL\Component\Content\FrontView\FrontView'), $data['one'], array())->shouldBeCalled();
+        $textLineType->buildFrontView(Argument::type('DTL\Component\Content\FrontView\FrontView'), $data['two'], array())->shouldBeCalled();
+        $textLineType->setDefaultOptions(
+            Argument::type('Symfony\Component\OptionsResolver\OptionsResolverInterface')
+        )->shouldBeCalled();
+
+        $this->propertyTypeRegistry->getType('text_line')->willReturn($textLineType->reveal());
+        $this->propertyTypeRegistry->getType('parent')->willReturn($parentType);
 
         $this->document1->getStructureType()->willReturn($structureType);
         $this->document1->getDocumentType()->willReturn('page');
         $this->document1->getContent()->willReturn($data);
         $this->structureFactory->getStructure('page', $structureType)->willReturn($this->structure);
 
-        foreach ($structureProperties as $name => $propertyData) {
+        foreach ($properties as $name => $propertyData) {
             $property = new Property();
             foreach ($propertyData as $attrName => $attrValue) {
                 $property->$attrName = $attrValue;
