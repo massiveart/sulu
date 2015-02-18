@@ -1,9 +1,9 @@
 <?php
 
-namespace DTL\Component\Content\Type;
+namespace DTL\Component\Content\Type\Registry;
 
 use Prophecy\PhpUnit\ProphecyTestCase;
-use DTL\Component\Content\Type\FormContentTypeRegistry;
+use DTL\Component\Content\Type\Registry\FormContentTypeRegistry;
 
 class FormContentTypeRegistryTest extends ProphecyTestCase
 {

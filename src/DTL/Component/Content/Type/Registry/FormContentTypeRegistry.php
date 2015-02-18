@@ -4,6 +4,7 @@ namespace DTL\Component\Content\Type\Registry;
 
 use Symfony\Component\Form\FormRegistryInterface;
 use DTL\Component\Content\Type\ContentTypeRegistryInterface;
+use DTL\Component\Content\Type\ContentTypeInterface;
 
 /**
  * Reduces the scope of the FormRegistry to that of a ContentTypeRegistry
