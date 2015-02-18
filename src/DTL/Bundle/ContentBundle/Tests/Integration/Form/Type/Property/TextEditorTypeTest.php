@@ -14,9 +14,9 @@ use DTL\Bundle\ContentBundle\Form\Type\Content\TextEditorType;
 
 class TextEditorTypeTest extends AbstractPropertyTypeTestCase
 {
-    public function getType()
+    public function getTypeAlias()
     {
-        return new TextEditorType();
+        return 'text_editor';
     }
 
     /**

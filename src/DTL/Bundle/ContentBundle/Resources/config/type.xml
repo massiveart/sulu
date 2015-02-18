@@ -9,7 +9,7 @@
 
     <services>
         <service id="dtl_content.type.registry" class="%dtl_content.type.registry.form.class%">
-            <argument type="service" id="dtl_content.form.registry" />
+            <argument type="service" id="dtl_content.form.extension" />
         </service>
     </services>
 

@@ -5,6 +5,7 @@ namespace DTL\Component\Content\Type\Registry;
 use Symfony\Component\Form\FormRegistryInterface;
 use DTL\Component\Content\Type\ContentTypeRegistryInterface;
 use DTL\Component\Content\Type\ContentTypeInterface;
+use Symfony\Component\Form\FormExtensionInterface;
 
 /**
  * Reduces the scope of the FormRegistry to that of a ContentTypeRegistry
@@ -15,11 +16,11 @@ use DTL\Component\Content\Type\ContentTypeInterface;
 class FormContentTypeRegistry implements ContentTypeRegistryInterface
 {
     /**
-     * @param FormRegistryInterface $formRegistry
+     * @param FormRegistryInterface $formExtension
      */
-    public function __construct(FormRegistryInterface $formRegistry)
+    public function __construct(FormExtensionInterface $formExtension)
     {
-        $this->formRegistry = $formRegistry;
+        $this->formExtension = $formExtension;
     }
 
     /**
@@ -27,15 +28,14 @@ class FormContentTypeRegistry implements ContentTypeRegistryInterface
      */
     public function getType($type)
     {
-        $type = $this->formRegistry->getType($type);
-
-        if (!$type instanceof ContentTypeInterface) {
-            throw new \RuntimeException(sprintf(
-                'Form registry "%s" did not return a form type of ContentTypeInterface.' .
-                'The form registry used for Sulu content must only register Sulu ContentTypeInterface types.',
-                get_class($this->formRegistry)
+        if (!$this->formExtension->hasType($type)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Unknown content type "%s"',
+                $type
             ));
         }
+
+        $type = $this->formExtension->getType($type);
 
         return $type;
     }

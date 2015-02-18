@@ -24,7 +24,7 @@ use DTL\Bundle\ContentBundle\Form\EventListener\ResizeableListener;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class ResizeableType extends AbstractType implements ContentTypeInterface
+class CollectionType extends AbstractType implements ContentTypeInterface
 {
     /**
      * {@inheritdoc}
@@ -85,6 +85,6 @@ class ResizeableType extends AbstractType implements ContentTypeInterface
      */
     public function getName()
     {
-        return 'resizable';
+        return 'collection';
     }
 }

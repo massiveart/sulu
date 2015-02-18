@@ -18,8 +18,9 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use DTL\Component\Content\FrontView\FrontViewBuilder;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
+use DTL\Component\Content\Type\ContentTypeInterface;
 
-class BlockType extends AbstractType
+class BlockType extends AbstractType implements ContentTypeInterface
 {
     const TYPE_KEY = 'type';
 

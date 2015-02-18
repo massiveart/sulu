@@ -15,9 +15,9 @@ use DTL\Bundle\ContentBundle\Form\Type\Content\BlockType;
 
 class BlockTypeTest extends AbstractPropertyTypeTestCase
 {
-    public function getType()
+    public function getTypeAlias()
     {
-        return 'dtl_content.form.type.block';
+        return 'block';
     }
 
     /**
@@ -64,12 +64,10 @@ class BlockTypeTest extends AbstractPropertyTypeTestCase
     {
         return array(
             array(
+                $this->getOptions(),
                 array(
                 ),
-                array(
-
-                ),
-                null,
+                array(),
             ),
         );
     }

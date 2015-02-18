@@ -14,9 +14,9 @@ use DTL\Bundle\ContentBundle\Form\Type\Content\TextAreaType;
 
 class TextAreaTypeTest extends AbstractPropertyTypeTestCase
 {
-    public function getType()
+    public function getTypeAlias()
     {
-        return new TextAreaType();
+        return 'text_area';
     }
 
     /**

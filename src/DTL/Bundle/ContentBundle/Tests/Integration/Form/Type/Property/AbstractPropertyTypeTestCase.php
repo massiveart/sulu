@@ -23,6 +23,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 abstract class AbstractPropertyTypeTestCase extends SuluTestCase
 {
+    abstract protected function getTypeAlias();
+
     /**
      * Provider for testFormView
      *
@@ -64,16 +66,11 @@ abstract class AbstractPropertyTypeTestCase extends SuluTestCase
      */
     public function testFrontViewAttributes($options, $expectedAttributes)
     {
-        $type = $this->getType();
         $options = $this->completeOptions($options);
-        $contentView = new FrontView();
-        $resolver = new OptionsResolver();
-        $type->setDefaultOptions($resolver);
-        $resolver->resolve($options);
-        $type->buildFrontView($contentView, null, $options);
+        $frontView = $this->createFrontView($this->getTypeAlias(), array(), $options);
 
         foreach ($expectedAttributes as $key => $value) {
-            $this->assertEquals($value, $contentView->getAttribute($key));
+            $this->assertEquals($value, $frontView->getAttribute($key));
         }
     }
 
@@ -163,10 +160,8 @@ abstract class AbstractPropertyTypeTestCase extends SuluTestCase
     public function testFrontViewValue(array $options, $data, $expectedValue)
     {
         $options = $this->completeOptions($options);
-
-        $contentView = new FrontView();
-        $this->getType()->buildFrontView($contentView, $data, $options);
-        $this->assertFrontViewValue($contentView, $expectedValue);
+        $frontView = $this->createFrontView($this->getTypeAlias(), $data, $this->completeOptions($options));
+        $this->assertFrontViewValue($frontView, $expectedValue);
     }
 
     /**
@@ -221,5 +216,14 @@ abstract class AbstractPropertyTypeTestCase extends SuluTestCase
         return $form;
     }
 
-    private function createFrontView($
+    private function createFrontView($propertyType, $data, $options)
+    {
+        $builder = $this->getContainer()->get('dtl_content.front_view.builder');
+        return $builder->buildType($propertyType, $data, $options);
+    }
+
+    protected function getType()
+    {
+        return $this->getContainer()->get('dtl_content.type.registry')->getType($this->getTypeAlias());
+    }
 }

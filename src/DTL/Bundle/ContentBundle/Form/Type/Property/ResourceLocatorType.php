@@ -15,7 +15,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use DTL\Component\Content\Form\ContentView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ResourceLocatorType extends AbstractContentType
+class ResourceLocatorType extends AbstractType
 {
     public function setDefaultOptions(OptionsResolverInterface $options)
     {

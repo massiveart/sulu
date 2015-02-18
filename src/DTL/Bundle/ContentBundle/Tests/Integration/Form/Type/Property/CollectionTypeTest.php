@@ -14,7 +14,7 @@ use DTL\Bundle\ContentBundle\Form\Type\Content\ResizeableType;
 
 class CollectionTypeTest extends AbstractPropertyTypeTestCase
 {
-    public function getType()
+    public function getTypeAlias()
     {
         return 'collection';
     }
@@ -115,6 +115,10 @@ class CollectionTypeTest extends AbstractPropertyTypeTestCase
         return array(
             array(
                 array(
+                    'type' => 'text_area',
+                    'options' => parent::completeOptions(array()),
+                    'max_occurs' => 1,
+                    'max_occurs' => 1,
                 ),
                 array(
                 ),

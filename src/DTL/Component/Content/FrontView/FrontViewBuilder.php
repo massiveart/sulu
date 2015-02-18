@@ -7,6 +7,7 @@ use DTL\Component\Content\Structure\Factory\StructureFactoryInterface;
 use DTL\Component\Content\Type\ContentTypeRegistryInterface;
 use DTL\Component\Content\Document\DocumentInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use DTL\Component\Content\Type\ContentTypeInterface;
 
 /**
  * Build ContentView object from Document and Structure data.)
@@ -86,6 +87,15 @@ class FrontViewBuilder
         return $frontView;
     }
 
+    /**
+     * Build a front view for the given property type name
+     *
+     * @param string $propertyType
+     * @param mixed $data
+     * @param array $options
+     *
+     * @return FrontView
+     */
     public function buildType($propertyType, $data, $options)
     {
         $frontView = new FrontView();
@@ -93,10 +103,10 @@ class FrontViewBuilder
         $propertyType = $this->registry->getType($propertyType);
 
         $typeChain = $this->getTypeChain($propertyType);
+        $optionsResolver = new OptionsResolver();
 
         // resolve the options
         foreach ($typeChain as $propertyType) {
-            $optionsResolver = new OptionsResolver();
             $propertyType->setDefaultOptions($optionsResolver);
         }
 
@@ -112,11 +122,15 @@ class FrontViewBuilder
 
     private function getTypeChain($propertyType, $parentTypes = array())
     {
-        $parentTypes[] = $propertyType;
+        // do not build symfony form types
+        if ($propertyType instanceof ContentTypeInterface) {
+            $parentTypes[] = $propertyType;
+        }
+
         $parentType = $propertyType->getParent();
 
         if (!$parentType) {
-            return $parentTypes;
+            return array_reverse($parentTypes);
         }
 
         $parentType = $this->registry->getType($parentType);
