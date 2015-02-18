@@ -19,19 +19,23 @@
     data-property='{{ property|json_encode }}'
     class="form-element preview-update trigger-save-button hide-in-sortmode"
     data-mapper-property="{{ name }}"
-    placeholder="{{ placeholder['locale'] }}"
+    {% if placeholder[locale] is defined %}
+    placeholder="{{ placeholder[locale] }}"
+    {% endif %}
     {% if property.required %}data-validation-required="true"{% endif %}
 />
 {% endblock %}
 
-{% block text_line %}
+{% block text_line_widget %}
 <textarea id="{{ id|raw }}"
     data-property='{{ property|json_encode }}'
     class="form-element preview-update trigger-save-button hide-in-sortmode"
     data-mapper-property="{{ name }}"
-    placeholder="{{ placeholder['locale'] }}"
-    {% if property.required %}data-validation-required="true"{% endif %}
-/>
+    {% if placeholder[locale] is defined %}
+    placeholder="{{ placeholder[locale] }}"
+    {% endif %}
+    {% if property.required %}data-validation-required="true"{% endif %}>
+</textarea>
 {% endblock %}
 
 {% block text_editor_widget %}
@@ -48,7 +52,9 @@
     data-aura-paste-from-word="{{ paste_from_word ? 'true' : 'false' }}"
     data-mapper-property="{{ name }}"
     data-aura-instance-name="{{ name }}"
-    placeholder="{{ placeholder }}"
+    {% if placeholder[locale] is defined %}
+    placeholder="{{ placeholder[locale] }}"
+    {% endif %}
 />
 {% endblock %}
 
@@ -80,7 +86,7 @@
 {% endblock %}
 
 {%- block form_row -%}
-    <div>
+    <div class="grid-col-12 floating form-group">
         {{- form_label(form) -}}
         {{- form_errors(form) -}}
         {{- form_widget(form) -}}

@@ -43,8 +43,6 @@ class CollectionType extends AbstractType implements ContentTypeInterface
         $resolver->setRequired(array(
             'type',
             'options',
-            'locale',
-            'webspace_key',
         ));
     }
 
@@ -53,7 +51,7 @@ class CollectionType extends AbstractType implements ContentTypeInterface
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $prototype = $builder->create('content_type', $options['type'], $options['options']);
+        $prototype = $builder->create($builder->getName(), $options['type'], $options['options']);
         $builder->setAttribute('prototype', $prototype->getForm());
 
         $resizeListener = new ResizeableListener(

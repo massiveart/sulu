@@ -64,9 +64,9 @@ class StructureFormTypeFactory
             $builder->add($name, 'collection', array(
                 'type' => $property->type,
                 'options' => $property->options,
-                'locale' => $options['locale'],
-                'webspace_key' => $options['webspace_key'],
                 'label' => $property->label,
+                'min_occurs' => $property->minOccurs,
+                'max_occurs' => $property->maxOccurs,
             ));
         }
 

@@ -23,35 +23,6 @@ class TextAreaType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $options)
     {
-        $options->setDefaults(array(
-            'compound' => false,
-            'placeholder' => array(),
-        ));
-
-        $options->setAllowedTypes(array(
-            'placeholder' => array('array')
-        ));
-
-        $options->setNormalizers(array(
-            'placeholder' => function ($options, $value) {
-                if (!is_array($value)) {
-                    throw new \InvalidArgumentException(sprintf(
-                        'Placeholder value must be an array of translations, e.g. array("de" => "Wilkkommen", "en" => "Welcome"), got "%s"',
-                        print_r($value, true)
-                    ));
-                }
-
-                return $value;
-            }
-        ));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
-        $view->vars['placeholder'] = $options['placeholder'];
     }
 
     /**
@@ -67,6 +38,6 @@ class TextAreaType extends AbstractType
      */
     public function getParent()
     {
-        return 'property';
+        return 'text_line';
     }
 }

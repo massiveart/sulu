@@ -24,8 +24,6 @@ class TextEditorType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $options)
     {
-        parent::setDefaultOptions($options);
-
         $options->setDefaults(array(
             'compound' => false,
             'god_mode' => false,
