@@ -1,0 +1,17 @@
+default:
+    suites:
+        default:
+            type: symfony_bundle
+            contexts:
+                - DTL\Bundle\ContentBundle\Behat\ContentContext
+            bundle: DtlContentBundle
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                path: tests/app/AppKernel.php
+                env: behat
+                bootstrap: Tests/bootstrap.php
+            context:
+                path_suffix: Tests/Features
+        Behat\WebApiExtension:
+            base_url: http://localhost:8000/
