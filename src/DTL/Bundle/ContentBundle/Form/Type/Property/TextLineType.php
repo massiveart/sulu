@@ -15,8 +15,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
+use DTL\Component\Content\Property\PropertyTypeInterface;
+use DTL\Component\Content\FrontView\FrontView;
 
-class TextLineType extends AbstractType
+class TextLineType extends AbstractType implements PropertyTypeInterface
 {
     /**
      * {@inheritDoc}
@@ -52,6 +54,14 @@ class TextLineType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['placeholder'] = $options['placeholder'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function buildFrontView(FrontView $view, $data, array $options)
+    {
+        $view->setValue($data);
     }
 
     /**

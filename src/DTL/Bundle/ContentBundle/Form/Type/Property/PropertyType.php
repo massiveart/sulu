@@ -16,7 +16,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use DTL\Component\Content\Form\ContentView;
-use DTL\Component\Content\Type\ContentTypeInterface;
+use DTL\Component\Content\Property\PropertyTypeInterface;
 use DTL\Component\Content\FrontView\FrontView;
 use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
 use Symfony\Component\OptionsResolver\Options;
@@ -24,7 +24,7 @@ use Symfony\Component\OptionsResolver\Options;
 /**
  * Base type for properties
  */
-class PropertyType extends AbstractType implements ContentTypeInterface
+class PropertyType extends AbstractType implements PropertyTypeInterface
 {
     /**
      * {@inheritDoc}

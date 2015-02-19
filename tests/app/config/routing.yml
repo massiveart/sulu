@@ -1,0 +1,7 @@
+sulu_content:
+    resource: "@SuluContentBundle/Resources/config/routing.yml"
+    prefix: /legacy/admin/content
+
+dtl_content:
+    resource: "@DtlContentBundle/Resources/config/routing.yml"
+    prefix: /admin/content

@@ -15,14 +15,24 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
+use DTL\Component\Content\Property\PropertyTypeInterface;
+use DTL\Component\Content\FrontView\FrontView;
 
-class TextAreaType extends AbstractType
+class TextAreaType extends AbstractType implements PropertyTypeInterface
 {
     /**
      * {@inheritDoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $options)
     {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function buildFrontView(FrontView $view, $data, array $options)
+    {
+        $view->setValue($data);
     }
 
     /**

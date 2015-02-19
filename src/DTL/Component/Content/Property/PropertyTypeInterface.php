@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\Type;
+namespace DTL\Component\Content\Property;
 
 use Symfony\Component\Form\FormTypeInterface;
 use DTL\Component\Content\FrontView\FrontView;
@@ -19,7 +19,7 @@ use DTL\Component\Content\FrontView\FrontView;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-interface ContentTypeInterface extends FormTypeInterface
+interface PropertyTypeInterface extends FormTypeInterface
 {
     /**
      * Build the content front view.

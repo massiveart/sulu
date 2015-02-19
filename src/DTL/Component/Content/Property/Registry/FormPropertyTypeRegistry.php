@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormExtensionInterface;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class FormContentTypeRegistry implements ContentTypeRegistryInterface
+class FormPropertyTypeRegistry implements ContentTypeRegistryInterface
 {
     /**
      * @param FormRegistryInterface $formExtension

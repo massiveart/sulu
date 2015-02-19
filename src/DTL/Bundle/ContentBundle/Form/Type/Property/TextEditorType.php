@@ -16,8 +16,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use DTL\Component\Content\Form\ContentView;
+use DTL\Component\Content\Property\PropertyTypeInterface;
+use DTL\Component\Content\FrontView\FrontView;
 
-class TextEditorType extends AbstractType
+class TextEditorType extends AbstractType implements PropertyTypeInterface
 {
     /**
      * {@inheritDoc}
@@ -45,6 +47,15 @@ class TextEditorType extends AbstractType
         $view->vars['links_enabled'] = $options['links_enabled'];
         $view->vars['paste_from_word'] = $options['paste_from_word'];
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function buildFrontView(FrontView $view, $data, array $options)
+    {
+        $view->setValue($data);
+    }
+
 
     /**
      * {@inheritDoc}

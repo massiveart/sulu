@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use DTL\Component\Content\Type\ContentTypeInterface;
+use DTL\Component\Content\Property\PropertyTypeInterface;
 use DTL\Component\Content\FrontView\FrontView;
 use DTL\Bundle\ContentBundle\Form\EventListener\ResizeableListener;
 
@@ -24,7 +24,7 @@ use DTL\Bundle\ContentBundle\Form\EventListener\ResizeableListener;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class CollectionType extends AbstractType implements ContentTypeInterface
+class CollectionType extends AbstractType implements PropertyTypeInterface
 {
     /**
      * {@inheritdoc}
