@@ -1,0 +1,29 @@
+framework:
+    form:
+        enabled: true
+
+twig:
+    form:
+        resources:
+            - 'DtlContentBundle:content:sulu.html.twig'
+
+doctrine_phpcr:
+    odm:
+        locales:
+            de: [ 'en', 'fr' ]
+        translation_namespace: i18n
+        document_managers:
+            default:
+                auto_mapping: true
+
+cmf_routing_auto:
+    adapter: sulu_phpcr
+    persistence:
+        phpcr: ~
+
+dtl_content:
+    structure:
+        paths:
+            -
+                path: "%kernel.root_dir%/Resources/pages"
+                type: "page"
