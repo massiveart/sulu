@@ -14,24 +14,33 @@ namespace DTL\Component\Content\Structure;
 class Property
 {
     /**
-     * @var string
-     */
-    public $name;
-
-    /**
-     * @var array
-     */
-    public $label = array();
-
-    /**
-     * @var array
-     */
-    public $options = array();
-
-    /**
+     * Type of this property (e.g. "text_line", "smart_content")
+     *
      * @var string
      */
     public $type;
+
+    /**
+     * If the property should be available in different localizations
+     *
+     * @var boolean
+     */
+    public $options = false;
+
+    /**
+     * Tags, e.g. [['name' => 'sulu_search.field', 'type' => 'string']]
+     *
+     * @var array
+     */
+    public $tags = array();
+
+    /**
+     * Children of this property, could array of either Property or Structure
+     * objects.
+     *
+     * @var Property|Structure[]
+     */
+    public $children = array();
 
     /**
      * @var integer
@@ -42,36 +51,6 @@ class Property
      * @var mixed
      */
     public $maxOccurs = 1;
-
-    /**
-     * @var boolean
-     */
-    public $localized = false;
-
-    /**
-     * @var array
-     */
-    public $tags = array();
-
-    /**
-     * @var integer
-     */
-    public $colspan;
-
-    /**
-     * @var string
-     */
-    public $cssClass;
-
-    /**
-     * @var array
-     */
-    public $children = array();
-
-    /**
-     * @var boolean
-     */
-    public $required;
 
     public function __set($field, $value)
     {

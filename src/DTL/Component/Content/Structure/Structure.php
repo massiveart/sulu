@@ -23,55 +23,6 @@ class Structure
      */
     public $resource;
 
-    /**
-     * Translated label of this structure
-     *
-     * array('de'=> 'Wilkommen', 'fr' => 'Bienvenue')
-     *
-     * @var array
-     */
-    public $label = array();
-
-    /**
-     * Type of the structure e.g. overview
-     *
-     * @var string
-     */
-    public $type;
-
-    /**
-     * Tags for this structure (are these used?)
-     *
-     * @var string[]
-     */
-    public $tags;
-
-    /**
-     * @var PropertyMetadata[]
-     */
-    public $children;
-
-    /**
-     * Frontend template to use for this structure
-     *
-     * @var string
-     */
-    public $view;
-
-    /**
-     * Controller to use to render this structure
-     *
-     * @var string
-     */
-    public $controller;
-
-    /**
-     * Cache lifetime (only applies to "pages")
-     *
-     * @var integer
-     */
-    public $cacheLifetime;
-
     public function __set($field, $value)
     {
         throw new \InvalidArgumentException(sprintf(
@@ -85,38 +36,38 @@ class Structure
      *
      * @return string $name
      */
-    public function getChild($name)
+    public function getProperty($name)
     {
-        if (!isset($this->children[$name])) {
+        if (!isset($this->properties[$name])) {
             throw new \InvalidArgumentException(sprintf(
-                'Unknown child "%s" in structure loaded from: "%s"',
+                'Unknown property "%s" in structure loaded from: "%s"',
                 $name, $this->resource
             ));
         }
 
-        return $this->children[$name];
+        return $this->properties[$name];
     }
 
     /**
-     * Return all the localized children
+     * Return all the localized properties
      *
      * @return Property[]
      */
     public function getLocalizedProperties()
     {
-        return array_filter($this->children, function (Property $property) {
+        return array_filter($this->properties, function (Property $property) {
             return $property->localized === true;
         });
     }
 
     /**
-     * Return all the non-localized children
+     * Return all the non-localized properties
      *
      * @return Property[]
      */
     public function getNonLocalizedProperties()
     {
-        return array_filter($this->children, function (Property $property) {
+        return array_filter($this->properties, function (Property $property) {
             return $property->localized === false;
         });
     }

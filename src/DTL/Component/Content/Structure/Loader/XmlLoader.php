@@ -52,25 +52,25 @@ class XmlLoader implements LoaderInterface
     private function loadStructure(\DOMXPath $xpath)
     {
         $structure = new Structure();
-        $structure->view = $this->getValueFromXPath('/x:template/x:view', $xpath);
+        $structure->options['front_template'] = $this->getValueFromXPath('/x:template/x:view', $xpath);
         $structure->controller = $this->getValueFromXPath('/x:template/x:controller', $xpath);
         $structure->cacheLifetime = $this->getValueFromXPath('/x:template/x:cacheLifetime', $xpath);
         $structure->tags = $this->loadStructureTags('/x:template/x:tag', $xpath);
-        $structure->label = $this->loadLabels('/x:template/x:meta/x:title', $xpath);
+        $structure->title = $this->loadTitle('/x:template/x:meta/x:title', $xpath);
         $structure->children = $this->loadProperties('/x:template/x:properties/x:*', $tags, $xpath);
 
         return $structure;
     }
 
-    private function loadLabels($path, $xpath, $context = null)
+    private function loadTitle($path, $xpath, $context = null)
     {
-        $labels = array();
+        $titles = array();
         foreach ($xpath->query($path, $context) as $node) {
             $locale = $node->getAttribute('lang');
-            $labels[$locale] = $node->nodeValue;
+            $titles[$locale] = $node->nodeValue;
         }
 
-        return $labels;
+        return $titles;
     }
 
     /**
@@ -107,7 +107,7 @@ class XmlLoader implements LoaderInterface
         $property->required = $this->getBooleanValueFromXPath('@mandatory', $xpath, $node, false);
         $property->localized = $this->getBooleanValueFromXPath('@multilingual', $xpath, $node, true);
         $property->tags = $this->loadTags('x:tag', $tags, $xpath, $node);
-        $property->label = $this->loadLabels('x:meta/x:title', $xpath, $node);
+        $property->title = $this->loadTitle('x:meta/x:title', $xpath, $node);
 
         $property->options = $this->loadParams('x:params/x:param', $xpath, $node);
 
