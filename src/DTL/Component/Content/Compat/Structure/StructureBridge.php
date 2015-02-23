@@ -293,7 +293,8 @@ class StructureBridge implements StructureInterface
      */
     public function getType()
     {
-        return $this->structure->name;
+        // should return either page or snippet ..
+        $this->notImplemented(__METHOD__);
     }
 
     /**
