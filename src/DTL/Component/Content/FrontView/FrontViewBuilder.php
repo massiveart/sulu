@@ -4,10 +4,10 @@ namespace DTL\Component\Content\FrontView;
 
 use DTL\Component\Content\Form\ContentView;
 use DTL\Component\Content\Structure\Factory\StructureFactoryInterface;
-use DTL\Component\Content\Type\ContentTypeRegistryInterface;
+use DTL\Component\Content\Property\PropertyTypeRegistryInterface;
 use DTL\Component\Content\Document\DocumentInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use DTL\Component\Content\Type\ContentTypeInterface;
+use DTL\Component\Content\Property\PropertyTypeInterface;
 
 /**
  * Build ContentView object from Document and Structure data.)
@@ -32,7 +32,7 @@ class FrontViewBuilder
      */
     public function __construct(
         StructureFactoryInterface $structureFactory,
-        ContentTypeRegistryInterface $registry
+        PropertyTypeRegistryInterface $registry
     ) {
         $this->registry = $registry;
         $this->structureFactory = $structureFactory;
@@ -78,7 +78,7 @@ class FrontViewBuilder
                 $propertyData = $data[$propertyName];
             }
 
-            $childFrontView = $this->buildType($property->type, $propertyData, $property->options);
+            $childFrontView = $this->buildType($property->type, $propertyData, $property->parameters);
             $children[] = $childFrontView;
         }
 
@@ -123,7 +123,7 @@ class FrontViewBuilder
     private function getTypeChain($propertyType, $parentTypes = array())
     {
         // do not build symfony form types
-        if ($propertyType instanceof ContentTypeInterface) {
+        if ($propertyType instanceof PropertyTypeInterface) {
             $parentTypes[] = $propertyType;
         }
 

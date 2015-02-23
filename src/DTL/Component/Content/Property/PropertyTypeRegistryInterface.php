@@ -9,9 +9,9 @@
  * with this source code in the file LICENSE.
  */
  
-namespace DTL\Component\Content\Type;
+namespace DTL\Component\Content\Property;
 
-interface ContentTypeRegistryInterface
+interface PropertyTypeRegistryInterface
 {
     /**
      * Return the content type with the given name

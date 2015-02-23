@@ -46,7 +46,7 @@ class FrontViewBuilderTest extends ProphecyTestCase
 
         $this->structureFactory = $this->prophesize('DTL\Component\Content\Structure\Factory\StructureFactoryInterface');
         $this->document1 = $this->prophesize('DTL\Component\Content\Document\DocumentInterface');
-        $this->propertyTypeRegistry = $this->prophesize('DTL\Component\Content\Type\ContentTypeRegistryInterface');
+        $this->propertyTypeRegistry = $this->prophesize('DTL\Component\Content\Property\PropertyTypeRegistryInterface');
         $this->structure = new Structure();
         $this->builder = new FrontViewBuilder(
             $this->structureFactory->reveal(),
@@ -68,7 +68,7 @@ class FrontViewBuilderTest extends ProphecyTestCase
 
         $propertyTypes = array();
 
-        $parentType = $this->prophesize('DTL\Component\Content\Type\ContentTypeInterface');
+        $parentType = $this->prophesize('DTL\Component\Content\Property\PropertyTypeInterface');
         $parentType->getParent()->willReturn(null);
         $parentType->buildFrontView(Argument::type('DTL\Component\Content\FrontView\FrontView'), $data['one'], array())->shouldBeCalled();
         $parentType->buildFrontView(Argument::type('DTL\Component\Content\FrontView\FrontView'), $data['two'], array())->shouldBeCalled();
@@ -76,7 +76,7 @@ class FrontViewBuilderTest extends ProphecyTestCase
             Argument::type('Symfony\Component\OptionsResolver\OptionsResolverInterface')
         )->shouldBeCalled();
 
-        $textLineType = $this->prophesize('DTL\Component\Content\Type\ContentTypeInterface');
+        $textLineType = $this->prophesize('DTL\Component\Content\Property\PropertyTypeInterface');
         $textLineType->getParent()->willReturn('parent');
         $textLineType->buildFrontView(Argument::type('DTL\Component\Content\FrontView\FrontView'), $data['one'], array())->shouldBeCalled();
         $textLineType->buildFrontView(Argument::type('DTL\Component\Content\FrontView\FrontView'), $data['two'], array())->shouldBeCalled();

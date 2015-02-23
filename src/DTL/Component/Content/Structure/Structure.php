@@ -28,7 +28,7 @@ class Structure extends Item
      *
      * @var Property
      */
-    public $properties;
+    public $properties = array();
 
     public function __set($field, $value)
     {
@@ -47,8 +47,8 @@ class Structure extends Item
     {
         if (!isset($this->properties[$name])) {
             throw new \InvalidArgumentException(sprintf(
-                'Unknown property "%s" in structure loaded from: "%s"',
-                 $name, $this->resource
+                'Unknown property "%s" in structure loaded from: "%s". Properties: "%s"',
+                 $name, $this->resource, implode('", "', array_keys($this->properties))
             ));
         }
 

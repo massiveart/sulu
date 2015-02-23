@@ -3,20 +3,20 @@
 namespace DTL\Component\Property\Type\Registry;
 
 use Prophecy\PhpUnit\ProphecyTestCase;
-use DTL\Component\Property\Type\Registry\FormPropertyTypeRegistry;
+use DTL\Component\Content\Property\Registry\FormPropertyTypeRegistry;
 
 class FormPropertyTypeRegistryTest extends ProphecyTestCase
 {
-    private $formRegistry;
+    private $formExtension;
     private $registry;
 
     public function setUp()
     {
         parent::setUp();
-        $this->formRegistry = $this->prophesize('Symfony\Component\Form\FormRegistryInterface');
-        $this->contentType = $this->prophesize('DTL\Component\Property\Type\PropertyTypeInterface');
+        $this->formExtension = $this->prophesize('Symfony\Component\Form\FormExtensionInterface');
+        $this->contentType = $this->prophesize('DTL\Component\Content\Property\PropertyTypeInterface');
         $this->nonPropertyType = $this->prophesize('Symfony\Component\Form\FormTypeInterface');
-        $this->registry = new FormPropertyTypeRegistry($this->formRegistry->reveal());
+        $this->registry = new FormPropertyTypeRegistry($this->formExtension->reveal());
     }
 
     /**
@@ -24,19 +24,8 @@ class FormPropertyTypeRegistryTest extends ProphecyTestCase
      */
     public function testRegistry()
     {
-        $this->formRegistry->getType('foo')->willReturn($this->contentType->reveal());
-        $contentType = $this->registry->getType('foo');
-        $this->assertSame($this->contentType->reveal(), $contentType);
-    }
-
-    /**
-     * Ensure an exception is thrown when a non content type is returned
-     *
-     * @expectedException RuntimeException
-     */
-    public function testRegistryNonPropertyType()
-    {
-        $this->formRegistry->getType('foo')->willReturn($this->nonPropertyType->reveal());
+        $this->formExtension->hasType('foo')->willReturn(true);
+        $this->formExtension->getType('foo')->willReturn($this->contentType->reveal());
         $contentType = $this->registry->getType('foo');
         $this->assertSame($this->contentType->reveal(), $contentType);
     }

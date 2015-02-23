@@ -1,10 +1,10 @@
 <?php
 
-namespace DTL\Component\Content\Type\Registry;
+namespace DTL\Component\Content\Property\Registry;
 
 use Symfony\Component\Form\FormRegistryInterface;
-use DTL\Component\Content\Type\ContentTypeRegistryInterface;
-use DTL\Component\Content\Type\ContentTypeInterface;
+use DTL\Component\Content\Property\PropertyTypeRegistryInterface;
+use DTL\Component\Content\Property\PropertyTypeInterface;
 use Symfony\Component\Form\FormExtensionInterface;
 
 /**
@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormExtensionInterface;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class FormPropertyTypeRegistry implements ContentTypeRegistryInterface
+class FormPropertyTypeRegistry implements PropertyTypeRegistryInterface
 {
     /**
      * @param FormRegistryInterface $formExtension

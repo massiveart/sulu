@@ -58,9 +58,9 @@ class FlatSerializer implements SerializerInterface
         $nonLocalizedProps = array();
 
         foreach ($data as $key => $value) {
-            $isTranslated = $structure->getChild($key)->localized;
+            $isLocalized = $structure->getProperty($key)->localized;
 
-            if ($isTranslated) {
+            if ($isLocalized) {
                 $localizedProps[$key] = $value;
                 continue;
             }
