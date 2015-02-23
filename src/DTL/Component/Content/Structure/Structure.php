@@ -56,6 +56,17 @@ class Structure extends Item
     }
 
     /**
+     * Return true if this structure has the named property, false
+     * if it does not.
+     *
+     * @param string $name
+     */
+    public function hasProperty($name)
+    {
+        return isset($this->properties[$name]);
+    }
+
+    /**
      * Return all the localized properties
      *
      * @return Property[]

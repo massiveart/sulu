@@ -1,7 +1,7 @@
 <?php
 /*
  * This file is part of the Sulu CMS.
- *
+
  * (c) MASSIVE ART WebServices GmbH
  *
  * This source file is subject to the MIT license that is bundled
@@ -65,6 +65,13 @@ interface DocumentInterface
      * @return ChildrenCollection
      */
     public function getChildren();
+
+    /**
+     * Return true if the document has children, false if not.
+     *
+     * @return boolean
+     */
+    public function hasChildren();
 
     /**
      * Return the locale of this document
@@ -183,4 +190,14 @@ interface DocumentInterface
      * @return string
      */
     public function getDocumentType();
+
+    /**
+     * Return the stage of the workflow
+     *
+     * Return value should represent workflow stages, e.g.
+     * testing, review, published, etc.
+     *
+     * @return mixed
+     */
+    public function getWorkflowStage();
 }

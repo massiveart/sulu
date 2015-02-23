@@ -32,4 +32,18 @@ interface PageInterface extends DocumentInterface
      * @param string
      */
     public function setResourceLocator($resourceLocator);
+
+    /**
+     * Return the published state of this document
+     *
+     * @return integer
+     */
+    public function getPublishedState();
+
+    /**
+     * Return the date upon which the Page was published
+     *
+     * @return DateTime
+     */
+    public function getPublished();
 }
