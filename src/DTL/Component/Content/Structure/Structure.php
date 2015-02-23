@@ -13,7 +13,7 @@ namespace DTL\Component\Content\Structure;
 
 use DTL\Component\Content\Structure\Property;
 
-class Structure
+class Structure extends Item
 {
     /**
      * The resource from which this structure was loaded
@@ -22,6 +22,13 @@ class Structure
      * @var string
      */
     public $resource;
+
+    /**
+     * Properties for this structure
+     *
+     * @var Property
+     */
+    public $properties;
 
     public function __set($field, $value)
     {
@@ -41,7 +48,7 @@ class Structure
         if (!isset($this->properties[$name])) {
             throw new \InvalidArgumentException(sprintf(
                 'Unknown property "%s" in structure loaded from: "%s"',
-                $name, $this->resource
+                 $name, $this->resource
             ));
         }
 

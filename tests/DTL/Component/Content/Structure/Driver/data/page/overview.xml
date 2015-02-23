@@ -8,26 +8,26 @@
     <cacheLifetime>2400</cacheLifetime>
 
     <meta>
-        <label lang="de">Übersicht</label>
-        <label lang="en">Overview</label>
+        <title lang="de">Übersicht</title>
+        <title lang="en">Overview</title>
     </meta>
 
     <properties>
         <property name="title" type="text_line" mandatory="true">
             <meta>
-                <label lang="de">Titel</label>
-                <label lang="en">Title</label>
+                <title lang="de">Titel</title>
+                <title lang="en">Title</title>
             </meta>
 
-            <tag name="sulu.search.field" role="label"/>
+            <tag name="sulu.search.field" role="title"/>
 
             <tag name="sulu.rlp.part"/>
         </property>
 
         <property name="url" type="resource_locator" mandatory="true">
             <meta>
-                <label lang="de">Adresse</label>
-                <label lang="en">Resource locator</label>
+                <title lang="de">Adresse</title>
+                <title lang="en">Resource locator</title>
             </meta>
 
             <tag name="sulu.rlp"/>
@@ -35,17 +35,17 @@
 
         <property name="smartcontent" type="smart_content">
             <meta>
-                <label lang="de">Smart-Content</label>
-                <label lang="en">Smart-Content</label>
+                <title lang="de">Smart-Content</title>
+                <title lang="en">Smart-Content</title>
             </meta>
 
             <params>
                 <param name="max_per_page" value="5"/>
 
                 <param name="properties" type="collection">
-                    <param name="label" value="label"/>
+                    <param name="title" value="title"/>
                     <param name="article" value="article"/>
-                    <param name="ext_label" value="excerpt.label"/>
+                    <param name="ext_title" value="excerpt.title"/>
                     <param name="ext_tags" value="excerpt.tags"/>
                     <param name="ext_images" value="excerpt.images"/>
                 </param>
@@ -54,8 +54,8 @@
 
         <property name="article" type="text_editor">
             <meta>
-                <label lang="de">Artikel</label>
-                <label lang="en">Article</label>
+                <title lang="de">Artikel</title>
+                <title lang="en">Article</title>
             </meta>
 
             <tag name="sulu.search.field" role="description"/>

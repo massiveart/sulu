@@ -52,12 +52,12 @@ class XmlLoader implements LoaderInterface
     private function loadStructure(\DOMXPath $xpath)
     {
         $structure = new Structure();
-        $structure->options['front_template'] = $this->getValueFromXPath('/x:template/x:view', $xpath);
-        $structure->controller = $this->getValueFromXPath('/x:template/x:controller', $xpath);
-        $structure->cacheLifetime = $this->getValueFromXPath('/x:template/x:cacheLifetime', $xpath);
+        $structure->parameters['template'] = $this->getValueFromXPath('/x:template/x:view', $xpath);
+        $structure->parameters['controller'] = $this->getValueFromXPath('/x:template/x:controller', $xpath);
+        $structure->parameters['cache_lifetime'] = $this->getValueFromXPath('/x:template/x:cacheLifetime', $xpath);
         $structure->tags = $this->loadStructureTags('/x:template/x:tag', $xpath);
         $structure->title = $this->loadTitle('/x:template/x:meta/x:title', $xpath);
-        $structure->children = $this->loadProperties('/x:template/x:properties/x:*', $tags, $xpath);
+        $structure->properties = $this->loadProperties('/x:template/x:properties/x:*', $tags, $xpath);
 
         return $structure;
     }
@@ -109,13 +109,12 @@ class XmlLoader implements LoaderInterface
         $property->tags = $this->loadTags('x:tag', $tags, $xpath, $node);
         $property->title = $this->loadTitle('x:meta/x:title', $xpath, $node);
 
-        $property->options = $this->loadParams('x:params/x:param', $xpath, $node);
-
+        $property->parameters = $this->loadParams('x:params/x:param', $xpath, $node);
         $property->name = $this->getValueFromXPath('@name', $xpath, $node);
         $property->type = $this->getValueFromXPath('@type', $xpath, $node);
         $property->minOccurs = $this->getValueFromXPath('@minOccurs', $xpath, $node);
         $property->maxOccurs = $this->getValueFromXPath('@maxOccurs', $xpath, $node);
-        $property->colspan = $this->getValueFromXPath('@colspan', $xpath, $node);
+        $property->colSpan = $this->getValueFromXPath('@colspan', $xpath, $node);
 
         $types = $this->loadTypes('x:types/x:type', $tags, $xpath, $node);
 

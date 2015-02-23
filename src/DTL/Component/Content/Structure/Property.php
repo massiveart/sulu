@@ -11,7 +11,7 @@
 
 namespace DTL\Component\Content\Structure;
 
-class Property
+class Property extends Item
 {
     /**
      * Type of this property (e.g. "text_line", "smart_content")
@@ -25,7 +25,28 @@ class Property
      *
      * @var boolean
      */
-    public $options = false;
+    public $localized = false;
+
+    /**
+     * If the property is required
+     *
+     * @var boolean
+     */
+    public $required = false;
+
+    /**
+     * The number of grid columns the property should use in the admin interface
+     *
+     * @var integer
+     */
+    public $colSpan = null;
+
+    /**
+     * The CSS class the property should use in the admin interface
+     *
+     * @var string
+     */
+    public $cssClass = null;
 
     /**
      * Tags, e.g. [['name' => 'sulu_search.field', 'type' => 'string']]

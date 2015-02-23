@@ -32,19 +32,21 @@ class XmlLoaderTest extends ProphecyTestCase
             array(
                 __DIR__ . '/data/page/overview.xml',
                 array(
-                    'view' => 'overview.html.twig',
-                    'controller' => 'SomeController',
-                    'cacheLifetime' => 2400,
-                    'label' => array(
+                    'parameters' => array(
+                        'template' => 'overview.html.twig',
+                        'controller' => 'SomeController',
+                        'cache_lifetime' => 2400,
+                    ),
+                    'title' => array(
                         'de' => 'Übersicht',
                         'en' => 'Overview',
                     ),
-                    'children' => array(
+                    'properties' => array(
                         'title' => array(
                             'name' => 'title',
                             'type' => 'text_line',
                             'required' => true,
-                            'label' => array(
+                            'title' => array(
                                 'de' => 'Titel',
                                 'en' => 'Title',
                             ),
@@ -52,7 +54,7 @@ class XmlLoaderTest extends ProphecyTestCase
                                 array(
                                     'name' => 'sulu.search.field',
                                     'attributes' => array(
-                                        'role' => 'label',
+                                        'role' => 'title',
                                     ),
                                 ),
                                 array(
@@ -63,16 +65,16 @@ class XmlLoaderTest extends ProphecyTestCase
                         'smartcontent' => array(
                             'name' => 'smartcontent',
                             'type' => 'smart_content',
-                            'label' => array(
+                            'title' => array(
                                 'de' => 'Smart-Content',
                                 'en' => 'Smart-Content',
                             ),
-                            'options' => array(
+                            'parameters' => array(
                                 'max_per_page' => 5,
                                 'properties' => array(
-                                    'label' => 'label',
+                                    'title' => 'title',
                                     'article' => 'article',
-                                    'ext_label' => 'excerpt.label',
+                                    'ext_title' => 'excerpt.title',
                                     'ext_tags' => 'excerpt.tags',
                                     'ext_images' => 'excerpt.images',
                                 ),
