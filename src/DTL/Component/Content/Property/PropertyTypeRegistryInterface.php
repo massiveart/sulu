@@ -20,5 +20,5 @@ interface PropertyTypeRegistryInterface
      *
      * @return ContentTypeInterface
      */
-    public function getType($name);
+    public function getProperty($name);
 }

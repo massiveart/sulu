@@ -14,7 +14,7 @@ use DTL\Bundle\ContentBundle\Form\Type\Content\ResizeableType;
 
 class CollectionTypeTest extends AbstractPropertyTypeTestCase
 {
-    public function getTypeAlias()
+    public function getPropertyAlias()
     {
         return 'collection';
     }

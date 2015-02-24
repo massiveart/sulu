@@ -190,14 +190,4 @@ interface DocumentInterface
      * @return string
      */
     public function getDocumentType();
-
-    /**
-     * Return the stage of the workflow
-     *
-     * Return value should represent workflow stages, e.g.
-     * testing, review, published, etc.
-     *
-     * @return mixed
-     */
-    public function getWorkflowStage();
 }

@@ -31,4 +31,13 @@ interface StructureFactoryInterface
      * @return StructureInterface
      */
     public function getStructure($type, $structureType);
+
+    /**
+     * Return all structures of the given type
+     *
+     * @param string
+     *
+     * @return Structure[]
+     */
+    public function getStructures($type);
 }

@@ -23,7 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 abstract class AbstractPropertyTypeTestCase extends SuluTestCase
 {
-    abstract protected function getTypeAlias();
+    abstract protected function getPropertyAlias();
 
     /**
      * Provider for testFormView
@@ -67,7 +67,7 @@ abstract class AbstractPropertyTypeTestCase extends SuluTestCase
     public function testFrontViewAttributes($options, $expectedAttributes)
     {
         $options = $this->completeOptions($options);
-        $frontView = $this->createFrontView($this->getTypeAlias(), array(), $options);
+        $frontView = $this->createFrontView($this->getPropertyAlias(), array(), $options);
 
         foreach ($expectedAttributes as $key => $value) {
             $this->assertEquals($value, $frontView->getAttribute($key));
@@ -160,7 +160,7 @@ abstract class AbstractPropertyTypeTestCase extends SuluTestCase
     public function testFrontViewValue(array $options, $data, $expectedValue)
     {
         $options = $this->completeOptions($options);
-        $frontView = $this->createFrontView($this->getTypeAlias(), $data, $this->completeOptions($options));
+        $frontView = $this->createFrontView($this->getPropertyAlias(), $data, $this->completeOptions($options));
         $this->assertFrontViewValue($frontView, $expectedValue);
     }
 
@@ -210,7 +210,7 @@ abstract class AbstractPropertyTypeTestCase extends SuluTestCase
     private function createForm($options)
     {
         $form = $this->getContainer()->get('dtl_content.form.factory')->createBuilder()
-            ->add('test_type', $this->getType(), $options)
+            ->add('test_type', $this->getProperty(), $options)
             ->getForm();
 
         return $form;
@@ -222,8 +222,8 @@ abstract class AbstractPropertyTypeTestCase extends SuluTestCase
         return $builder->buildType($propertyType, $data, $options);
     }
 
-    protected function getType()
+    protected function getProperty()
     {
-        return $this->getContainer()->get('dtl_content.type.registry')->getType($this->getTypeAlias());
+        return $this->getContainer()->get('dtl_content.property.registry')->getProperty($this->getPropertyAlias());
     }
 }

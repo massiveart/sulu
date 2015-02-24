@@ -100,9 +100,9 @@ class FrontViewBuilder
     {
         $frontView = new FrontView();
 
-        $propertyType = $this->registry->getType($propertyType);
+        $propertyType = $this->registry->getProperty($propertyType);
 
-        $typeChain = $this->getTypeChain($propertyType);
+        $typeChain = $this->getPropertyChain($propertyType);
         $optionsResolver = new OptionsResolver();
 
         // resolve the options
@@ -120,7 +120,7 @@ class FrontViewBuilder
         return $frontView;
     }
 
-    private function getTypeChain($propertyType, $parentTypes = array())
+    private function getPropertyChain($propertyType, $parentTypes = array())
     {
         // do not build symfony form types
         if ($propertyType instanceof PropertyTypeInterface) {
@@ -133,7 +133,7 @@ class FrontViewBuilder
             return array_reverse($parentTypes);
         }
 
-        $parentType = $this->registry->getType($parentType);
-        return $this->getTypeChain($parentType, $parentTypes);
+        $parentType = $this->registry->getProperty($parentType);
+        return $this->getPropertyChain($parentType, $parentTypes);
     }
 }

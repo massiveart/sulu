@@ -107,9 +107,7 @@ class StructureFactory implements StructureFactoryInterface
     }
 
     /**
-     * Return structures of the given type
-     *
-     * @return Structure[]
+     * {@inheritDoc}
      */
     public function getStructures($type)
     {

@@ -14,7 +14,7 @@ use DTL\Bundle\ContentBundle\Form\Type\Content\ResourceLocatorType;
 
 class ResourceLocatorTypeTest extends AbstractPropertyTypeTestCase
 {
-    public function getTypeAlias()
+    public function getPropertyAlias()
     {
         return 'resource_locator';
     }

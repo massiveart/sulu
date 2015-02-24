@@ -46,7 +46,7 @@
         <!-- FrontViewBuilder -->
         <service id="dtl_content.front_view.builder" class="DTL\Component\Content\FrontView\FrontViewBuilder">
             <argument type="service" id="dtl_content.structure.factory"/>
-            <argument type="service" id="dtl_content.type.registry"/>
+            <argument type="service" id="dtl_content.property.registry"/>
         </service>
 
     </services>

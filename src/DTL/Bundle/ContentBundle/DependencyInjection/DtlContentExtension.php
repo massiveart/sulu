@@ -34,11 +34,17 @@ class DtlContentExtension extends Extension
         $loader->load('phpcr_odm.xml');
         $loader->load('serializer.xml');
         $loader->load('form.xml');
-        $loader->load('type.xml');
         $loader->load('form_content_types.xml');
         $loader->load('routing_auto.xml');
         $loader->load('structure.xml');
         $loader->load('controller.xml');
+        $loader->load('property.xml');
+
+        $compat = $config['compat']['enabled'];
+        $container->setParameter('dtl_content.compat', $compat);
+        if (true === $compat) {
+            $loader->load('compat.xml');
+        }
 
         $this->processStructure($config['structure'], $container);
     }
@@ -53,7 +59,11 @@ class DtlContentExtension extends Extension
         $typePaths = array();
 
         foreach ($config as $path) {
-            $typePaths[$path['type']] = $path['path'];
+            if (!isset($typePaths[$path['type']])) {
+                $typePaths[$path['type']] = array();
+            }
+
+            $typePaths[$path['type']][$path['path']] = $path['path'];
         }
 
         $container->setParameter('dtl_content.structure.paths', $typePaths);

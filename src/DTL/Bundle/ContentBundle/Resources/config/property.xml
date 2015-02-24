@@ -4,11 +4,11 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="dtl_content.type.registry.form.class">DTL\Component\Content\Type\Registry\FormContentTypeRegistry</parameter>
+        <parameter key="dtl_content.property.registry.form.class">DTL\Component\Content\Property\Registry\FormPropertyTypeRegistry</parameter>
     </parameters>
 
     <services>
-        <service id="dtl_content.type.registry" class="%dtl_content.type.registry.form.class%">
+        <service id="dtl_content.property.registry" class="%dtl_content.property.registry.form.class%">
             <argument type="service" id="dtl_content.form.extension" />
         </service>
     </services>

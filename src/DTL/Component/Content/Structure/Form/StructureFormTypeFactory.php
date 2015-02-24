@@ -60,11 +60,11 @@ class StructureFormTypeFactory
             'auto_initialize' => false, // auto initialize should only be for root nodes
         ));
 
-        foreach ($structure->children as $name => $property) {
+        foreach ($structure->properties as $name => $property) {
             $builder->add($name, 'collection', array(
                 'type' => $property->type,
-                'options' => $property->options,
-                'label' => $property->label,
+                'options' => $property->parameters,
+                'label' => $property->title,
                 'min_occurs' => $property->minOccurs,
                 'max_occurs' => $property->maxOccurs,
             ));

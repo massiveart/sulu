@@ -11,6 +11,7 @@
 namespace DTL\Bundle\ContentBundle\Document;
 
 use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCR;
+use Sulu\Component\Content\StructureInterface;
 
 /**
  * Page document class
@@ -20,18 +21,63 @@ class PageDocument extends Document
     /**
      * @var integer
      */
-    protected $state = 0;
+    private $publishedState;
 
-    public function getState() 
+    /**
+     * @var \DateTime
+     */
+    private $published;
+
+    /**
+     * @var integer
+     */
+    private $workflowStage;
+
+    public function __construct()
     {
-        return $this->state;
+        $this->workflowStage = StructureInterface::STATE_TEST;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPublishedState() 
+    {
+        return $this->publishedState;
     }
     
-    public function setState($state)
+    /**
+     * {@inheritDoc}
+     */
+    public function setPublishedState($publishedState)
     {
-        $this->state = $state;
+        $this->publishedState = $publishedState;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getPublished() 
+    {
+        return $this->published;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getWorkflowStage() 
+    {
+        return $this->workflowStage;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setWorkflowStage($workflowStage)
+    {
+        $this->workflowStage = $workflowStage;
+    }
+    
     /**
      * {@inheritDoc}
      */
@@ -39,26 +85,4 @@ class PageDocument extends Document
     {
         return 'page';
     }
-
-    public function getLocales()
-    {
-        $locales = array();
-
-        $node = $this->getPhpcrNode();
-        if (!$node) {
-            return array($this->getLocale());
-        }
-
-        foreach ($node->getProperties() as $property) {
-            /** @var PropertyInterface $property */
-            preg_match('/^' . 'i18n' . ':([a-zA-Z_]*?)-title/', $property->getName(), $matches);
-
-            if ($matches) {
-                $locales[$matches[1]] = $matches[1];
-            }
-        }
-
-        return array_values($locales);
-    }
-
 }

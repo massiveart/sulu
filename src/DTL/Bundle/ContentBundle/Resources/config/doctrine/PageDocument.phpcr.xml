@@ -7,7 +7,8 @@
 >
 
     <document name="DTL\Bundle\ContentBundle\Document\PageDocument">
-        <field name="state" type="long" />
+        <field name="published" type="date" translated="true" nullable="true"/>
+        <field name="workflowStage" type="long" translated="true" />
     </document>
 
 </doctrine-mapping>

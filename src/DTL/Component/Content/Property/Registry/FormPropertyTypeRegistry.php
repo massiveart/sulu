@@ -26,7 +26,7 @@ class FormPropertyTypeRegistry implements PropertyTypeRegistryInterface
     /**
      * {@inheritDoc}
      */
-    public function getType($type)
+    public function getProperty($type)
     {
         if (!$this->formExtension->hasType($type)) {
             throw new \InvalidArgumentException(sprintf(

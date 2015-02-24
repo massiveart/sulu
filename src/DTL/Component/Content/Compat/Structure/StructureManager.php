@@ -4,11 +4,24 @@ namespace DTL\Component\Content\Compat\Structure;
 
 use Sulu\Component\Content\StructureManagerInterface;
 use DTL\Component\Content\Structure\Structure;
+use Sulu\Component\Content\StructureExtension\StructureExtensionInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use DTL\Component\Content\Structure\Factory\StructureFactoryInterface;
+use DTL\Component\Content\Compat\Structure\StructureBridge;
 
 class StructureManager implements StructureManagerInterface
 {
-    public function __construct(StructureFactoryInterface $factory)
+    /**
+     * @var StructureFactoryInterface
+     */
+    private $structureFactory;
+
+    /**
+     * @param StructureFactoryInterface $structureFactory
+     */
+    public function __construct(StructureFactoryInterface $structureFactory)
     {
+        $this->structureFactory = $structureFactory;
     }
 
     /**
@@ -17,11 +30,10 @@ class StructureManager implements StructureManagerInterface
      * @param string $type
      * @return StructureInterface
      */
-    public function getStructure($key, $type = Structure::TYPE_PAGE)
+    public function getStructure($key, $type = 'page')
     {
         $structure = $this->structureFactory->getStructure($type, $key);
-
-        $compatStructure = new Structure($structure);
+        $compatStructure = new StructureBridge($structure);
 
         return $compatStructure;
     }
@@ -33,8 +45,13 @@ class StructureManager implements StructureManagerInterface
      */
     public function getStructures($type = Structure::TYPE_PAGE)
     {
-    }
+        $compatStructures = array();
+        foreach ($this->structureFactory->getStructures() as $structure) {
+            $compatStructures[] = new StructureBridge($structure);
+        }
 
+        return $compatStructures;
+    }
 
     /**
      * add dynamically an extension to structures
@@ -43,6 +60,7 @@ class StructureManager implements StructureManagerInterface
      */
     public function addExtension(StructureExtensionInterface $extension, $template = 'all')
     {
+        throw new \BadMethodCallException('Not implemented');
     }
 
     /**
@@ -52,6 +70,7 @@ class StructureManager implements StructureManagerInterface
      */
     public function getExtensions($key)
     {
+        throw new \BadMethodCallException('Not implemented');
     }
 
     /**
@@ -62,6 +81,7 @@ class StructureManager implements StructureManagerInterface
      */
     public function hasExtension($key, $name)
     {
+        throw new \BadMethodCallException('Not implemented');
     }
 
     /**
@@ -72,5 +92,14 @@ class StructureManager implements StructureManagerInterface
      */
     public function getExtension($key, $name)
     {
+        throw new \BadMethodCallException('Not implemented');
     }
+
+    /**
+     * This is not required.
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+    }
+
 }

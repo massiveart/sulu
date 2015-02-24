@@ -315,6 +315,14 @@ abstract class Document implements PageInterface
         return $this->node;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function hasChildren()
+    {
+        return count($this->children) ? true : false;
+    }
+
     public function __toString()
     {
         return $this->path ? : get_class($this);

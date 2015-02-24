@@ -15,7 +15,7 @@ use DTL\Bundle\ContentBundle\Form\Type\Content\BlockType;
 
 class BlockTypeTest extends AbstractPropertyTypeTestCase
 {
-    public function getTypeAlias()
+    public function getPropertyAlias()
     {
         return 'block';
     }

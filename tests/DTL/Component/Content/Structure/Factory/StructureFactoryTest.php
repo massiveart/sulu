@@ -23,13 +23,14 @@ class StructureFactoryTest extends ProphecyTestCase
     {
         parent::setUp();
         $this->cacheDir = __DIR__ . '/data/cache';
+        $this->mappingFile = __DIR__ . '/data/page/something.xml';
 
         $this->structure = $this->prophesize('DTL\Component\Content\Structure\Structure');
         $this->loader = $this->prophesize('Symfony\Component\Config\Loader\LoaderInterface');
         $this->factory = new StructureFactory(
             $this->loader->reveal(),
             array(
-                'page' => __DIR__ . '/data/page',
+                'page' => array(__DIR__ . '/data/page'),
             ),
             $this->cacheDir
         );
@@ -44,7 +45,7 @@ class StructureFactoryTest extends ProphecyTestCase
      * @expectedException DTL\Component\Content\Structure\Factory\Exception\DocumentTypeNotFoundException
      * @expectedExceptionMessage Structure path for document type "non_existing" is not mapped. Mapped structure types: "page
      */
-    public function testGetMetadataBadType()
+    public function testGetStructureBadType()
     {
         $this->factory->getStructure('non_existing', 'foo');
     }
@@ -53,7 +54,7 @@ class StructureFactoryTest extends ProphecyTestCase
      * @expectedException DTL\Component\Content\Structure\Factory\Exception\StructureTypeNotFoundException
      * @expectedExceptionMessage Could not load structure type "overview_not_existing" for document type "page", looked in "
      */
-    public function testGetMetadataNonExisting()
+    public function testGetStructureNonExisting()
     {
         $this->factory->getStructure('page', 'overview_not_existing');
     }
@@ -65,10 +66,8 @@ class StructureFactoryTest extends ProphecyTestCase
      */
     public function testGetStructure()
     {
-        $cacheFile = __DIR__ . '/data/page/something.xml';
-
-        $this->loader->load($cacheFile)->willReturn($this->structure->reveal());
-        $this->loader->load($cacheFile)->shouldBeCalledTimes(1);
+        $this->loader->load($this->mappingFile)->willReturn($this->structure->reveal());
+        $this->loader->load($this->mappingFile)->shouldBeCalledTimes(1);
 
         $structure = $this->factory->getStructure('page', 'something');
 
@@ -76,6 +75,15 @@ class StructureFactoryTest extends ProphecyTestCase
 
         $this->factory->getStructure('page', 'something');
         $this->factory->getStructure('page', 'something');
+    }
+
+    public function testGetStructures()
+    {
+        $this->loader->load($this->mappingFile)->willReturn($this->structure->reveal());
+        $this->loader->load($this->mappingFile)->shouldBeCalledTimes(1);
+
+        $structures = $this->factory->getStructures('page');
+        $this->assertEquals($this->structure->reveal(), $structures[0]);
     }
 
     private function cleanUp()

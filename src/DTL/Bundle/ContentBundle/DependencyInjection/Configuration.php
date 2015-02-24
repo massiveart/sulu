@@ -30,6 +30,10 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->arrayNode('compat')
+                    ->info('Enable legacy compatibility services')
+                    ->canBeEnabled()
+                ->end()
                 ->arrayNode('structure')
                     ->addDefaultsIfNotSet()
                     ->children()
