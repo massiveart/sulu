@@ -3,6 +3,7 @@
 namespace DTL\Component\Content\Compat\Structure;
 
 use Sulu\Component\Content\StructureManagerInterface;
+use DTL\Component\Content\Structure\Structure;
 
 class StructureManager implements StructureManagerInterface
 {

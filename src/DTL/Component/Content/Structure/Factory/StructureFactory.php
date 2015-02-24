@@ -88,7 +88,7 @@ class StructureFactory implements StructureFactoryInterface
                     'Could not load structure type "%s" for document type "%s", looked in "%s"',
                     $structureType,
                     $type,
-                    implode('", "', $this->typePaths)
+                    implode('", "', $this->typePaths[$type])
                 ));
             }
 
@@ -104,5 +104,49 @@ class StructureFactory implements StructureFactoryInterface
         require($cachePath);
 
         return unserialize($metadata);
+    }
+
+    /**
+     * Return structures of the given type
+     *
+     * @return Structure[]
+     */
+    public function getStructures($type)
+    {
+        $structureNames = $this->getStructureNames($type);
+        $structures = array();
+
+        foreach ($structureNames as $structureName) {
+            $structures[] = $this->getStructure($type, $structureName);
+        }
+
+        return $structures;
+    }
+
+    /**
+     * Return the structure names for the given type
+     * (not necessarily valid).
+     *
+     * @param string $type
+     *
+     * @return string[]
+     */
+    private function getStructureNames($type)
+    {
+        $structureNames = array();
+        foreach ($this->typePaths[$type] as $structurePath) {
+            $iterator = new \DirectoryIterator($structurePath);
+            foreach ($iterator as $file) {
+                $ext = $file->getExtension();
+
+                if ($ext !== 'xml') {
+                    continue;
+                }
+
+                $structureNames[] = $file->getBasename('.' . $ext);
+            }
+        }
+
+        return $structureNames;
     }
 }
