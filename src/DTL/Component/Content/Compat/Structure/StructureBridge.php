@@ -153,7 +153,7 @@ class StructureBridge implements StructureInterface
      */
     public function getKey()
     {
-        return $this->structure->getName();
+        return $this->structure->name;
     }
 
     /**
@@ -335,6 +335,13 @@ class StructureBridge implements StructureInterface
     public function toArray($complete = true)
     {
         $this->notImplemented(__METHOD__);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function jsonSerialize()
+    {
     }
 
     /**

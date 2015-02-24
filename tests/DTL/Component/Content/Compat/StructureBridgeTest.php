@@ -3,6 +3,8 @@
 namespace DTL\Component\Content\Compat;
 
 use DTL\Component\Content\Structure\Structure;
+use DTL\Component\Content\Structure\Property;
+use DTL\Component\Content\Compat\Structure\StructureBridge;
 
 class StructureBridgeTest extends \PHPUnit_Framework_TestCase
 {
@@ -78,16 +80,16 @@ class StructureBridgeTest extends \PHPUnit_Framework_TestCase
         $map = array(
             'isMandatory' => 'required',
             'isMultilingual' => 'localized',
-            'getMinOccurs' => 'min_occurs',
-            'getMaxOccurs' => 'max_occurs',
-            'getColspan' => 'col_span',
+            'getMinOccurs' => 'minOccurs',
+            'getMaxOccurs' => 'maxOccurs',
+            'getColspan' => 'colSpan',
             'getParams' => 'parameters',
         );
 
         foreach ($map as $method => $propName) {
             $this->assertEquals(
-                $this->bridge->$method($propName),
-                $this->structure->properties['prop_1']->$propName;
+                $this->bridge->getProperty('prop_1')->$method($propName),
+                $this->structure->properties['prop_1']->$propName
             );
         }
     }

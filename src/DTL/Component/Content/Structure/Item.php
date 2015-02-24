@@ -66,5 +66,21 @@ class Item
             $name, get_class($this)
         ));
     }
-}
 
+    /**
+     * Return the localized name of this Item or
+     * default to the name.
+     *
+     * @param string $locale Localization
+     *
+     * @return string
+     */
+    public function getLocalizedTitle($locale)
+    {
+        if (isset($this->title[$locale])) {
+            return $this->title[$locale];
+        }
+
+        return ucfirst($this->name);
+    }
+}
