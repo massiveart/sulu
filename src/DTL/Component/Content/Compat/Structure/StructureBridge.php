@@ -6,7 +6,12 @@ use Sulu\Component\Content\StructureInterface;
 use DTL\Component\Content\Structure\Structure;
 use DTL\Bundle\ContentBundle\Document\Document;
 use Sulu\Component\Content\Property;
+use DTL\Component\Content\Structure\Property as NewProperty;
 use DTL\Component\Content\Document\PageInterface;
+use Sulu\Component\Content\PropertyTag;
+use Sulu\Component\Content\Section\SectionProperty;
+use Sulu\Component\Content\Block\BlockProperty;
+use Sulu\Component\Content\Block\BlockPropertyType;
 
 class StructureBridge implements StructureInterface
 {
@@ -162,21 +167,8 @@ class StructureBridge implements StructureInterface
     public function getProperty($name)
     {
         $property = $this->structure->getProperty($name);
-        $propertyBridge = new Property(
-            $name,
-            array(
-                'title' => $property->title,
-                'infoText' => $property->description,
-            ),
-            $property->type,
-            $property->required,
-            $property->localized,
-            $property->maxOccurs,
-            $property->minOccurs,
-            $property->parameters,
-            $property->tags,
-            $property->colSpan
-        );
+
+        $propertyBridge = $this->createBridgeFromProperty($name, $property);
 
         return $propertyBridge;
     }
@@ -414,6 +406,87 @@ class StructureBridge implements StructureInterface
     public function copyFrom(StructureInterface $structure)
     {
         $this->notImplemented(__METHOD__);
+    }
+
+    private function getSectionProperty($name, NewProperty $property)
+    {
+        $sectionProperty = new SectionProperty(
+            $name,
+            array(
+                'title' => $property->title,
+                'infoText' => $property->description,
+            ),
+            $property->colSpan
+        );
+
+        foreach ($property->children as $childName => $child) {
+            $sectionProperty->addChild($this->createBridgeFromProperty($childName, $child));
+        }
+
+        return $sectionProperty;
+    }
+
+    private function getBlockProperty($name, NewProperty $property)
+    {
+        $blockProperty = new BlockProperty(
+            $name,
+            array(
+                'title' => $property->title,
+                'infoText' => $property->description,
+            ),
+            $property->type,
+            $property->required,
+            $property->localized,
+            $property->maxOccurs,
+            $property->minOccurs,
+            $property->parameters,
+            array(),
+            $property->colSpan
+        );
+
+        foreach ($property->parameters['prototypes'] as $prototypeName => $prototype) {
+            $blockType = new BlockPropertyType(
+                $prototypeName,
+                array(
+                    'title' => $prototype->title,
+                )
+            );
+        }
+
+        return $blockProperty;
+    }
+
+    private function createBridgeFromProperty($name, NewProperty $property)
+    {
+        if ($property->type === 'section') {
+            return $this->getSectionProperty($name, $property);
+        }
+
+        if ($property->type === 'block') {
+            return $this->getBlockProperty($name, $property);
+        }
+
+        $propertyBridge = new Property(
+            $name,
+            array(
+                'title' => $property->title,
+                'infoText' => $property->description,
+            ),
+            $property->type,
+            $property->required,
+            $property->localized,
+            $property->maxOccurs,
+            $property->minOccurs,
+            $property->parameters,
+            array(),
+            $property->colSpan
+        );
+
+        foreach ($property->tags as $tag) {
+            $propertyBridge->addTag(new PropertyTag($tag->name, $tag->priority, $tag->attributes));
+        }
+
+        return $propertyBridge;
     }
 
     private function getDocument()

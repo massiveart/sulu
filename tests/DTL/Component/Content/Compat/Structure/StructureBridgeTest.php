@@ -1,6 +1,6 @@
 <?php
 
-namespace DTL\Component\Content\Compat;
+namespace DTL\Component\Content\Compat\Structure;
 
 use DTL\Component\Content\Structure\Structure;
 use DTL\Component\Content\Structure\Property;

@@ -1,6 +1,6 @@
 <?php
 
-namespace DTL\Component\Content\Compat;
+namespace DTL\Component\Content\Compat\Stucture;
 
 use Prophecy\PhpUnit\ProphecyTestCase;
 use DTL\Component\Content\Compat\Structure\StructureManager;
