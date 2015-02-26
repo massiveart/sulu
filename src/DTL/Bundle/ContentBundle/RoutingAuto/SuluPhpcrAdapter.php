@@ -71,10 +71,10 @@ class SuluPhpcrAdapter extends PhpcrOdmAdapter
             $uriContext->getLocale()
         ), '/');
 
-        try {
-            $parentDocument = $this->documentManager->find(null, $path);
-        } catch (PathNotFoundException $e) {
-            throw new \RuntimeException(sprintf('The "route_basepath" configuration points to a non-existant path "%s".',
+        $parentDocument = $this->documentManager->find(null, $path);
+
+        if (null === $parentDocument) {
+            throw new \RuntimeException(sprintf('Cannot find path "%s".',
                 $path
             ));
         }

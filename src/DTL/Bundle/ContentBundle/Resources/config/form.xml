@@ -13,6 +13,8 @@
         <!-- Form structure types -->
         <service id="dtl_content.form.type.page" class="DTL\Bundle\ContentBundle\Form\Type\Document\PageDocumentType">
             <argument type="service" id="dtl_content.form.factory.structure_type"/>
+            <argument type="service" id="sulu.phpcr.session" />
+            <argument type="service" id="doctrine_phpcr.odm.document_manager" />
             <tag name="form.type" alias="page" />
         </service>
 

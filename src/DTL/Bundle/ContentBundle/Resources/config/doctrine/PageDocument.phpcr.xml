@@ -8,8 +8,8 @@
 
     <document name="DTL\Bundle\ContentBundle\Document\PageDocument">
         <field name="published" type="date" translated="true" nullable="true"/>
-        <field name="workflowStage" property="workflow-stage" type="long" translated="true" />
-        <field name="navigationContexts" property="nav-contexts" type="string" multivalue="true" translated="true" />
+        <field name="workflowStage" type="long" translated="true" />
+        <field name="navigationContexts" type="string" multivalue="true" translated="true" />
     </document>
 
 </doctrine-mapping>

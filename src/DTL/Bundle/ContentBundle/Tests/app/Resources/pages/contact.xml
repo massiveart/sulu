@@ -10,7 +10,7 @@
     <cacheLifetime>2400</cacheLifetime>
 
     <properties>
-        <property multilingual="false" name="name" type="text_line"/>
+        <property multilingual="true" name="name" type="text_line"/>
         <property multilingual="false" name="email" type="text_line"/>
         <property multilingual="false" name="telephone" type="text_line" />
         <property name="information" type="text_line" />
