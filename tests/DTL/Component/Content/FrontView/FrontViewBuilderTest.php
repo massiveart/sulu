@@ -84,8 +84,8 @@ class FrontViewBuilderTest extends ProphecyTestCase
             Argument::type('Symfony\Component\OptionsResolver\OptionsResolverInterface')
         )->shouldBeCalled();
 
-        $this->propertyTypeRegistry->getType('text_line')->willReturn($textLineType->reveal());
-        $this->propertyTypeRegistry->getType('parent')->willReturn($parentType);
+        $this->propertyTypeRegistry->getProperty('text_line')->willReturn($textLineType->reveal());
+        $this->propertyTypeRegistry->getProperty('parent')->willReturn($parentType);
 
         $this->document1->getStructureType()->willReturn($structureType);
         $this->document1->getDocumentType()->willReturn('page');

@@ -12,26 +12,27 @@ namespace DTL\Bundle\ContentBundle\Document;
 
 use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCR;
 use Sulu\Component\Content\StructureInterface;
+use DTL\Component\Content\Document\PageInterface;
 
 /**
  * Page document class
  */
-class PageDocument extends Document
+class PageDocument extends Document implements PageInterface
 {
     /**
      * @var integer
      */
-    private $publishedState;
+    protected $publishedState;
 
     /**
      * @var \DateTime
      */
-    private $published;
+    protected $published;
 
     /**
      * @var integer
      */
-    private $workflowStage;
+    protected $workflowStage;
 
     public function __construct()
     {

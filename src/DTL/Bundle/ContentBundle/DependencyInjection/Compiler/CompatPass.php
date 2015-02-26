@@ -12,14 +12,14 @@ class CompatPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (false === $container->getParameter('compat')) {
+        if (false === $container->getParameter('dtl_content.compat')) {
             return;
         }
 
         $this->replaceStructureManager($container);
     }
 
-    public function replaceStructureManager()
+    public function replaceStructureManager(ContainerBuilder $container)
     {
         if (!$container->hasDefinition('sulu.content.structure_manager')) {
             return;

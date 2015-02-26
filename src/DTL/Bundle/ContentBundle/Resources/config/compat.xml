@@ -5,7 +5,7 @@
 
     <services>
         <service id="dtl_content.compat.structure.structure_manager" class="DTL\Component\Content\Compat\Structure\StructureManager">
-            <argument type="service" id="dtl_content.structure.structure_factory" />
+            <argument type="service" id="dtl_content.structure.factory" />
         </service>
     </services>
 </container>

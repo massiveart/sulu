@@ -18,87 +18,87 @@ use PHPCR\NodeInterface;
 /**
  * Base document class.
  */
-abstract class Document implements PageInterface
+abstract class Document implements DocumentInterface
 {
     /**
      * @var string
      */
-    private $uuid;
+    protected $uuid;
 
     /**
      * @var string
      */
-    private $path;
+    protected $path;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var mixed
      */
-    private $parent;
+    protected $parent;
 
     /**
      * @var object
      */
-    private $parentDocument;
+    protected $parentDocument;
 
     /**
      * @var ChildrenCollection
      */
-    private $children;
+    protected $children;
 
     /**
      * @var string
      */
-    private $locale;
+    protected $locale;
 
     /**
      * @var string
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      */
-    private $structureType;
+    protected $structureType;
 
     /**
      * @var string
      */
-    private $resourceLocator;
+    protected $resourceLocator;
 
     /**
      * @var integer
      */
-    private $creator;
+    protected $creator;
 
     /**
      * @var integer
      */
-    private $changer;
+    protected $changer;
 
     /**
      * @var \DateTime
      */
-    private $created;
+    protected $created;
 
     /**
      * @var \DateTime
      */
-    private $changed;
+    protected $changed;
 
     /**
      * @var array (not mapped, populated in an event listener)
      */
-    private $content = array();
+    protected $content = array();
 
     /**
      * @var NodeInterface
      */
-    private $node;
+    protected $node;
 
     /**
      * {@inheritDoc}

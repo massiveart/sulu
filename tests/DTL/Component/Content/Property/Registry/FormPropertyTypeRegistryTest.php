@@ -26,7 +26,7 @@ class FormPropertyTypeRegistryTest extends ProphecyTestCase
     {
         $this->formExtension->hasType('foo')->willReturn(true);
         $this->formExtension->getType('foo')->willReturn($this->contentType->reveal());
-        $contentType = $this->registry->getType('foo');
+        $contentType = $this->registry->getProperty('foo');
         $this->assertSame($this->contentType->reveal(), $contentType);
     }
 }

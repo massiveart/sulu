@@ -82,7 +82,7 @@ class StructureBridgeTest extends \PHPUnit_Framework_TestCase
             'isMultilingual' => 'localized',
             'getMinOccurs' => 'minOccurs',
             'getMaxOccurs' => 'maxOccurs',
-            'getColspan' => 'colpan',
+            'getColspan' => 'colSpan',
             'getParams' => 'parameters',
         );
 
