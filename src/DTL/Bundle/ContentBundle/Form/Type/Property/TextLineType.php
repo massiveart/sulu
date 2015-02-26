@@ -69,7 +69,7 @@ class TextLineType extends AbstractType implements PropertyTypeInterface
      */
     public function getName()
     {
-        return 'text_line';
+        return 'text_line_property';
     }
 
     /**

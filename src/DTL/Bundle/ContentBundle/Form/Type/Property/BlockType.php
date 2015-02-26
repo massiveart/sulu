@@ -139,7 +139,7 @@ class BlockType extends AbstractType implements PropertyTypeInterface
      */
     public function getName()
     {
-        return 'block';
+        return 'block_property';
     }
 
     /**

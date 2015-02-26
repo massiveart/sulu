@@ -7,5 +7,13 @@
         <service id="dtl_content.compat.structure.structure_manager" class="DTL\Component\Content\Compat\Structure\StructureManager">
             <argument type="service" id="dtl_content.structure.factory" />
         </service>
+
+        <service id="dtl_content.compat.content_mapper" class="DTL\Component\Content\Compat\ContentMapper">
+            <argument type="service" id="dtl_content.compat.data_normalizer" />
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="doctrine_phpcr.odm.default_document_manager" />
+        </service>
+
+        <service id="dtl_content.compat.data_normalizer" class="DTL\Component\Content\Compat\DataNormalizer" />
     </services>
 </container>

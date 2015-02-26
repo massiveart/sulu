@@ -46,13 +46,25 @@ class StructureFormTypeFactory
     }
 
     /**
-     * create the structure form type
+     * Create a structure form
      *
      * @param mixed $documenttype the document type (e.g. page, snippet)
      * @param mixed $structuretype the structure type (e.g. overview, example)
      * @param array $options form options (e.g. webspace, locale)
      */
     public function create($documentType, $structureType, array $options)
+    {
+        return $this->createBuilder($documentType, $structureType, $options)->getForm();
+    }
+
+    /**
+     * Create a structure form builder
+     *
+     * @param mixed $documenttype the document type (e.g. page, snippet)
+     * @param mixed $structuretype the structure type (e.g. overview, example)
+     * @param array $options form options (e.g. webspace, locale)
+     */
+    public function createBuilder($documentType, $structureType, array $options)
     {
         $structure = $this->structureFactory->getStructure($documentType, $structureType);
 
@@ -61,8 +73,8 @@ class StructureFormTypeFactory
         ));
 
         foreach ($structure->properties as $name => $property) {
-            $builder->add($name, 'collection', array(
-                'type' => $property->type,
+            $builder->add($name, 'collection_property', array(
+                'type' => $property->type . '_property',
                 'options' => $property->parameters,
                 'label' => $property->title,
                 'min_occurs' => $property->minOccurs,
@@ -70,11 +82,13 @@ class StructureFormTypeFactory
             ));
         }
 
-        return $builder->getForm();
+        return $builder;
     }
 
     /**
      * create the structure form type from a document
+     *
+     * REMOVE THIS PROBABLY IS NOT USED BY ANYTHING NOW
      *
      * @param DocumentInterface $document
      * @param array $options

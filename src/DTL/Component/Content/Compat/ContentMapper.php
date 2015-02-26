@@ -3,14 +3,50 @@
 namespace DTL\Component\Content\Compat;
 
 use Sulu\Component\Content\Mapper\ContentMapperInterface;
+use PHPCR\Query\QueryInterface;
+use PHPCR\Query\QueryResultInterface;
+use Sulu\Component\Content\Mapper\ContentMapperRequest;
+use Symfony\Component\Form\FormFactoryInterface;
+use Doctrine\ODM\PHPCR\DocumentManager;
+use DTL\Component\Content\Form\Exception\InvalidFormException;
 
 class ContentMapper implements ContentMapperInterface
 {
+    /**
+     * @var DataNormalizer $dataNormalizer
+     */
+    private $dataNormalizer;
+
+    /**
+     * @var FormFactoryInterface $formFactory
+     */
+    private $formFactory;
+
+    /**
+     * @var DocumentManager
+     */
+    private $documentManager;
+
+    /**
+     * @param DataNormalizer $dataNormalizer
+     * @param FormFactoryInterface $formFactory
+     */
+    public function __construct(
+        DataNormalizer $dataNormalizer,
+        FormFactoryInterface $formFactory,
+        DocumentManager $documentManager
+    )
+    {
+        $this->dataNormalizer = $dataNormalizer;
+        $this->formFactory = $formFactory;
+        $this->documentManager = $documentManager;
+    }
+
     public function save(
         $data,
-        $templateKey,
+        $structureName,
         $webspaceKey,
-        $languageCode,
+        $locale,
         $userId,
         $partialUpdate = true,
         $uuid = null,
@@ -21,8 +57,7 @@ class ContentMapper implements ContentMapperInterface
         $structureType = Structure::TYPE_PAGE
     )
     {
-        $data = $this->dataNormalizer->normalizeData($data);
-        $form = $this->formFactory->create($structureType);
+        $data = $this->dataNormalizer->normalize($data);
 
         $document = null;
 
@@ -35,16 +70,24 @@ class ContentMapper implements ContentMapperInterface
                     $uuid
                 ));
             }
-
-            $form->setData($document);
         }
 
+        $form = $this->formFactory->create($structureType, $document, array(
+            'webspace_key' => $webspaceKey,
+            'locale' => $locale,
+            'structure_name' => $structureName,
+        ));
         $form->submit($data);
 
         if ($form->isValid()) {
+            $document = $form->getData();
+
             $this->documentManager->persist($document);
             $this->documentManager->flush();
+            return;
         }
+
+        throw new InvalidFormException($form);
     }
 
     public function saveExtension(
@@ -61,7 +104,7 @@ class ContentMapper implements ContentMapperInterface
 
     public function saveStartPage(
         $data,
-        $templateKey,
+        $structureName,
         $webspaceKey,
         $languageCode,
         $userId,
@@ -172,6 +215,20 @@ class ContentMapper implements ContentMapperInterface
 
     public function saveRequest(ContentMapperRequest $request)
     {
+        return $this->save(
+            $request->getData(),
+            $request->getTemplateKey(),
+            $request->getWebspaceKey(),
+            $request->getLocale(),
+            $request->getUserId(),
+            $request->getPartialUpdate(),
+            $request->getUuid(),
+            $request->getParentUuid(),
+            $request->getState(),
+            $request->getIsShadow(),
+            $request->getShadowBaseLanguage(),
+            $request->getType()
+        );
     }
 
     public function restoreHistoryPath($path, $userId, $webspaceKey, $languageCode, $segmentKey = null)

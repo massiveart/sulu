@@ -40,7 +40,7 @@ class TextAreaType extends AbstractType implements PropertyTypeInterface
      */
     public function getName()
     {
-        return 'text_area';
+        return 'text_area_property';
     }
 
     /**

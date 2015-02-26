@@ -4,33 +4,10 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <!-- Custom form factory and registry for content reendering -->
-
-        <!-- DependencyInjectionExtension -->
-        <service id="dtl_content.form.extension" class="%form.extension.class%" public="false">
-            <argument type="service" id="service_container" />
-            <!-- All services with tag "dtl_content.form.type" are inserted here by FormPass -->
-            <argument type="collection" />
-            <argument type="collection" />
-            <argument type="collection" />
-        </service>
-
-        <service id="dtl_content.form.registry" class="%form.registry.class%">
-            <argument type="collection">
-                <argument type="service" id="dtl_content.form.extension" />
-            </argument>
-            <argument type="service" id="form.resolved_type_factory" />
-        </service>
-
-        <service id="dtl_content.form.factory" class="%form.factory.class%">
-            <argument type="service" id="dtl_content.form.registry" />
-            <argument type="service" id="form.resolved_type_factory" />
-        </service>
-
         <!-- Structure form type factory -->
         <service id="dtl_content.form.factory.structure_type" class="DTL\Component\Content\Structure\Form\StructureFormTypeFactory">
             <argument type="service" id="dtl_content.structure.factory" />
-            <argument type="service" id="dtl_content.form.factory" />
+            <argument type="service" id="form.factory" />
         </service>
 
         <!-- Form structure types -->

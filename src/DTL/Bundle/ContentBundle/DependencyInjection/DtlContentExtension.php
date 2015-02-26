@@ -41,10 +41,8 @@ class DtlContentExtension extends Extension
         $loader->load('property.xml');
 
         $compat = $config['compat']['enabled'];
+        $loader->load('compat.xml');
         $container->setParameter('dtl_content.compat', $compat);
-        if (true === $compat) {
-            $loader->load('compat.xml');
-        }
 
         $this->processStructure($config['structure'], $container);
     }

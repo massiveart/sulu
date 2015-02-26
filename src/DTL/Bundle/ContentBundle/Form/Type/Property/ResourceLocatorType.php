@@ -39,7 +39,7 @@ class ResourceLocatorType extends AbstractType implements PropertyTypeInterface
      */
     public function getName()
     {
-        return 'resource_locator';
+        return 'resource_locator_property';
     }
 
     /**

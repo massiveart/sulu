@@ -34,6 +34,16 @@ class PageDocument extends Document implements PageInterface
      */
     protected $workflowStage;
 
+    /**
+     * @var array
+     */
+    protected $navigationContexts;
+
+    /**
+     * @var string
+     */
+    protected $redirectType;
+
     public function __construct()
     {
         $this->workflowStage = StructureInterface::STATE_TEST;
@@ -77,6 +87,38 @@ class PageDocument extends Document implements PageInterface
     public function setWorkflowStage($workflowStage)
     {
         $this->workflowStage = $workflowStage;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getNavigationContexts() 
+    {
+        return $this->navigationContexts;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setNavigationContexts(array $navigationContexts)
+    {
+        $this->navigationContexts = $navigationContexts;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRedirectType() 
+    {
+        return $this->redirectType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setRedirectType($redirectType)
+    {
+        $this->redirectType = $redirectType;
     }
     
     /**

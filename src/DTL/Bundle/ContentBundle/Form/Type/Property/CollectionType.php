@@ -85,6 +85,6 @@ class CollectionType extends AbstractType implements PropertyTypeInterface
      */
     public function getName()
     {
-        return 'collection';
+        return 'collection_property';
     }
 }

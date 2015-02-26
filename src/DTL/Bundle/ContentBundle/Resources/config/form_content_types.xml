@@ -5,32 +5,32 @@
 
     <services>
         <service id="dtl_content.form.type.property" class="DTL\Bundle\ContentBundle\Form\Type\Property\PropertyType">
-            <tag name="dtl_content.form.type" alias="property" />
+            <tag name="form.type" alias="property" />
         </service>
 
         <service id="dtl_content.form.type.collection" class="DTL\Bundle\ContentBundle\Form\Type\Property\CollectionType">
-            <tag name="dtl_content.form.type" alias="collection" />
+            <tag name="form.type" alias="collection_property" />
         </service>
 
         <service id="dtl_content.form.type.resource_locator" class="DTL\Bundle\ContentBundle\Form\Type\Property\ResourceLocatorType">
-            <tag name="dtl_content.form.type" alias="resource_locator" />
+            <tag name="form.type" alias="resource_locator_property" />
         </service>
 
         <service id="dtl_content.form.type.text_area" class="DTL\Bundle\ContentBundle\Form\Type\Property\TextAreaType">
-            <tag name="dtl_content.form.type" alias="text_area" />
+            <tag name="form.type" alias="text_area_property" />
         </service>
 
         <service id="dtl_content.form.type.text_editor" class="DTL\Bundle\ContentBundle\Form\Type\Property\TextEditorType">
-            <tag name="dtl_content.form.type" alias="text_editor" />
+            <tag name="form.type" alias="text_editor_property" />
         </service>
 
         <service id="dtl_content.form.type.text_line" class="DTL\Bundle\ContentBundle\Form\Type\Property\TextLineType">
-            <tag name="dtl_content.form.type" alias="text_line" />
+            <tag name="form.type" alias="text_line_property" />
         </service>
 
         <service id="dtl_content.form.type.block" class="DTL\Bundle\ContentBundle\Form\Type\Property\BlockType">
             <argument type="service" id="dtl_content.front_view.builder" />
-            <tag name="dtl_content.form.type" alias="block" />
+            <tag name="form.type" alias="block_property" />
         </service>
 
     </services>
