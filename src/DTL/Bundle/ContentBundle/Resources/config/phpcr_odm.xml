@@ -5,7 +5,9 @@
 
     <parameters>
         <parameter key="dtl_content.event_subscriber.phpcr_odm.structure.class">DTL\Component\Content\EventSubscriber\ContentSerializerSubscriber</parameter>
-        <parameter key="dtl_content.event_subscriber.phpcr_odm.document_name.class">DTL\Component\Content\EventSubscriber\DocumentNameSubscriber</parameter>
+        <parameter key="dtl_content.event_subscriber.phpcr_odm.document_name.class">DTL\Component\Content\EventSubscriber\NameSubscriber</parameter>
+        <parameter key="dtl_content.event_subscriber.phpcr_odm.document_timestamp.class">DTL\Component\Content\EventSubscriber\TimestampSubscriber</parameter>
+        <parameter key="dtl_content.event_subscriber.phpcr_odm.document_blame.class">DTL\Component\Content\EventSubscriber\BlameSubscriber</parameter>
         <parameter key="dtl_content.initializer.class">DTL\Bundle\ContentBundle\Initializer\PhpcrOdmInitializer</parameter>
     </parameters>
 
@@ -25,6 +27,15 @@
         <service id="dtl_content.initializer" class="%dtl_content.initializer.class%">
             <argument type="service" id="sulu_core.webspace.webspace_manager" />
             <tag name="doctrine_phpcr.initializer" />
+        </service>
+
+        <service id="dtl_content.event_subscriber.phpcr_odm.timestamp" class="%dtl_content.event_subscriber.phpcr_odm.timestamp.class%">
+            <tag name="doctrine_phpcr.event_subscriber" />
+        </service>
+
+        <service id="dtl_content.event_subscriber.phpcr_odm.blame" class="%dtl_content.event_subscriber.phpcr_odm.blame.class%">
+            <argument type="service" id="security.token_storage" />
+            <tag name="doctrine_phpcr.event_subscriber" />
         </service>
     </services>
 </container>

@@ -11,11 +11,24 @@ use Doctrine\ODM\PHPCR\Event;
 use PHPCR\Util\UUIDHelper;
 use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
 
-class DocumentNameSubscriber implements EventSubscriber
+/**
+ * Manage the name of the document (node) before persisting.
+ *
+ * The document should have a unique name based upon the primary
+ * locale.
+ *
+ * TODO: This class should use the primary locale, current it changes
+ *       the node name each time a specific locale is persisted.
+ */
+class NameSubscriber implements EventSubscriber
 {
     private $documentManager;
     private $slugifier;
 
+    /**
+     * @param DocumentManager $documentManager
+     * @param SlugifierInterface $slugifier
+     */
     public function __construct(
         DocumentManager $documentManager,
         SlugifierInterface $slugifier
@@ -35,16 +48,29 @@ class DocumentNameSubscriber implements EventSubscriber
         );
     }
 
+    /**
+     * Handle prePersist
+     *
+     * @param LifecycleEventArgs $event
+     */
     public function prePersist(LifecycleEventArgs $event)
     {
         $this->handleDocumentName($event);
     }
 
+    /**
+     * Handle prePersist
+     *
+     * @param LifecycleEventArgs $event
+     */
     public function preUpdate(LifecycleEventArgs $event)
     {
         $this->handleDocumentName($event);
     }
 
+    /**
+     * @param LifecycleEventArgs $event
+     */
     private function handleDocumentName(LifecycleEventArgs $event)
     {
         $document = $event->getObject();
@@ -88,7 +114,15 @@ class DocumentNameSubscriber implements EventSubscriber
         );
     }
 
-    public function getName($document, $parent, $title)
+    /**
+     * Return the slugified name of the document after checking for and
+     * resolving any conflicts.
+     *
+     * @param Document $document
+     * @param Document $parent
+     * @param string $title
+     */
+    private function getName($document, $parent, $title)
     {
         $slug = $this->slugifier->slugify($title);
 
@@ -108,12 +142,17 @@ class DocumentNameSubscriber implements EventSubscriber
         return basename($path);
     }
 
-    private function getPath($parentPath, $slug, $i) 
+    /**
+     * @param string $parentPath
+     * @param string $slug
+     * @param integer $index
+     */
+    private function getPath($parentPath, $slug, $index) 
     {
         $path = join('/', array($parentPath, $slug));
 
-        if ($i > 0) {
-            $path .= '-' . $i;
+        if ($index > 0) {
+            $path .= '-' . $index;
         }
 
         return $path;
