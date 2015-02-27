@@ -2,12 +2,12 @@
 namespace DTL\Component\Content\EventSubscriber;
 
 use DTL\Bundle\ContentBundle\Document\DocumentName;
-use DTL\Bundle\ContentBundle\Document\Document;
 use Doctrine\ODM\PHPCR\DocumentManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ODM\PHPCR\Event;
 use PHPCR\Util\UUIDHelper;
+use DTL\Component\Content\Document\DocumentInterface;
 
 /**
  * Manage the timestamp (created, changed) fields on
@@ -53,14 +53,14 @@ class TimestampSubscriber implements EventSubscriber
     {
         $document = $event->getObject();
 
-        if (!$document instanceof Document) {
+        if (!$document instanceof DocumentInterface) {
             return;
         }
 
         if (!$document->getCreated()) {
-            $document->setCreated(new \DateTime();
+            $document->setCreated(new \DateTime());
         }
 
-        $document->setUpdated(new \DateTime());
+        $document->setChanged(new \DateTime());
     }
 }
