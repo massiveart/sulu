@@ -3,13 +3,13 @@
 namespace DTL\Component\Content\EventSubscriber;
 
 use DTL\Bundle\ContentBundle\Document\DocumentName;
-use DTL\Bundle\ContentBundle\Document\Document;
 use Doctrine\ODM\PHPCR\DocumentManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ODM\PHPCR\Event;
 use PHPCR\Util\UUIDHelper;
 use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
+use DTL\Component\Content\Document\DocumentInterface;
 
 /**
  * Manage the name of the document (node) before persisting.
@@ -75,7 +75,7 @@ class NameSubscriber implements EventSubscriber
     {
         $document = $event->getObject();
 
-        if (!$document instanceof Document) {
+        if (!$document instanceof DocumentInterface) {
             return;
         }
 
@@ -91,7 +91,7 @@ class NameSubscriber implements EventSubscriber
         $parent = $document->getParent();
 
         if (!$parent) {
-            throw new \RuntimeException(sprintf(
+            throw new \InvalidArgumentException(sprintf(
                 'Document with title "%s" has no parent',
                 $title
             ));
@@ -99,8 +99,9 @@ class NameSubscriber implements EventSubscriber
 
         if (!is_object($parent)) {
             throw new \InvalidArgumentException(sprintf(
-                'Non-object detected as parent for document with title "%s"',
-                $title
+                'Non-object detected as parent for document with title "%s", got "%s"',
+                $title,
+                gettype($parent)
             ));
         }
 
