@@ -15,8 +15,8 @@
         </service>
 
         <service id="dtl_content.serializer.property_name_encoder" class="%dtl_content.serializer.property_name_encoder.class%">
-            <argument>ci18n</argument>
-            <argument>cnorm</argument>
+            <argument>lcon</argument>
+            <argument>ncon</argument>
         </service>
     </services>
 

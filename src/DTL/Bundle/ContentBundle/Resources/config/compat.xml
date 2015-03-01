@@ -12,6 +12,9 @@
             <argument type="service" id="dtl_content.compat.data_normalizer" />
             <argument type="service" id="form.factory" />
             <argument type="service" id="doctrine_phpcr.odm.default_document_manager" />
+            <argument type="service" id="dtl_content.compat.structure.structure_manager" />
+            <argument type="service" id="sulu.phpcr.session" />
+            <argument type="service" id="sulu.content.type.resource_locator" />
         </service>
 
         <service id="dtl_content.compat.data_normalizer" class="DTL\Component\Content\Compat\DataNormalizer" />

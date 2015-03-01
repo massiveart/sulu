@@ -24,6 +24,9 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class PageDocumentType extends AbstractDocumentType
 {
+    /**
+     * {@inheritDoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $options)
     {
         $options->setDefaults(array(

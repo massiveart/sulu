@@ -22,9 +22,21 @@ use Sulu\Component\PHPCR\SessionManager\SessionManagerInterface;
 
 abstract class AbstractDocumentType extends AbstractType
 {
+    /**
+     * @var StructureFormTypeFactory
+     */
     private $structureTypeFactory;
+
+    /**
+     * @var SessionManagerInterface
+     */
     private $sessionManager;
 
+    /**
+     * @param StructureFormTypeFactory $structureTypeFactory
+     * @param SessionManagerInterface $sessionManager
+     * @param DocumentManager $documentManager
+     */
     public function __construct(
         StructureFormTypeFactory $structureTypeFactory,
         SessionManagerInterface $sessionManager,
@@ -36,6 +48,9 @@ abstract class AbstractDocumentType extends AbstractType
         $this->documentManager = $documentManager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $options)
     {
         $options->setRequired(array(
@@ -46,11 +61,12 @@ abstract class AbstractDocumentType extends AbstractType
         ));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('title', 'text');
-        $builder->add('creator', 'number');
-        $builder->add('changer', 'number');
         $builder->add('parent', 'phpcr_document', array(
             'class' => $options['data_class'],
         ));
@@ -64,8 +80,15 @@ abstract class AbstractDocumentType extends AbstractType
         $builder->add($structureForm);
         $builder->addEventListener(FormEvents::POST_SUBMIT, array($this, 'postSubmitDocumentParent'));
         $builder->addEventListener(FormEvents::POST_SUBMIT, array($this, 'postSubmitStructureName'));
+        $builder->addEventListener(FormEvents::POST_SUBMIT, array($this, 'postSubmitLocale'));
     }
 
+    /**
+     * Set the document parent to be the webspace content path
+     * when the document has no parent.
+     *
+     * @param FormEvent $event
+     */
     public function postSubmitDocumentParent(FormEvent $event)
     {
         $document = $event->getData();
@@ -89,19 +112,27 @@ abstract class AbstractDocumentType extends AbstractType
         $document->setParent($parent);
     }
 
+    /**
+     * Assign the name of the structure to the document
+     *
+     * @param FormEvent $event
+     */
     public function postSubmitStructureName(FormEvent $event)
     {
         $document = $event->getData();
-        $form = $event->getForm();
         $documentStructureName = $document->getStructureType();
-        $structureName = $form->getConfig()->getAttribute('structure_name');
-        $locale = $form->getConfig()->getAttribute('locale');
+        $structureName = $event->getForm()->getConfig()->getAttribute('structure_name');
         $document->setStructureType($structureName);
+    }
 
-        $document->setCreator(1);
-        $document->setChanger(1);
-        $document->setCreated(new \DateTime());
-        $document->setChanged(new \DateTime());
-        $document->setLocale($locale);
+    /**
+     * Assign the current locale to the document
+     *
+     * @param FormEvent $event
+     */
+    public function postSubmitLocale(FormEvent $event)
+    {
+        $locale = $event->getForm()->getConfig()->getAttribute('locale');
+        $event->getData()->setLocale($locale);
     }
 }

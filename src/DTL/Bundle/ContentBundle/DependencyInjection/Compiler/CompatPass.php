@@ -17,6 +17,7 @@ class CompatPass implements CompilerPassInterface
         }
 
         $this->replaceStructureManager($container);
+        $this->replaceContentMapper($container);
     }
 
     public function replaceStructureManager(ContainerBuilder $container)
@@ -28,5 +29,14 @@ class CompatPass implements CompilerPassInterface
         $container->removeDefinition('sulu.content.structure_manager');
         $container->setAlias('sulu.content.structure_manager', 'dtl_content.compat.structure.structure_manager');
     }
-}
 
+    public function replaceContentMapper(ContainerBuilder $container)
+    {
+        if (!$container->hasDefinition('sulu.content.mapper')) {
+            return;
+        }
+
+        $container->removeDefinition('sulu.content.mapper');
+        $container->setAlias('sulu.content.mapper', 'dtl_content.compat.content_mapper');
+    }
+}

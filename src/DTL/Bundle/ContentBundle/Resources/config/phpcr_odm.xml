@@ -5,9 +5,9 @@
 
     <parameters>
         <parameter key="dtl_content.event_subscriber.phpcr_odm.structure.class">DTL\Component\Content\EventSubscriber\ContentSerializerSubscriber</parameter>
-        <parameter key="dtl_content.event_subscriber.phpcr_odm.document_name.class">DTL\Component\Content\EventSubscriber\NameSubscriber</parameter>
-        <parameter key="dtl_content.event_subscriber.phpcr_odm.document_timestamp.class">DTL\Component\Content\EventSubscriber\TimestampSubscriber</parameter>
-        <parameter key="dtl_content.event_subscriber.phpcr_odm.document_blame.class">DTL\Component\Content\EventSubscriber\BlameSubscriber</parameter>
+        <parameter key="dtl_content.event_subscriber.phpcr_odm.name.class">DTL\Component\Content\EventSubscriber\NameSubscriber</parameter>
+        <parameter key="dtl_content.event_subscriber.phpcr_odm.timestamp.class">DTL\Component\Content\EventSubscriber\TimestampSubscriber</parameter>
+        <parameter key="dtl_content.event_subscriber.phpcr_odm.blame.class">DTL\Component\Content\EventSubscriber\BlameSubscriber</parameter>
         <parameter key="dtl_content.initializer.class">DTL\Bundle\ContentBundle\Initializer\PhpcrOdmInitializer</parameter>
     </parameters>
 
@@ -18,7 +18,7 @@
             <tag name="doctrine_phpcr.event_subscriber" />
         </service>
 
-        <service id="dtl_content.event_subscriber.phpcr_odm.document_name" class="%dtl_content.event_subscriber.phpcr_odm.document_name.class%">
+        <service id="dtl_content.event_subscriber.phpcr_odm.name" class="%dtl_content.event_subscriber.phpcr_odm.name.class%">
             <argument type="service" id="doctrine_phpcr.odm.document_manager" />
             <argument type="service" id="cmf_routing_auto.slugifier" />
             <tag name="doctrine_phpcr.event_subscriber" />

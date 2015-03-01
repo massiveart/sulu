@@ -12,6 +12,7 @@ use Sulu\Component\Content\PropertyTag;
 use Sulu\Component\Content\Section\SectionProperty;
 use Sulu\Component\Content\Block\BlockProperty;
 use Sulu\Component\Content\Block\BlockPropertyType;
+use DTL\Component\Content\Document\DocumentInterface;
 
 class StructureBridge implements StructureInterface
 {
@@ -132,7 +133,7 @@ class StructureBridge implements StructureInterface
     /**
      * {@inheritDoc}
      */
-    public function setCreated(DateTime $created)
+    public function setCreated(\DateTime $created)
     {
         $this->readOnlyException(__METHOD__);
     }
@@ -148,7 +149,7 @@ class StructureBridge implements StructureInterface
     /**
      * {@inheritDoc}
      */
-    public function setChanged(DateTime $changed)
+    public function setChanged(\DateTime $changed)
     {
         $this->readOnlyException(__METHOD__);
     }

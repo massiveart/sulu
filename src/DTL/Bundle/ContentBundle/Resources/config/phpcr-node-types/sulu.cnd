@@ -1,5 +1,8 @@
 <sulu = 'http://sulu.io/phpcr'>
-<cont = 'http://sulu.io/phpcr/content'>
+<lcon = 'http://sulu.io/phpcr/content/localized'>
+<ncon = 'http://sulu.io/phpcr/content'>
+<lsys = 'http://sulu.io/phpcr/system/localized'>
+<nsys = 'http://sulu.io/phpcr/system'>
 
 [sulu:structure] > nt:unstructured
 [sulu:snippet] > sulu:structure

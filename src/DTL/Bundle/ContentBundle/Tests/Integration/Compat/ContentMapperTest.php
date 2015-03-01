@@ -40,11 +40,9 @@ class ContentMapperTest extends SuluTestCase
     /**
      * @dataProvider provideSave
      */
-    public function testSave($requests)
+    public function testSave($request)
     {
-        foreach ($requests as $request) {
-            $this->contentMapper->saveRequest($request);
-        }
+        $this->contentMapper->saveRequest($request);
     }
 
     public function testSaveMultiple()
@@ -63,13 +61,12 @@ class ContentMapperTest extends SuluTestCase
                 'telephone' => '123123',
             ));
 
-        $this->contentMapper->saveRequest($request);
-        $document = $this->db('PHPCR')->getOm()->find(null, '/cmf/sulu_io/contents/this-is-a-test');
+        $structure = $this->contentMapper->saveRequest($request);
 
         $request = ContentMapperRequest::create('page')
             ->setTemplateKey('contact')
             ->setWebspaceKey('sulu_io')
-            ->setUuid($document->getUuid())
+            ->setUuid($structure->getUuid())
             ->setUserId(1)
             ->setState(StructureInterface::STATE_PUBLISHED)
             ->setLocale('de')

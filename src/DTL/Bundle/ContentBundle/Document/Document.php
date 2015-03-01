@@ -101,6 +101,11 @@ abstract class Document implements DocumentInterface
     protected $node;
 
     /**
+     * @var integer
+     */
+    protected $depth;
+
+    /**
      * {@inheritDoc}
      */
     public function getName()
@@ -314,6 +319,15 @@ abstract class Document implements DocumentInterface
     {
         return $this->node;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDepth() 
+    {
+        return $this->depth;
+    }
+    
 
     /**
      * {@inheritDoc}

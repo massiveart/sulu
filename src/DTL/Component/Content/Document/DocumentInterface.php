@@ -190,4 +190,12 @@ interface DocumentInterface
      * @return string
      */
     public function getDocumentType();
+
+    /**
+     * Return the depth of this document within the content repository
+     *
+     * @return integer
+     */
+    public function getDepth();
+    
 }

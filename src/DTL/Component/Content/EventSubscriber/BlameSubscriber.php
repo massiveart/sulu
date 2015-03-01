@@ -75,6 +75,11 @@ class BlameSubscriber implements EventSubscriber
         }
 
         $token = $this->tokenStorage->getToken();
+
+        if (null === $token) {
+            return;
+        }
+
         if (!$token->isAuthenticated()) {
             return;
         }

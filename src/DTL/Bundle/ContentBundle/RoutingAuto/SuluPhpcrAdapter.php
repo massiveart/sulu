@@ -27,6 +27,7 @@ use DTL\Bundle\ContentBundle\RoutingAuto\SuluPhpcrNodeAutoRoute;
 use Symfony\Cmf\Bundle\RoutingAutoBundle\Adapter\PhpcrOdmAdapter;
 use DTL\Bundle\ContentBundle\Document\Route;
 use Doctrine\ODM\PHPCR\Document\Generic;
+use PHPCR\Util\PathHelper;
 
 class SuluPhpcrAdapter extends PhpcrOdmAdapter
 {
@@ -70,16 +71,22 @@ class SuluPhpcrAdapter extends PhpcrOdmAdapter
             $contentDocument->getWebspaceKey(),
             $uriContext->getLocale()
         ), '/');
+        $uri = $uriContext->getUri();
 
         $parentDocument = $this->documentManager->find(null, $path);
 
         if (null === $parentDocument) {
-            throw new \RuntimeException(sprintf('Cannot find path "%s".',
+            $parentDocument = $this->documentManager->find(null, PathHelper::getParentPath($path));
+            $uri = '/' . $uriContext->getLocale() . $uri;
+        }
+
+        if (null === $parentDocument) {
+            throw new \RuntimeException(sprintf('Cannot webspace routes folder at path "%s".',
                 $path
             ));
         }
 
-        $segments = preg_split('#/#', $uriContext->getUri(), null, PREG_SPLIT_NO_EMPTY);
+        $segments = preg_split('#/#', $uri, null, PREG_SPLIT_NO_EMPTY);
         $headName = array_pop($segments);
         foreach ($segments as $segment) {
             $path .= '/' . $segment;
