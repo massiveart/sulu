@@ -37,12 +37,12 @@ class CollectionType extends AbstractType implements PropertyTypeInterface
             'multiple' => function (Options $options) {
                 return $options['min_occurs'] !== $options['max_occurs'];
             },
-            'compound' => true,
+                'compound' => true,
+                'options' => array(),
         ));
 
         $resolver->setRequired(array(
             'type',
-            'options',
         ));
     }
 
@@ -85,6 +85,6 @@ class CollectionType extends AbstractType implements PropertyTypeInterface
      */
     public function getName()
     {
-        return 'collection_property';
+        return 'collection';
     }
 }

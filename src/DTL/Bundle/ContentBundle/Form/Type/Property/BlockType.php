@@ -68,7 +68,7 @@ class BlockType extends AbstractType implements PropertyTypeInterface
     {
         $prototypeForms = array();
 
-        $builder->add('type', 'text_line');
+        $builder->add('type', 'text');
 
         foreach ($options['prototypes'] as $name => $prototype) {
             $prototypeOptions = $prototype['options'];
@@ -139,7 +139,7 @@ class BlockType extends AbstractType implements PropertyTypeInterface
      */
     public function getName()
     {
-        return 'block_property';
+        return 'block';
     }
 
     /**

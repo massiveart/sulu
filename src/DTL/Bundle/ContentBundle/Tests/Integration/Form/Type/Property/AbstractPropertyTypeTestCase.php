@@ -209,7 +209,7 @@ abstract class AbstractPropertyTypeTestCase extends SuluTestCase
      */
     private function createForm($options)
     {
-        $form = $this->getContainer()->get('dtl_content.form.factory')->createBuilder()
+        $form = $this->getContainer()->get('form.factory')->createBuilder()
             ->add('test_type', $this->getProperty(), $options)
             ->getForm();
 

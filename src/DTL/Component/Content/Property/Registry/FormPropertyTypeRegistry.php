@@ -35,8 +35,8 @@ class FormPropertyTypeRegistry implements PropertyTypeRegistryInterface
             ));
         }
 
-        $type = $this->formExtension->getType($type);
+        $property = $this->formExtension->getType($type);
 
-        return $type;
+        return $property;
     }
 }

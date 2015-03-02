@@ -37,8 +37,6 @@ class PageDocumentTest extends SuluTestCase
                     'ResourceLocator' => 'foo/bar',
                     'Creator' => 2,
                     'Changer' => 3,
-                    'Created' => new \DateTime('2015-02-09'),
-                    'Changed' => new \DateTime('2015-02-09'),
                     'Content' => array(
                         'name' => 'Daniel Leech',
                         'email' => 'daniel@dantleech.com',
@@ -55,8 +53,6 @@ class PageDocumentTest extends SuluTestCase
                     'ResourceLocator' => 'foo/bar',
                     'Creator' => 2,
                     'Changer' => 3,
-                    'Created' => new \DateTime('2015-02-09'),
-                    'Changed' => new \DateTime('2015-02-09'),
                     'Content' => array(
                         'smart-content' => array(
                             'tags' => array('one', 'two', 'three'),
@@ -151,12 +147,10 @@ class PageDocumentTest extends SuluTestCase
         $page->setParent($this->parent);
         $page->setTitle($title);
         $page->setLocale('de');
-        $page->setResourceLocator('foo/bar');
+        $page->setResourceLocator('/foo/bar');
         $page->setStructureType('contact');
         $page->setCreator(1);
         $page->setChanger(1);
-        $page->setCreated(new \DateTime());
-        $page->setChanged(new \DateTime());
         $page->setContent(array(
             'email' => 'dan',
         ));

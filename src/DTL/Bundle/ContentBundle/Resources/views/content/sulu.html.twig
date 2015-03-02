@@ -16,8 +16,8 @@
 
 {% block text_area_widget %}
 <textarea id="{{ id|raw }}"
-    data-property='{{ property|json_encode }}'
-    class="form-element preview-update trigger-save-button hide-in-sortmode"
+          data-property='{{ property|json_encode }}'
+          class="form-element preview-update trigger-save-button hide-in-sortmode"
     data-mapper-property="{{ name }}"
     {% if placeholder[locale] is defined %}
     placeholder="{{ placeholder[locale] }}"

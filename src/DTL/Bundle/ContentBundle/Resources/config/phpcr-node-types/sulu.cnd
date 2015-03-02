@@ -4,10 +4,26 @@
 <lsys = 'http://sulu.io/phpcr/system/localized'>
 <nsys = 'http://sulu.io/phpcr/system'>
 
-[sulu:structure] > nt:unstructured
-[sulu:snippet] > sulu:structure
-[sulu:page] > sulu:structure
-[sulu:route] > nt:unstructured
+// New schema - using primary types
+// [sulu:base] > nt:unstructured
+// [sulu:content] > sulu:base
+// [sulu:snippet] > sulu:content
+// [sulu:page] > sulu:content
+// [sulu:route] > nt:unstructured
+
+
+// Legacy schema using mixins
+[sulu:base] > mix:referenceable
+mixin abstract noquery
+
+[sulu:content] > sulu:base
+mixin noquery
+
+[sulu:snippet] > sulu:content
+mixin noquery
+
+[sulu:page] > sulu:content
+mixin noquery
 
 [sulu:webspace] > nt:unstructured
 

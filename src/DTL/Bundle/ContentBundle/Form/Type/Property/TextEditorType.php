@@ -62,7 +62,7 @@ class TextEditorType extends AbstractType implements PropertyTypeInterface
      */
     public function getName()
     {
-        return 'text_editor_property';
+        return 'text_editor';
     }
 
     /**

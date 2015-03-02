@@ -73,8 +73,8 @@ class StructureFormTypeFactory
         ));
 
         foreach ($structure->properties as $name => $property) {
-            $builder->add($name, 'collection_property', array(
-                'type' => $property->type . '_property',
+            $builder->add($name, 'collection', array(
+                'type' => $property->type,
                 'options' => $property->parameters,
                 'label' => $property->title,
                 'min_occurs' => $property->minOccurs,

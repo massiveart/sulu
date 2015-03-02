@@ -135,26 +135,12 @@ interface DocumentInterface
     public function getCreated();
 
     /**
-     * Set the created date
-     *
-     * @param \DateTime
-     */
-    public function setCreated(\DateTime $created);
-
-    /**
      * Set the date the document was last changed
      *
      * @return \DateTime
      */
     public function getChanged();
     
-    /**
-     * Set the date the document was last changed
-     *
-     * @param mixed $changed
-     */
-    public function setChanged(\DateTime $changed);
-
     /**
      * Return the structure content for this document
      *

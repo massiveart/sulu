@@ -106,7 +106,6 @@ class NameSubscriber implements EventSubscriber
         }
 
         $name = $this->getName($document, $parent, $title);
-
         $meta = $this->documentManager->getClassMetadata(get_class($document));
         $meta->setFieldValue(
             $document,
