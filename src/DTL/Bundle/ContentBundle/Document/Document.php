@@ -261,9 +261,25 @@ abstract class Document implements DocumentInterface
     /**
      * {@inheritDoc}
      */
+    public function setCreated(\DateTime $created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getChanged() 
     {
         return $this->changed;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setChanged(\DateTime $changed)
+    {
+        $this->changed = $changed;
     }
 
     /**

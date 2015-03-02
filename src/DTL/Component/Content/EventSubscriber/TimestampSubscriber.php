@@ -8,7 +8,6 @@ use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ODM\PHPCR\Event;
 use PHPCR\Util\UUIDHelper;
 use DTL\Component\Content\Document\DocumentInterface;
-use Doctrine\Common\Util\ClassUtils;
 
 /**
  * Manage the timestamp (created, changed) fields on
@@ -58,16 +57,10 @@ class TimestampSubscriber implements EventSubscriber
             return;
         }
 
-        $refl = new \ReflectionClass(ClassUtils::getClass($document));
-        $createdProp = $refl->getProperty('created');
-        $createdProp->setAccessible(true);
-        $changedProp = $refl->getProperty('changed');
-        $changedProp->setAccessible(true);
-
         if (!$document->getCreated()) {
-            $createdProp->setValue($document, new \DateTime());
+            $document->setCreated(new \DateTime());
         }
 
-        $changedProp->setValue($document, new \DateTime());
+        $document->setChanged(new \DateTime());
     }
 }

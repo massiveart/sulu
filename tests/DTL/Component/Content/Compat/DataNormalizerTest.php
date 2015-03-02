@@ -26,9 +26,9 @@ class DataNormalizerTest extends \PHPUnit_Framework_TestCase
                 ),
                 array(
                     'title' => 'Title',
-                    'url' => '/path/to',
-                    'redirect' => 'external',
-                    'navContexts' => array('one', 'two'),
+                    'resourceLocator' => '/path/to',
+                    'redirectType' => 'external',
+                    'navigationContexts' => array('one', 'two'),
                     'content' => array(
                         'animal' => 'dog',
                         'car' => 'skoda',
