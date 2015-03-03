@@ -14,7 +14,7 @@ use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCR;
 use DTL\Component\Content\Document\DocumentInterface;
 use DTL\Component\Content\Document\PageInterface;
 use PHPCR\NodeInterface;
-use DTL\Component\Content\EventSubscriber\Marker\AutoNameMarker;
+use DTL\Component\Content\PhpcrOdm\EventSubscriber\Marker\AutoNameMarker;
 
 /**
  * Page document

@@ -4,21 +4,44 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="dtl_content.event_subscriber.phpcr_odm.structure.class">DTL\Component\Content\EventSubscriber\ContentSerializerSubscriber</parameter>
-        <parameter key="dtl_content.event_subscriber.phpcr_odm.name.class">DTL\Component\Content\EventSubscriber\NameSubscriber</parameter>
-        <parameter key="dtl_content.event_subscriber.phpcr_odm.timestamp.class">DTL\Component\Content\EventSubscriber\TimestampSubscriber</parameter>
-        <parameter key="dtl_content.event_subscriber.phpcr_odm.blame.class">DTL\Component\Content\EventSubscriber\BlameSubscriber</parameter>
+        <parameter key="dtl_content.phpcr_odm.namespace_registry.class">DTL\Component\Content\PhpcrOdm\NamespaceRoleRegistry</parameter>
+
+        <parameter key="dtl_content.phpcr_odm.serializer.flat.class">DTL\Component\Content\PhpcrOdm\Serializer\FlatSerializer</parameter>
+        <parameter key="dtl_content.phpcr_odm.serializer.property_name_encoder.class">DTL\Component\Content\PhpcrOdm\Serializer\PropertyNameEncoder</parameter>
+
+        <parameter key="dtl_content.phpcr_odm.event_subscriber.structure.class">DTL\Component\Content\PhpcrOdm\EventSubscriber\ContentSerializerSubscriber</parameter>
+        <parameter key="dtl_content.phpcr_odm.event_subscriber.name.class">DTL\Component\Content\PhpcrOdm\EventSubscriber\NameSubscriber</parameter>
+        <parameter key="dtl_content.phpcr_odm.event_subscriber.timestamp.class">DTL\Component\Content\PhpcrOdm\EventSubscriber\TimestampSubscriber</parameter>
+        <parameter key="dtl_content.phpcr_odm.event_subscriber.blame.class">DTL\Component\Content\PhpcrOdm\EventSubscriber\BlameSubscriber</parameter>
+        <parameter key="dtl_content.phpcr_odm.event_subscriber.namespace_registry.class">DTL\Component\Content\PhpcrOdm\EventSubscriber\NamespaceRegistrySubscriber</parameter>
         <parameter key="dtl_content.initializer.class">DTL\Bundle\ContentBundle\Initializer\PhpcrOdmInitializer</parameter>
     </parameters>
 
     <services>
-        <service id="dtl_content.event_subscriber.phpcr_odm.structure" class="%dtl_content.event_subscriber.phpcr_odm.structure.class%">
+        <!-- Namespace registry -->
+        <service id="dtl_content.phpcr_odm.namespace_registry" class="%dtl_content.phpcr_odm.namespace_registry.class%">
+            <argument type="collection" />
+        </service>
+
+        <!-- Serializer -->
+        <service id="dtl_content.phpcr_odm.serializer.flat" class="%dtl_content.phpcr_odm.serializer.flat.class%">
+            <argument type="service" id="dtl_content.structure.factory" />
+            <argument type="service" id="dtl_content.phpcr_odm.serializer.property_name_encoder" />
+        </service>
+
+        <service id="dtl_content.phpcr_odm.serializer.property_name_encoder" class="%dtl_content.phpcr_odm.serializer.property_name_encoder.class%">
+            <argument>lcon</argument>
+            <argument>ncon</argument>
+        </service>
+
+        <!-- Event subscribers -->
+        <service id="dtl_content.phpcr_odm.event_subscriber.structure" class="%dtl_content.phpcr_odm.event_subscriber.structure.class%">
             <argument type="service" id="doctrine_phpcr.odm.document_manager" />
-            <argument type="service" id="dtl_content.serializer.flat" />
+            <argument type="service" id="dtl_content.phpcr_odm.serializer.flat" />
             <tag name="doctrine_phpcr.event_subscriber" />
         </service>
 
-        <service id="dtl_content.event_subscriber.phpcr_odm.name" class="%dtl_content.event_subscriber.phpcr_odm.name.class%">
+        <service id="dtl_content.phpcr_odm.event_subscriber.name" class="%dtl_content.phpcr_odm.event_subscriber.name.class%">
             <argument type="service" id="doctrine_phpcr.odm.document_manager" />
             <argument type="service" id="cmf_routing_auto.slugifier" />
             <tag name="doctrine_phpcr.event_subscriber" />
@@ -29,12 +52,17 @@
             <tag name="doctrine_phpcr.initializer" />
         </service>
 
-        <service id="dtl_content.event_subscriber.phpcr_odm.timestamp" class="%dtl_content.event_subscriber.phpcr_odm.timestamp.class%">
+        <service id="dtl_content.phpcr_odm.event_subscriber.timestamp" class="%dtl_content.phpcr_odm.event_subscriber.timestamp.class%">
             <tag name="doctrine_phpcr.event_subscriber" />
         </service>
 
-        <service id="dtl_content.event_subscriber.phpcr_odm.blame" class="%dtl_content.event_subscriber.phpcr_odm.blame.class%">
+        <service id="dtl_content.phpcr_odm.event_subscriber.blame" class="%dtl_content.phpcr_odm.event_subscriber.blame.class%">
             <argument type="service" id="security.token_storage" />
+            <tag name="doctrine_phpcr.event_subscriber" />
+        </service>
+
+        <service id="dtl_content.phpcr_odm.event_subscriber.namespace_registry" class="%dtl_content.phpcr_odm.event_subscriber.namespace_registry.class%">
+            <argument type="service" id="dtl_content.phpcr_odm.namespace_registry" />
             <tag name="doctrine_phpcr.event_subscriber" />
         </service>
     </services>

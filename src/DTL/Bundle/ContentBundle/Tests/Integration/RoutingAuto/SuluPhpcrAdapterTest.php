@@ -41,7 +41,7 @@ class SuluPhpcrAdapterTest extends SuluTestCase
             array(
                 'resource/locator',
                 'This is my title',
-                '/resource/locator/this-is-my-title',
+                'resource/locator/this-is-my-title',
             ),
         );
     }
@@ -69,16 +69,14 @@ class SuluPhpcrAdapterTest extends SuluTestCase
         $page->setStructureType('contact');
         $page->setCreator(1);
         $page->setChanger(1);
-        $page->setCreated(new \DateTime());
-        $page->setChanged(new \DateTime());
         $page->setTitle($title);
         $page->setLocale('de');
         $this->manager->persist($page);
         $this->manager->flush();
 
+        $page = $this->manager->find(null, $page->getPath());
         $uriContextCollection = new UriContextCollection($page);
         $this->autoRouteManager->buildUriContextCollection($uriContextCollection);
-        $this->autoRouteManager->handleDefunctRoutes();
         $uriContexts = $uriContextCollection->getUriContexts();
         $this->assertCount(1, $uriContexts);
 

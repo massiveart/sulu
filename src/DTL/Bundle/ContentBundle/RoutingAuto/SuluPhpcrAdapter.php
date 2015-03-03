@@ -71,6 +71,7 @@ class SuluPhpcrAdapter extends PhpcrOdmAdapter
             $contentDocument->getWebspaceKey(),
             $uriContext->getLocale()
         ), '/');
+
         $uri = $uriContext->getUri();
 
         $parentDocument = $this->documentManager->find(null, $path);

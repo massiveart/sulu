@@ -14,6 +14,7 @@ use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCR;
 use DTL\Component\Content\Document\DocumentInterface;
 use DTL\Component\Content\Document\PageInterface;
 use PHPCR\NodeInterface;
+use DTL\Component\Content\PhpcrOdm\NamespaceRoleRegistry;
 
 /**
  * Base document class.
@@ -91,9 +92,14 @@ abstract class Document implements DocumentInterface
     protected $changed;
 
     /**
-     * @var array (not mapped, populated in an event listener)
+     * @var array Not mapped, populated in an event listener
      */
     protected $content = array();
+
+    /**
+     * @var NamespaceRegistry Not mapped, set by event listener
+     */
+    protected $namespaceRegistry;
 
     /**
      * @var NodeInterface
@@ -334,6 +340,11 @@ abstract class Document implements DocumentInterface
     public function hasChildren()
     {
         return count($this->children) ? true : false;
+    }
+
+    public function setNamespaceRegistry(NamespaceRoleRegistry $registry)
+    {
+        $this->namespaceRegistry = $registry;
     }
 
     public function __toString()

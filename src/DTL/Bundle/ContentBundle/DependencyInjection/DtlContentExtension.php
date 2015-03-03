@@ -32,7 +32,6 @@ class DtlContentExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('phpcr_odm.xml');
-        $loader->load('serializer.xml');
         $loader->load('form.xml');
         $loader->load('form_content_types.xml');
         $loader->load('routing_auto.xml');
