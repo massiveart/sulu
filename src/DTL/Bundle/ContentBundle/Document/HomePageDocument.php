@@ -14,11 +14,15 @@ use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCR;
 use DTL\Component\Content\Document\DocumentInterface;
 use DTL\Component\Content\Document\PageInterface;
 use PHPCR\NodeInterface;
-use DTL\Component\Content\EventSubscriber\Marker\AutoNameMarker;
 
 /**
- * Page document
+ * Base document class.
  */
-class PageDocument extends BasePageDocument implements AutoNameMarker
+class HomePageDocument extends BasePageDocument
 {
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
 }
+

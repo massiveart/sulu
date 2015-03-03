@@ -1,3 +1,7 @@
+DTL\Bundle\ContentBundle\Document\HomePageDocument:
+    uri_schema: "/"
+    conflict_resolver: throw_exception
+
 DTL\Bundle\ContentBundle\Document\PageDocument:
     uri_schema: "{url}/{title}"
     token_providers:

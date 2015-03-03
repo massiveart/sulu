@@ -126,7 +126,6 @@ abstract class Document implements DocumentInterface
      */
     public function setTitle($title)
     {
-        $this->name = $title; // set with ev listener
         $this->title = $title;
     }
 

@@ -12,6 +12,7 @@ use DTL\Component\Content\Document\PageInterface;
 use Sulu\Component\Webspace\Webspace;
 use Doctrine\ODM\PHPCR\DocumentManager;
 use DTL\Bundle\ContentBundle\Document\PageDocument;
+use DTL\Bundle\ContentBundle\Document\HomePageDocument;
 
 class PhpcrOdmInitializer implements InitializerInterface
 {
@@ -57,29 +58,33 @@ class PhpcrOdmInitializer implements InitializerInterface
 
             $session->save();
             $webspaceDocument = $documentManager->find(null, $webspaceNode->getPath());
+            $contentPath = sprintf('%s/%s', $webspaceNode->getPath(), $this->paths['content']);
+            $homepageDocument = $documentManager->find(null, $contentPath);
 
-            $homepage = $this->createHomepage($documentManager, $webspaceDocument, $webspace);
-
-            $this->createRoutes($documentManager, $webspace, $homepage);
+            if (null === $homepageDocument) {
+                $this->createHomepage($documentManager, $webspace, $webspaceDocument, $webspace);
+            }
         }
 
         $documentManager->flush();
     }
 
-    private function createHomepage(DocumentManager $manager, $webspaceDocument)
+    private function createHomepage(DocumentManager $manager, Webspace $webspace, $webspaceDocument)
     {
-        $page = new PageDocument();
-        $page->setStructureType('overview');
-        $page->setResourceLocator('');
-        $page->setLocale('en');
-        $page->setWorkflowStage(StructureInterface::STATE_PUBLISHED);
+        $page = new HomePageDocument();
+        $page->setName($this->paths['content']);
         $page->setParent($webspaceDocument);
         $manager->persist($page);
 
-        return $page;
-    }
+        foreach ($webspace->getLocalizations() as $localization) {
+            $page->setTitle('Homepage');
+            $page->setStructureType('overview');
+            $page->setResourceLocator('');
+            $page->setLocale('en');
+            $page->setWorkflowStage(StructureInterface::STATE_PUBLISHED);
+            $manager->bindTranslation($page, $localization->getLocalization());
+        }
 
-    public function createRoutes(DocumentManager $homepage, Webspace $webspace, PageInterface $page)
-    {
+        return $page;
     }
 }

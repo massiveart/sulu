@@ -6,8 +6,11 @@
         https://github.com/doctrine/phpcr-odm/raw/master/doctrine-phpcr-odm-mapping.xsd"
 >
 
-    <document name="DTL\Bundle\ContentBundle\Document\PageDocument">
-    </document>
+    <mapped-superclass name="DTL\Bundle\ContentBundle\Document\BasePageDocument">
+        <field name="published" type="date" translated="true" nullable="true"/>
+        <field name="workflowStage" type="long" translated="true" />
+        <field name="navigationContexts" type="string" multivalue="true" translated="true" nullable="true" />
+    </mapped-superclass>
 
 </doctrine-mapping>
 

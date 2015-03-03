@@ -10,6 +10,7 @@ use Doctrine\ODM\PHPCR\Event;
 use PHPCR\Util\UUIDHelper;
 use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
 use DTL\Component\Content\Document\DocumentInterface;
+use DTL\Component\Content\EventSubscriber\Marker\AutoNameMarker;
 
 /**
  * Manage the name of the document (node) before persisting.
@@ -75,7 +76,7 @@ class NameSubscriber implements EventSubscriber
     {
         $document = $event->getObject();
 
-        if (!$document instanceof DocumentInterface) {
+        if (!$document instanceof AutoNameMarker) {
             return;
         }
 
