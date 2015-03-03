@@ -35,6 +35,8 @@ class PageDocumentTest extends SuluTestCase
                     'Locale' => 'de',
                     'StructureType' => 'contact',
                     'ResourceLocator' => 'foo/bar',
+                    'ShadowLocaleEnabled' => true,
+                    'ShadowLocale' => 'de',
                     'Creator' => 2,
                     'Changer' => 3,
                     'Content' => array(
@@ -47,6 +49,8 @@ class PageDocumentTest extends SuluTestCase
             ),
             array(
                 array(
+                    'ShadowLocaleEnabled' => false,
+                    'ShadowLocale' => null,
                     'Title' => 'Foobar',
                     'Locale' => 'en',
                     'StructureType' => 'contact',
@@ -89,9 +93,14 @@ class PageDocumentTest extends SuluTestCase
         $document = $this->manager->find(null, $page->getPath());
 
         foreach ($data as $field => $expectedValue) {
+            $getter = 'get' . $field;
+            if (!method_exists($document, $getter)) {
+                $getter = 'is' . $field;
+            }
+
             $this->assertEquals(
                 $expectedValue,
-                $document->{'get' . $field}()
+                $document->{$getter}()
             );
         }
     }
@@ -173,5 +182,33 @@ class PageDocumentTest extends SuluTestCase
         }
 
         return $page;
+    }
+
+    public function testGetEnabledShadowLocales()
+    {
+        $page = new PageDocument();
+        $page->setTitle('Hello');
+        $page->setParent($this->parent);
+        $page->setStructureType('contact');
+        $page->setResourceLocator('/foo');
+        $this->manager->persist($page);
+        $this->manager->bindTranslation($page, 'de');
+
+        foreach (array('en', 'fr') as $locale) {
+            $page->setShadowLocale($locale);
+            $page->setShadowLocaleEnabled(true);
+            $this->manager->bindTranslation($page, $locale);
+        }
+
+        $this->manager->flush();
+        $this->manager->clear();
+
+        $page = $this->manager->find(null, '/cmf/sulu_io/contents/hello');
+        $this->assertNotNull($page);
+        $result = $page->getEnabledShadowLocales();
+
+        $this->assertEquals(array(
+            'en', 'fr',
+        ), $result);
     }
 }

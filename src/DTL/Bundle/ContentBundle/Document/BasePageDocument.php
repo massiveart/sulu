@@ -44,6 +44,16 @@ abstract class BasePageDocument extends Document implements PageInterface
      */
     protected $redirectType;
 
+    /**
+     * @var boolean
+     */
+    protected $shadowLocaleEnabled = false;
+
+    /**
+     * @var string
+     */
+    protected $shadowLocale;
+
     public function __construct()
     {
         $this->workflowStage = StructureInterface::STATE_TEST;
@@ -127,5 +137,47 @@ abstract class BasePageDocument extends Document implements PageInterface
     public function getDocumentType()
     {
         return 'page';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getShadowLocale() 
+    {
+        return $this->shadowLocale;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function setShadowLocale($shadowLocale)
+    {
+        $this->shadowLocale = $shadowLocale;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setShadowLocaleEnabled($shadowLocaleEnabled)
+    {
+        $this->shadowLocaleEnabled = $shadowLocaleEnabled;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isShadowLocaleEnabled()
+    {
+        return $this->shadowLocaleEnabled;
+    }
+
+    public function getEnabledShadowLocales()
+    {
+        if (null === $this->node) {
+            throw new \RuntimeException(
+                'Cannot retrieve enabled shadow locales on a non-persisted page. The PHPCR node ' .
+                'must be available'
+            );
+        }
     }
 }

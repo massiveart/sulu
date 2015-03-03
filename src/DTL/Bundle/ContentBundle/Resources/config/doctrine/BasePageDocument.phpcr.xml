@@ -10,6 +10,8 @@
         <field name="published" type="date" translated="true" nullable="true"/>
         <field name="workflowStage" type="long" translated="true" />
         <field name="navigationContexts" type="string" multivalue="true" translated="true" nullable="true" />
+        <field name="shadowLocaleEnabled" type="boolean" translated="true" />
+        <field name="shadowLocale" type="string" nullable="true" translated="true"/>
     </mapped-superclass>
 
 </doctrine-mapping>
