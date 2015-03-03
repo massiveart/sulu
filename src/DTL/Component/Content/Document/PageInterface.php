@@ -18,6 +18,19 @@ use Doctrine\ODM\PHPCR\ChildrenCollection;
  */
 interface PageInterface extends DocumentInterface
 {
+    const REDIRECT_TYPE_INTERNAL = 'internal';
+    const REDIRECT_TYPE_EXTERNAL = 'external';
+
+    /**
+     * Return the type of redirection to perform when the
+     * page is loaded. Returning null indicates no redirection.
+     *
+     * Must return one of the self::REDIRECT_TYPE_* constants.
+     *
+     * @return string
+     */
+    public function getRedirectType();
+
     /**
      * Return the resource locator (i.e. the URI)
      * for this document

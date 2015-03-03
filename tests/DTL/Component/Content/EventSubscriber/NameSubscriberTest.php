@@ -9,6 +9,7 @@ use DTL\Component\Content\Document\DocumentInterface;
 use Doctrine\ODM\PHPCR\Mapping\ClassMetadata;
 use Doctrine\ODM\PHPCR\UnitOfWork;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use DTL\Component\Content\EventSubscriber\Marker\AutoNameMarker;
 
 class NameSubscriberTest extends ProphecyTestCase
 {
@@ -25,7 +26,7 @@ class NameSubscriberTest extends ProphecyTestCase
     {
         $this->documentManager = $this->prophesize(DocumentManager::class);
         $this->slugifier = $this->prophesize(SlugifierInterface::class);
-        $this->document = $this->prophesize(DocumentInterface::class);
+        $this->document = $this->prophesize(AutoNameMarker::class);
         $this->parentDocument = new \stdClass;
         $this->classMetadata = $this->prophesize(ClassMetadata::class);
         $this->unitOfWork = $this->prophesize(UnitOfWork::class);

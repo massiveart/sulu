@@ -4,6 +4,7 @@ namespace DTL\Component\Content\Compat\Structure;
 
 use Sulu\Component\Content\StructureInterface;
 use DTL\Component\Content\Structure\Structure;
+use Sulu\Component\Content\Structure as LegacyStructure;
 use DTL\Bundle\ContentBundle\Document\Document;
 use Sulu\Component\Content\Property;
 use DTL\Component\Content\Structure\Property as NewProperty;
@@ -327,7 +328,59 @@ class StructureBridge implements StructureInterface
      */
     public function toArray($complete = true)
     {
-        $this->notImplemented(__METHOD__);
+        $result = array(
+            'id' => $this->getUuid(),
+            'nodeType' => $this->getNodeType(),
+            'internal' => false,
+            'concreteLanguages' => $this->document->getConcreteLanguages(),
+            'hasSub' => false,
+        );
+
+        if ($complete) {
+            $result = array(
+                'enabledShadowLanguages' => $this->document->getEnabledShadowLanguages(),
+                'shadowOn' => $this->document->getIsShadow(),
+                'shadowBaseLanguage' => $this->document->getShadowBaseLanguage() ? : false,
+                'template' => $this->structure->name,
+                'creator' => $this->document->getCreator(),
+                'changer' => $this->document->getChanger(),
+                'created' => $this->document->getCreated(),
+                'changed' => $this->document->getChanged()
+            );
+
+            if ($this->type !== null) {
+                $result['type'] = $this->getType()->toArray();
+            }
+
+            if ($this->structure->redirectType === self::NODE_TYPE_INTERNAL_LINK) {
+                $result['linked'] = 'internal';
+            } elseif ($this->redirectType === self::NODE_TYPE_EXTERNAL_LINK) {
+                $result['linked'] = 'external';
+            }
+
+            foreach ($this->structure->properties as $property) {
+                // serialize properties
+            }
+
+            return $result;
+        }
+
+        $result = array(
+            'path' => $this->path,
+            'title' => $this->getProperty('title')->toArray()
+        );
+
+        if ($this->type !== null) {
+            $result['type'] = $this->getType()->toArray();
+        }
+
+        if ($this->nodeType === self::NODE_TYPE_INTERNAL_LINK) {
+            $result['linked'] = 'internal';
+        } elseif ($this->nodeType === self::NODE_TYPE_EXTERNAL_LINK) {
+            $result['linked'] = 'external';
+        }
+
+        return $result;
     }
 
     /**
@@ -374,7 +427,23 @@ class StructureBridge implements StructureInterface
      */
     public function getNodeType()
     {
-        $this->notImplemented();
+        $redirectType = $this->document->getRedirectType();
+
+        if (null === $redirectType) {
+            return LegacyStructure::NODE_TYPE_CONTENT;
+        }
+
+        if (PageInterface::REDIRECT_TYPE_INTERNAL == $redirectType) {
+            return LegacyStructure::NODE_TYPE_INTERNAL_LINK;
+        }
+
+        if (PageInterface::REDIRECT_TYPE_EXTERNAL == $redirectType) {
+            return LegacyStructure::NODE_TYPE_EXTERNAL_LINK;
+        }
+
+        throw new \InvalidArgumentException(sprintf(
+            'Unknown redirect type "%s"', $redirectType
+        ));
     }
 
     /**

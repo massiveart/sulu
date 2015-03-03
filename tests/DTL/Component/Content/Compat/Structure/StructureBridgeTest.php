@@ -5,6 +5,8 @@ namespace DTL\Component\Content\Compat\Structure;
 use DTL\Component\Content\Structure\Structure;
 use DTL\Component\Content\Structure\Property;
 use DTL\Component\Content\Compat\Structure\StructureBridge;
+use Sulu\Component\Content\Structure as LegacyStructure;
+use DTL\Component\Content\Document\PageInterface;
 
 class StructureBridgeTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,6 +39,8 @@ class StructureBridgeTest extends \PHPUnit_Framework_TestCase
         $structure->properties['prop_2']->cssClass = 'blue-moon';
 
         $this->structure = $structure;
+        $this->page = $this->prophesize('DTL\Component\Content\Document\PageInterface');
+
         $this->bridge = new StructureBridge($this->structure);
     }
 
@@ -117,5 +121,31 @@ class StructureBridgeTest extends \PHPUnit_Framework_TestCase
     public function testPropertyTags()
     {
         $this->markTestIncomplete('Write this test');
+    }
+
+    public function provideGetNodeType()
+    {
+        return array(
+            array(PageInterface::REDIRECT_TYPE_INTERNAL, LegacyStructure::NODE_TYPE_INTERNAL_LINK),
+            array(PageInterface::REDIRECT_TYPE_EXTERNAL, LegacyStructure::NODE_TYPE_EXTERNAL_LINK),
+            array(null, LegacyStructure::NODE_TYPE_CONTENT),
+            array('not valid', null, true),
+        );
+    }
+
+    /**
+     * @dataProvider provideGetNodeType
+     */
+    public function testGetNodeType($redirectType, $expectedNodeType, $exception = false)
+    {
+        if ($exception) {
+            $this->setExpectedException('InvalidArgumentException', 'Unknown redirect type');
+        }
+
+        $this->page->getRedirectType()->willReturn($redirectType);
+        $this->bridge->setDocument($this->page->reveal());
+        $result = $this->bridge->getNodeType();
+
+        $this->assertEquals($expectedNodeType, $result);
     }
 }
