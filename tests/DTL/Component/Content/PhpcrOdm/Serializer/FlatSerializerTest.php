@@ -14,6 +14,8 @@ use Prophecy\PhpUnit\ProphecyTestCase;
 use DTL\Component\Content\Structure\Structure;
 use DTL\Component\Content\Structure\Property;
 use DTL\Component\Content\PhpcrOdm\Serializer\PropertyNameEncoder;
+use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
+use DTL\Component\Content\PhpcrOdm\NamespaceRoleRegistry;
 
 class FlatSerializerTest extends ProphecyTestCase
 {
@@ -25,7 +27,10 @@ class FlatSerializerTest extends ProphecyTestCase
         $this->document = $this->prophesize('DTL\Component\Content\Document\DocumentInterface');
         $this->document->getDocumentType()->willReturn('page');
         $this->node = $this->prophesize('PHPCR\NodeInterface');
-        $this->encoder = new PropertyNameEncoder('i18n', 'cont');
+        $this->helper = new DocumentNodeHelper(new NamespaceRoleRegistry(array(
+            'localized-content' => 'i18n',
+            'content' => 'cont',
+        )));
 
         $this->structureFactory->getStructure('page', 'test')->willReturn(
             $this->structure
@@ -33,7 +38,7 @@ class FlatSerializerTest extends ProphecyTestCase
 
         $this->serializer = new FlatSerializer(
             $this->structureFactory->reveal(),
-            $this->encoder
+            $this->helper
         );
     }
 

@@ -11,14 +11,15 @@
 namespace DTL\Component\Content\PhpcrOdm\EventSubscriber;
 
 use Doctrine\Common\EventSubscriber;
-use DTL\Component\Content\PhpcrOdm\NamespaceRoleRegistry;
+use DTL\Component\Content\PhpcrOdm\NamespaceRoleHelper;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use DTL\Component\Content\Document\DocumentInterface;
 use Doctrine\ODM\PHPCR\Event;
+use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
 
-class NamespaceRegistrySubscriber implements EventSubscriber
+class DocumentNodeHelperSubscriber implements EventSubscriber
 {
-    private $registry;
+    private $helper;
 
     /**
      * {@inheritDoc}
@@ -31,11 +32,11 @@ class NamespaceRegistrySubscriber implements EventSubscriber
     }
 
     /**
-     * @param NamespaceRoleRegistry $registry
+     * @param NamespaceRoleHelper $helper
      */
-    public function __construct(NamespaceRoleRegistry $registry)
+    public function __construct(DocumentNodeHelper $helper)
     {
-        $this->registry = $registry;
+        $this->helper = $helper;
     }
 
     /**
@@ -49,6 +50,6 @@ class NamespaceRegistrySubscriber implements EventSubscriber
             return;
         }
 
-        $document->setNamespaceRegistry($this->registry);
+        $document->setDocumentNodeHelper($this->helper);
     }
 }

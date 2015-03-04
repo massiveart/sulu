@@ -11,9 +11,9 @@
 namespace DTL\Component\Content\PhpcrOdm\Serializer;
 
 use PHPCR\NodeInterface;
-use DTL\Component\Content\PhpcrOdm\Serializer\PropertyNameEncoderInterface;
 use DTL\Component\Content\Document\DocumentInterface;
 use DTL\Component\Content\Structure\Factory\StructureFactory;
+use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
 
 /**
  * Serialize content data into a series of properties in a single node.
@@ -28,19 +28,19 @@ class FlatSerializer implements SerializerInterface
     private $structureFactory;
 
     /**
-     * @var PropertyNameEncoderInterface
+     * @var DocumentNodeHelper
      */
-    private $propertyNameEncoder;
+    private $nodeHelper;
 
     /**
      * @param StructureFactory $structureFactory
      */
     public function __construct(
         StructureFactory $structureFactory, 
-        PropertyNameEncoderInterface $propertyNameEncoder)
+        DocumentNodeHelper $nodeHelper)
     {
         $this->structureFactory = $structureFactory;
-        $this->propertyNameEncoder = $propertyNameEncoder;
+        $this->nodeHelper = $nodeHelper;
     }
 
     /**
@@ -69,12 +69,12 @@ class FlatSerializer implements SerializerInterface
         }
 
         foreach ($this->flatten($localizedProps) as $propName => $propValue) {
-            $propName = $this->propertyNameEncoder->encodeLocalized($propName, $document->getLocale());
+            $propName = $this->nodeHelper->encodeLocalizedContentName($propName, $document->getLocale());
             $node->setProperty($propName, $propValue);
         }
 
         foreach ($this->flatten($nonLocalizedProps) as $propName => $propValue) {
-            $propName = $this->propertyNameEncoder->encode($propName);
+            $propName = $this->nodeHelper->encodeContentName($propName);
             $node->setProperty($propName, $propValue);
         }
 
@@ -95,12 +95,12 @@ class FlatSerializer implements SerializerInterface
         $flatData = array();
 
         foreach (array_keys($structure->getLocalizedProperties()) as $name) {
-            $prefix = $this->propertyNameEncoder->encodeLocalized($name, $document->getLocale());
+            $prefix = $this->nodeHelper->encodeLocalizedContentName($name, $document->getLocale());
             $flatData = array_merge($flatData, $this->extractProperties($name, $prefix, $nodeProperties));
         }
 
         foreach (array_keys($structure->getNonLocalizedProperties()) as $name) {
-            $prefix = $this->propertyNameEncoder->encode($name);
+            $prefix = $this->nodeHelper->encodeContentName($name);
             $flatData = array_merge($flatData, $this->extractProperties($name, $prefix, $nodeProperties));
         }
 

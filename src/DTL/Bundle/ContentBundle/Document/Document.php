@@ -15,6 +15,7 @@ use DTL\Component\Content\Document\DocumentInterface;
 use DTL\Component\Content\Document\PageInterface;
 use PHPCR\NodeInterface;
 use DTL\Component\Content\PhpcrOdm\NamespaceRoleRegistry;
+use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
 
 /**
  * Base document class.
@@ -97,9 +98,9 @@ abstract class Document implements DocumentInterface
     protected $content = array();
 
     /**
-     * @var NamespaceRegistry Not mapped, set by event listener
+     * @var DocumentNodeHelper
      */
-    protected $namespaceRegistry;
+    protected $documentNodeHelper;
 
     /**
      * @var NodeInterface
@@ -342,9 +343,18 @@ abstract class Document implements DocumentInterface
         return count($this->children) ? true : false;
     }
 
-    public function setNamespaceRegistry(NamespaceRoleRegistry $registry)
+    /**
+     * {@inheritDoc}
+     */
+    public function setDocumentNodeHelper(DocumentNodeHelper $documentNodeHelper)
     {
-        $this->namespaceRegistry = $registry;
+        if (null !== $this->documentNodeHelper) {
+            throw new \RuntimeException(
+                'Document helper has already been set. Cannot replace it.'
+            );
+        }
+
+        $this->documentNodeHelper = $documentNodeHelper;
     }
 
     public function __toString()

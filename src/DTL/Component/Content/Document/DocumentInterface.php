@@ -12,6 +12,7 @@ namespace DTL\Component\Content\Document;
 
 use Doctrine\ODM\PHPCR\ChildrenCollection;
 use DTL\Component\Content\PhpcrOdm\NamespaceRoleRegistry;
+use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
 
 /**
  * Documents are the basic content data units in Sulu
@@ -200,12 +201,17 @@ interface DocumentInterface
     public function getDepth();
 
     /**
-     * Set the namespace role registry.
-     * This is required when introspecting the contents of the node.
+     * Set the document node helper. This should be set by an event
+     * subscriber on the onLoad lifecycle event.
      *
-     * NOTE: Could be in a separate "NamespaceRegistryAware" interface
+     * This should only be set one time and would ideally be a cosntuctor
+     * argument. The implementing class should throw an exception if
+     * a helper is already set.
      *
-     * @param NamespaceRoleRegistry
+     * @throws RuntimeException If the helper has already been set.
+     *
+     * @param DocumentNodeHelper $helper
+     *
      */
-    public function setNamespaceRegistry(NamespaceRoleRegistry $registry);
+    public function setDocumentNodeHelper(DocumentNodeHelper $helper);
 }

@@ -44,6 +44,7 @@ class DtlContentExtension extends Extension
         $container->setParameter('dtl_content.compat', $compat);
 
         $this->processStructure($config['structure'], $container);
+        $this->processPhpcrOdm($config['phpcr_odm'], $container);
     }
 
     private function processStructure($config, ContainerBuilder $container)
@@ -64,6 +65,12 @@ class DtlContentExtension extends Extension
         }
 
         $container->setParameter('dtl_content.structure.paths', $typePaths);
+    }
+
+    private function processPhpcrOdm($config, ContainerBuilder $container)
+    {
+        $namespaceRegistry = $container->getDefinition('dtl_content.phpcr_odm.namespace_registry');
+        $namespaceRegistry->replaceArgument(0, $config['namespaces']);
     }
 }
 
