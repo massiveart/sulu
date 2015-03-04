@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\Serializer;
+namespace DTL\Component\Content\PhpcrOdm\Serializer;
 
 use PHPCR\NodeInterface;
 use DTL\Component\Content\Document\DocumentInterface;

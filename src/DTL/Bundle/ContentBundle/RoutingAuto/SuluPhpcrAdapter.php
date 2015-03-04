@@ -128,18 +128,17 @@ class SuluPhpcrAdapter extends PhpcrOdmAdapter
      */
     public function findRouteForUri($uri, UriContext $uriContext)
     {
-        if ($uri == '/') {
-            $uri = '';
-        }
-
         $subject = $uriContext->getSubjectObject();
         $webspace = $subject->getWebspaceKey();
         $locale = $uriContext->getLocale();
+
         $path = sprintf('%s%s',
-            rtrim($this->sessionManager->getRoutePath($webspace, $locale), '/'),
+            $trimmed = rtrim($this->sessionManager->getRoutePath($webspace, $locale), '/'),
             $uri
         );
 
-        return $this->dm->find(null, $path);
+        $route = $this->dm->find(null, $path);
+
+        return $route;
     }
 }

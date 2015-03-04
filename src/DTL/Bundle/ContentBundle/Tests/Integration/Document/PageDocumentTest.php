@@ -34,7 +34,7 @@ class PageDocumentTest extends SuluTestCase
                     'Title' => 'Foobar',
                     'Locale' => 'de',
                     'StructureType' => 'contact',
-                    'ResourceLocator' => 'foo/bar',
+                    'ResourceLocator' => '/foo/bar',
                     'ShadowLocaleEnabled' => true,
                     'ShadowLocale' => 'de',
                     'Creator' => 2,
@@ -54,7 +54,7 @@ class PageDocumentTest extends SuluTestCase
                     'Title' => 'Foobar',
                     'Locale' => 'en',
                     'StructureType' => 'contact',
-                    'ResourceLocator' => 'foo/bar',
+                    'ResourceLocator' => '/foo/bar',
                     'Creator' => 2,
                     'Changer' => 3,
                     'Content' => array(

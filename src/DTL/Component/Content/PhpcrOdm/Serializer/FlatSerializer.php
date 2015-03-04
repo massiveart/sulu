@@ -8,10 +8,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\Serializer;
+namespace DTL\Component\Content\PhpcrOdm\Serializer;
 
 use PHPCR\NodeInterface;
-use DTL\Component\Content\Serializer\PropertyNameEncoderInterface;
+use DTL\Component\Content\PhpcrOdm\Serializer\PropertyNameEncoderInterface;
 use DTL\Component\Content\Document\DocumentInterface;
 use DTL\Component\Content\Structure\Factory\StructureFactory;
 

@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\EventSubscriber\Marker;
+namespace DTL\Component\Content\PhpcrOdm\EventSubscriber\Marker;
 
 use DTL\Component\Content\Document\DocumentInterface;
 

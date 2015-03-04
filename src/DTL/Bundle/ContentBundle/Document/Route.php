@@ -106,6 +106,12 @@ class Route implements RouteObjectInterface, AutoRouteInterface
         $this->parent = $parent;
     }
 
+    public function getName() 
+    {
+        return $this->name;
+    }
+    
+
     public function setName($name)
     {
         $this->name = $name;

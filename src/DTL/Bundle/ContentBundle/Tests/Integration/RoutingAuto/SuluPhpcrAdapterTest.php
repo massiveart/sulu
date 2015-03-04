@@ -39,9 +39,9 @@ class SuluPhpcrAdapterTest extends SuluTestCase
     {
         return array(
             array(
-                'resource/locator',
+                '/resource/locator',
                 'This is my title',
-                'resource/locator/this-is-my-title',
+                '/resource/locator/this-is-my-title',
             ),
         );
     }
@@ -57,8 +57,8 @@ class SuluPhpcrAdapterTest extends SuluTestCase
 
     public function testRedirect()
     {
-        $this->createUriContexts('this', 'Foo bar');
-        $this->createUriContexts('this-is-new', 'Foo bar');
+        $this->createUriContexts('/this', 'Foo bar');
+        $this->createUriContexts('/this-is-new', 'Foo bar');
     }
 
     private function createUriContexts($resourceLocator, $title)

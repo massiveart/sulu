@@ -11,6 +11,7 @@
 namespace DTL\Component\Content\Document;
 
 use Doctrine\ODM\PHPCR\ChildrenCollection;
+use DTL\Component\Content\PhpcrOdm\NamespaceRoleRegistry;
 
 /**
  * Documents are the basic content data units in Sulu
@@ -197,5 +198,14 @@ interface DocumentInterface
      * @return integer
      */
     public function getDepth();
-    
+
+    /**
+     * Set the namespace role registry.
+     * This is required when introspecting the contents of the node.
+     *
+     * NOTE: Could be in a separate "NamespaceRegistryAware" interface
+     *
+     * @param NamespaceRoleRegistry
+     */
+    public function setNamespaceRegistry(NamespaceRoleRegistry $registry);
 }

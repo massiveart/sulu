@@ -8,11 +8,11 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\EventSubscriber;
+namespace DTL\Component\Content\PhpcrOdm\EventSubscriber;
 
 use Doctrine\ODM\PHPCR\Event;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use DTL\Component\Content\Serializer\SerializerInterface;
+use DTL\Component\Content\PhpcrOdm\Serializer\SerializerInterface;
 use DTL\Bundle\ContentBundle\Document\ContentDocument;
 use Doctrine\ODM\PHPCR\DocumentManager;
 use Doctrine\Common\EventSubscriber;

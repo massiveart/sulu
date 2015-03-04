@@ -69,4 +69,30 @@ interface PageInterface extends DocumentInterface
      * @return mixed
      */
     public function getWorkflowStage();
+
+    /**
+     * Return a list of all locales on this node which are shadows of another
+     * locale.  Therefore, the return value of this method is independent of
+     * the current locale.
+     *
+     * @return string[]
+     */
+    public function getEnabledShadowLocales();
+
+    /**
+     * Return the shadow locale for this page for it's current locale (as
+     * determined by getLocale). The value may be null if the shadow locale has
+     * not yet been used.
+     *
+     * @return string|null
+     */
+    public function getShadowLocale();
+
+    /**
+     * Return true if the shadow locale is enabled for the current locale of
+     * this document, false otherwise.
+     *
+     * @return boolean
+     */
+    public function isShadowLocaleEnabled();
 }

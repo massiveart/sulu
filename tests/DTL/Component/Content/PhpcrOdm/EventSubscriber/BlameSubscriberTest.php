@@ -1,6 +1,6 @@
 <?php
 
-namespace DTL\Component\Content\EventSubscriber;
+namespace DTL\Component\Content\PhpcrOdm\EventSubscriber;
 
 use Prophecy\PhpUnit\ProphecyTestCase;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;

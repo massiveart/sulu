@@ -1,6 +1,6 @@
 <?php
 
-namespace DTL\Component\Content\EventSubscriber;
+namespace DTL\Component\Content\PhpcrOdm\EventSubscriber;
 
 use DTL\Bundle\ContentBundle\Document\DocumentName;
 use Doctrine\ODM\PHPCR\DocumentManager;
@@ -13,15 +13,10 @@ use DTL\Component\Content\Document\DocumentInterface;
 use DTL\Component\Content\EventSubscriber\Marker\AutoNameMarker;
 
 /**
- * Manage the name of the document (node) before persisting.
- *
- * The document should have a unique name based upon the primary
- * locale.
- *
- * TODO: This class should use the primary locale, current it changes
- *       the node name each time a specific locale is persisted.
+ * Make the configured PHPCR namespaces available within
+ * classes implementing the DocumentInterface
  */
-class NameSubscriber implements EventSubscriber
+class PhpcrNamespaceSubscriber implements EventSubscriber
 {
     private $documentManager;
     private $slugifier;
@@ -159,3 +154,4 @@ class NameSubscriber implements EventSubscriber
         return $path;
     }
 }
+

@@ -8,10 +8,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\Serializer;
+namespace DTL\Component\Content\PhpcrOdm\Serializer;
 
 use Prophecy\PhpUnit\ProphecyTestCase;
-use DTL\Component\Content\EventSubscriber\ContentSerializerSubscriber;
+use DTL\Component\Content\PhpcrOdm\EventSubscriber\ContentSerializerSubscriber;
 use Prophecy\Argument;
 
 class ContentSerializerSubscriberTest extends ProphecyTestCase
@@ -24,7 +24,7 @@ class ContentSerializerSubscriberTest extends ProphecyTestCase
         parent::setUp();
 
         $this->documentManager = $this->prophesize('Doctrine\ODM\PHPCR\DocumentManager');
-        $this->serializer = $this->prophesize('DTL\Component\Content\Serializer\SerializerInterface');
+        $this->serializer = $this->prophesize('DTL\Component\Content\PhpcrOdm\Serializer\SerializerInterface');
         $this->document = $this->prophesize('DTL\Component\Content\Document\DocumentInterface');
         $this->node = $this->prophesize('PHPCR\NodeInterface');
         $this->notContent = new \stdClass;

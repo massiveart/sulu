@@ -8,10 +8,10 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Component\Content\Serializer;
+namespace DTL\Component\Content\PhpcrOdm\Serializer;
 
 use Prophecy\PhpUnit\ProphecyTestCase;
-use DTL\Component\Content\Serializer\PropertyNameEncoder;
+use DTL\Component\Content\PhpcrOdm\Serializer\PropertyNameEncoder;
 
 class PropertyNameEncoderTest extends ProphecyTestCase
 {
