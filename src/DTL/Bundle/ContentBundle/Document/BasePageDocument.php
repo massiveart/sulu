@@ -171,6 +171,9 @@ abstract class BasePageDocument extends Document implements PageInterface
         return $this->shadowLocaleEnabled;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getEnabledShadowLocales()
     {
         if (null === $this->node) {
@@ -179,5 +182,7 @@ abstract class BasePageDocument extends Document implements PageInterface
                 'must be available'
             );
         }
+
+        return $this->documentNodeHelper->getEnabledShadowLocales($this->node);
     }
 }

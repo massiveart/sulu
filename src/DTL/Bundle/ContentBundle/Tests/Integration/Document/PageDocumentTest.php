@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Content;
+namespace DTL\Bundle\ContentBundle\Tests\Integration\Document;
 
 use Sulu\Bundle\TestBundle\Testing\SuluTestCase;
 use Symfony\Component\Form\FormInterface;

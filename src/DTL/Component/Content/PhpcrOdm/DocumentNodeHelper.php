@@ -31,22 +31,23 @@ class DocumentNodeHelper
      */
     public function getLocalesForPropertyName(NodeInterface $node, $name, $role)
     {
-        $locales = array();
-        $namespaceAlias = $this->namespaceRegistry->getAlias($role);
+        $properties = $this->getLocalizedProperties($node, $name, $role);
 
-        $properties = $node->getProperties(sprintf(
-            '%s:*', $namespaceAlias
-        ));
+        return array_keys($properties);
+    }
 
-        foreach ($properties as $property) {
-            if (!preg_match($p = sprintf('{%s:([a-z_A-Z]+)-%s}', $namespaceAlias, $name), $property->getName(), $matches)) {
-                continue;
-            }
+    /**
+     * Return the shadow locales which are enabled for the given
+     * document node.
+     */
+    public function getEnabledShadowLocales(NodeInterface $node)
+    {
+        $properties = $this->getLocalizedProperties($node, 'shadowLocaleEnabled', 'localized-system');
+        $properties = array_filter($properties, function ($property) {
+            return $property->getValue();
+        });
 
-            $locales[] = $matches[1];
-        }
-
-        return $locales;
+        return array_keys($properties);
     }
 
     /**
@@ -82,5 +83,36 @@ class DocumentNodeHelper
             $this->namespaceRegistry->getAlias('content'),
             $propName
         );
+    }
+
+    private function extractLocaleForName($namespaceAlias, $name, $propertyName)
+    {
+        if (!preg_match(sprintf('{%s:([a-z_A-Z]+)-%s}', $namespaceAlias, $name), $propertyName, $matches)) {
+            return null;
+        }
+
+        return $matches[1];
+    }
+
+    private function getLocalizedProperties(NodeInterface $node, $name, $role)
+    {
+        $localizedProperties = array();
+        $namespaceAlias = $this->namespaceRegistry->getAlias($role);
+
+        $properties = $node->getProperties(sprintf(
+            '%s:*', $namespaceAlias
+        ));
+
+        foreach ($properties as $property) {
+            $locale = $this->extractLocaleForName($namespaceAlias, $name, $property->getName());
+
+            if (null === $locale) {
+                continue;
+            }
+
+            $localizedProperties[$locale] = $property;
+        }
+
+        return $localizedProperties;
     }
 }
