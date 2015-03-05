@@ -67,10 +67,7 @@ class SuluPhpcrAdapter extends PhpcrOdmAdapter
      */
     public function createAutoRoute(UriContext $uriContext, $contentDocument, $autoRouteTag)
     {
-        $path = rtrim($this->sessionManager->getRoutePath(
-            $contentDocument->getWebspaceKey(),
-            $uriContext->getLocale()
-        ), '/');
+        $path = $this->generateRoutePath($contentDocument->getWebspaceKey(), $uriContext->getLocale());
 
         $uri = $uriContext->getUri();
 
@@ -131,14 +128,18 @@ class SuluPhpcrAdapter extends PhpcrOdmAdapter
         $subject = $uriContext->getSubjectObject();
         $webspace = $subject->getWebspaceKey();
         $locale = $uriContext->getLocale();
-
-        $path = sprintf('%s%s',
-            $trimmed = rtrim($this->sessionManager->getRoutePath($webspace, $locale), '/'),
-            $uri
-        );
+        $path = $this->generateRoutePath($webspace, $locale, $uri);
 
         $route = $this->dm->find(null, $path);
 
         return $route;
+    }
+
+    private function generateRoutePath($webspace, $locale, $uri = '')
+    {
+        return rtrim(sprintf('%s%s',
+            rtrim($this->sessionManager->getRoutePath($webspace, $locale), '/'),
+            $uri
+        ), '/');
     }
 }
