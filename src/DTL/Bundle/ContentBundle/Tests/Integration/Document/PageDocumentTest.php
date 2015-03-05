@@ -16,6 +16,7 @@ use DTL\Component\Content\Form\ContentView;
 use DTL\Bundle\ContentBundle\Document\PageDocument;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 use Symfony\Component\HttpFoundation\Request;
+use DTL\Component\Content\Document\DocumentInterface;
 
 class PageDocumentTest extends SuluTestCase
 {
@@ -94,9 +95,6 @@ class PageDocumentTest extends SuluTestCase
 
         foreach ($data as $field => $expectedValue) {
             $getter = 'get' . $field;
-            if (!method_exists($document, $getter)) {
-                $getter = 'is' . $field;
-            }
 
             $this->assertEquals(
                 $expectedValue,
@@ -106,6 +104,10 @@ class PageDocumentTest extends SuluTestCase
         }
     }
 
+    /**
+     * Assert the persisting the document in different locales
+     * works.
+     */
     public function testLocalization()
     {
         $calls = $this->provideMapping();
@@ -119,6 +121,8 @@ class PageDocumentTest extends SuluTestCase
         }
 
         $this->manager->flush();
+
+        $this->markTestIncomplete('No assertions are made here');
     }
 
     /**
@@ -187,25 +191,7 @@ class PageDocumentTest extends SuluTestCase
 
     public function testGetEnabledShadowLocales()
     {
-        $page = new PageDocument();
-        $page->setTitle('Hello');
-        $page->setParent($this->parent);
-        $page->setStructureType('contact');
-        $page->setResourceLocator('/foo');
-        $this->manager->persist($page);
-        $this->manager->bindTranslation($page, 'de');
-
-        foreach (array('en', 'fr') as $locale) {
-            $page->setShadowLocale($locale);
-            $page->setShadowLocaleEnabled(true);
-            $this->manager->bindTranslation($page, $locale);
-        }
-
-        $this->manager->flush();
-        $this->manager->clear();
-
-        $page = $this->manager->find(null, '/cmf/sulu_io/contents/hello');
-        $this->assertNotNull($page);
+        $page = $this->createLocalizedPage('de', array('en', 'fr'));
         $result = $page->getShadowLocales();
 
         $this->assertEquals(array(
@@ -215,15 +201,53 @@ class PageDocumentTest extends SuluTestCase
 
     public function testGetRealLocales()
     {
+        $page = $this->createLocalizedPage('de', array('en', 'fr'));
+        $result = $page->getRealLocales();
+
+        $this->assertEquals(array(
+            'de'
+        ), $result);
+    }
+
+    public function provideGetLocalizationState()
+    {
+        return array(
+            array(
+                'de', 'de', array(),
+                DocumentInterface::LOCALIZATION_STATE_LOCALIZED,
+            ),
+            array(
+                'de', 'fr', array(),
+                DocumentInterface::LOCALIZATION_STATE_GHOST,
+            ),
+            array(
+                'de', 'fr', array('de'),
+                DocumentInterface::LOCALIZATION_STATE_SHADOW,
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider provideGetLocalizationState
+     */
+    public function testGetLocalizationState($requestedLocale, $locale, $shadowLocales, $expectedState)
+    {
+        $page = $this->createLocalizedPage($locale, $shadowLocales);
+
+        $this->assertEquals($expectedState, $page->getLocalizationState());
+    }
+
+    private function createLocalizedPage($locale, array $shadowLocales, $loadInLocale = null)
+    {
         $page = new PageDocument();
         $page->setTitle('Hello');
         $page->setParent($this->parent);
         $page->setStructureType('contact');
         $page->setResourceLocator('/foo');
         $this->manager->persist($page);
-        $this->manager->bindTranslation($page, 'de');
+        $this->manager->bindTranslation($page, $locale);
 
-        foreach (array('en', 'fr') as $locale) {
+        foreach ($shadowLocales as $locale) {
             $page->setShadowLocale($locale);
             $page->setShadowLocaleEnabled(true);
             $this->manager->bindTranslation($page, $locale);
@@ -232,12 +256,9 @@ class PageDocumentTest extends SuluTestCase
         $this->manager->flush();
         $this->manager->clear();
 
-        $page = $this->manager->find(null, '/cmf/sulu_io/contents/hello');
+        $page = $this->manager->findTranslation(null, '/cmf/sulu_io/contents/hello', $locale, true);
         $this->assertNotNull($page);
-        $result = $page->getRealLocales();
 
-        $this->assertEquals(array(
-            'de'
-        ), $result);
+        return $page;
     }
 }

@@ -70,6 +70,20 @@ interface PageInterface extends DocumentInterface
     public function getShadowLocales();
 
     /**
+     * Return true if shadow localization has been enabled on this page
+     *
+     * @return boolean
+     */
+    public function getShadowLocaleEnabled();
+
+    /**
+     * Enable or disable shadow localization on this page
+     *
+     * @param boolean $shadowLocaleEnabled
+     */
+    public function setShadowLocaleEnabled($shadowLocaleEnabled);
+
+    /**
      * Return all real locales whch exist for this page (excluding shadow locales)
      *
      * @return string[]
@@ -84,12 +98,4 @@ interface PageInterface extends DocumentInterface
      * @return string|null
      */
     public function getShadowLocale();
-
-    /**
-     * Return true if the shadow locale is enabled for the current locale of
-     * this document, false otherwise.
-     *
-     * @return boolean
-     */
-    public function isShadowLocaleEnabled();
 }

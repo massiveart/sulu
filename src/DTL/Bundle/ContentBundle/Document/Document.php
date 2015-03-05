@@ -371,6 +371,32 @@ abstract class Document implements DocumentInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getLocalizationState()
+    {
+        $locales = $this->getLocales();
+        var_dump($locales);
+        var_dump($this->getLocale());
+
+        if (in_array($this->getLocale(), $locales)) {
+            return DocumentInterface::LOCALIZATION_STATE_LOCALIZED;
+        }
+
+        return DocumentInterface::LOCALIZATION_STATE_GHOST;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLocales()
+    {
+        $this->assertPersisted(__METHOD__);
+
+        return $this->documentNodeHelper->getLocales($this->node);
+    }
+
+    /**
      * Magic __toString method.
      *
      * @return string

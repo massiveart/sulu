@@ -13,6 +13,7 @@ namespace DTL\Bundle\ContentBundle\Document;
 use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCR;
 use Sulu\Component\Content\StructureInterface;
 use DTL\Component\Content\Document\PageInterface;
+use DTL\Component\Content\Document\DocumentInterface;
 
 /**
  * Page document class
@@ -145,17 +146,17 @@ abstract class BasePageDocument extends Document implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function setShadowLocaleEnabled($shadowLocaleEnabled)
+    public function getShadowLocaleEnabled() 
     {
-        $this->shadowLocaleEnabled = $shadowLocaleEnabled;
+        return $this->shadowLocaleEnabled;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function isShadowLocaleEnabled()
+    public function setShadowLocaleEnabled($shadowLocaleEnabled)
     {
-        return $this->shadowLocaleEnabled;
+        $this->shadowLocaleEnabled = $shadowLocaleEnabled;
     }
 
     /**
@@ -180,5 +181,17 @@ abstract class BasePageDocument extends Document implements PageInterface
         $realLocales = array_diff($locales, $shadowLocales);
 
         return $realLocales;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLocalizationState()
+    {
+        if (true === $this->shadowLocaleEnabled) {
+            return DocumentInterface::LOCALIZATION_STATE_SHADOW;
+        }
+
+        return parent::getLocalizationState();
     }
 }

@@ -332,15 +332,15 @@ class StructureBridge implements StructureInterface
             'id' => $this->getUuid(),
             'nodeType' => $this->getNodeType(),
             'internal' => false,
-            'concreteLanguages' => $this->document->getConcreteLanguages(),
+            'concreteLanguages' => $this->document->getRealLocales(),
             'hasSub' => false,
         );
 
         if ($complete) {
             $result = array(
                 'enabledShadowLanguages' => $this->document->getShadowLocales(),
-                'shadowOn' => $this->document->getIsShadow(),
-                'shadowBaseLanguage' => $this->document->getShadowBaseLanguage() ? : false,
+                'shadowOn' => $this->document->isShadowLocaleEnabled(),
+                'shadowBaseLanguage' => $this->document->getShadowLocale() ? : false,
                 'template' => $this->structure->name,
                 'creator' => $this->document->getCreator(),
                 'changer' => $this->document->getChanger(),

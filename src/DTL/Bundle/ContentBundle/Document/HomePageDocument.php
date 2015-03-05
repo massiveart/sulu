@@ -16,7 +16,7 @@ use DTL\Component\Content\Document\PageInterface;
 use PHPCR\NodeInterface;
 
 /**
- * Base document class.
+ * Represents the homepage for a webspace
  */
 class HomePageDocument extends BasePageDocument
 {

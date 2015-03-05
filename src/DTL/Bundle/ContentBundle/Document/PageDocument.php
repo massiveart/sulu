@@ -17,7 +17,7 @@ use PHPCR\NodeInterface;
 use DTL\Component\Content\PhpcrOdm\EventSubscriber\Marker\AutoNameMarker;
 
 /**
- * Page document
+ * Page document represents a standard page.
  */
 class PageDocument extends BasePageDocument implements AutoNameMarker
 {

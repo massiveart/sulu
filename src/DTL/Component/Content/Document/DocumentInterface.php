@@ -15,10 +15,31 @@ use DTL\Component\Content\PhpcrOdm\NamespaceRoleRegistry;
 use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
 
 /**
- * Documents are the basic content data units in Sulu
+ * Documents are are the base content units in Sulu all
+ * documents need to implement this interface.
  */
 interface DocumentInterface
 {
+    /**
+     * The document is loaded in the requested locale,
+     */
+    const LOCALIZATION_STATE_LOCALIZED = 'localized';
+
+    /**
+     * The document is not available in the requested locale
+     * and a fallback has been used instead.
+     */
+    const LOCALIZATION_STATE_GHOST = 'ghost';
+
+    /**
+     * The document specified its own fallback for the requested
+     * locale.
+     *
+     * This status does not apply to non-primary document types such
+     * as snippets.
+     */
+    const LOCALIZATION_STATE_SHADOW = 'shadow';
+
     /**
      * Return the (node) name of this document
      *
@@ -226,4 +247,22 @@ interface DocumentInterface
      * @return string
      */
     public function getLifecycleStage();
+
+    /**
+     * Return the localization state of the document, possible
+     * values:
+     *
+     * Could be one of: localized, ghost or shadow
+     *
+     * @return boolean
+     */
+    public function getLocalizationState();
+
+    /**
+     * Return all of the localizations for this document, including
+     * "shadow" localizations.
+     *
+     * @return string[]
+     */
+    public function getLocales();
 }
