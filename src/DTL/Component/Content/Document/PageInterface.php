@@ -61,13 +61,20 @@ interface PageInterface extends DocumentInterface
     public function getPublished();
 
     /**
-     * Return a list of all locales on this node which are shadows of another
-     * locale.  Therefore, the return value of this method is independent of
-     * the current locale.
+     * Return a list of all enabled shadow locales on this node which are
+     * shadows of another locale.  Therefore, the return value of this method
+     * is independent of the current locale.
      *
      * @return string[]
      */
-    public function getEnabledShadowLocales();
+    public function getShadowLocales();
+
+    /**
+     * Return all real locales whch exist for this page (excluding shadow locales)
+     *
+     * @return string[]
+     */
+    public function getRealLocales();
 
     /**
      * Return the shadow locale for this page for it's current locale (as

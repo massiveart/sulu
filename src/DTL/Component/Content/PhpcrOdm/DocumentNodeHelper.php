@@ -21,19 +21,15 @@ class DocumentNodeHelper
     }
 
     /**
-     * Return the locales which are associated with the given
-     * property name for the given node and role (one of the roles
-     * registered with the namespace role registry, e.g. localized-system).
+     * Return all of the locales for the given node
      *
-     * @param NodeInterface $node
-     * @param string $name
-     * @param string $role
+     * @param NodeInterface
+     *
+     * @return string[]
      */
-    public function getLocalesForPropertyName(NodeInterface $node, $name, $role)
+    public function getLocales(NodeInterface $node)
     {
-        $properties = $this->getLocalizedProperties($node, $name, $role);
-
-        return array_keys($properties);
+        return array_keys($this->getLocalizedProperties($node, 'title', 'localized-system'));
     }
 
     /**

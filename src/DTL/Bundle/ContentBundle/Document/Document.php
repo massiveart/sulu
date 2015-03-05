@@ -370,8 +370,29 @@ abstract class Document implements DocumentInterface
         return $this->lifecycleStage;
     }
 
+    /**
+     * Magic __toString method.
+     *
+     * @return string
+     */
     public function __toString()
     {
         return $this->path ? : get_class($this);
+    }
+
+    /**
+     * Assert that the PHPCR node is present (i.e. that the document
+     * has been already been persisted).
+     *
+     * @param string $callingMethod
+     */
+    protected function assertPersisted($callingMethod)
+    {
+        if (null === $this->node) {
+            throw new \RuntimeException(sprintf(
+                'Method "%s" requires access to the PHPCR node, which is only ' .
+                'available when document has been persisted.'
+            ), $callingMethod);
+        }
     }
 }

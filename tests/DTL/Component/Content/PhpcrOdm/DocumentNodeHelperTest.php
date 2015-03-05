@@ -23,7 +23,7 @@ class DocumentNameHelperTest extends ProphecyTestCase
             $this->namespaceRegistry->reveal()
         );
 
-        $this->namespaceRegistry->getAlias('localized-content')->willReturn('lcon');
+        $this->namespaceRegistry->getAlias('localized-content')->willReturn('lsys');
         $this->namespaceRegistry->getAlias('localized-system')->willReturn('lsys');
         $this->namespaceRegistry->getAlias('content')->willReturn('ncon');
     }
@@ -31,7 +31,7 @@ class DocumentNameHelperTest extends ProphecyTestCase
     public function testEncodeLocalized()
     {
         $res = $this->helper->encodeLocalizedContentName('prop', 'de');
-        $this->assertEquals('lcon:de-prop', $res);
+        $this->assertEquals('lsys:de-prop', $res);
     }
 
     public function testEncode()
@@ -40,30 +40,28 @@ class DocumentNameHelperTest extends ProphecyTestCase
         $this->assertEquals('ncon:prop', $res);
     }
 
-    public function provideGetLocalesForPropertyName()
+    public function provideGetLocales()
     {
         return array(
             array(
                 array(
-                    'lcon:de-foobar',
-                    'lcon:de-barbar',
-                    'lcon:fr-barbar',
-                    'lcon:de_at-barbar',
-                    'lcon:fr-barfoo',
+                    'lsys:de-foobar',
+                    'lsys:de-title',
+                    'lsys:fr-title',
+                    'lsys:de_at-title',
+                    'lsys:fr-barfoo',
                 ),
-                'barbar',
                 array(
                     'de', 'fr', 'de_at',
                 ),
             ),
             array(
                 array(
-                    'lcon:de-foobar',
-                    'lcon:de-barbar',
-                    'lcon:fr-barbar',
-                    'lcon:fr-barfoo',
+                    'lsys:de-title',
+                    'lsys:de-barbar',
+                    'lsys:fr-barbar',
+                    'lsys:fr-barfoo',
                 ),
-                'foobar',
                 array(
                     'de'
                 ),
@@ -71,7 +69,6 @@ class DocumentNameHelperTest extends ProphecyTestCase
             array(
                 array(
                 ),
-                'foobar',
                 array(
                 ),
             ),
@@ -79,9 +76,9 @@ class DocumentNameHelperTest extends ProphecyTestCase
     }
 
     /**
-     * @dataProvider provideGetLocalesForPropertyName
+     * @dataProvider provideGetLocales
      */
-    public function testGetLocalesForPropertyName($propertyNames, $name, array $expectedLocales)
+    public function testGetLocales($propertyNames, array $expectedLocales)
     {
         $this->node = $this->prophesize('PHPCR\NodeInterface');
         $properties = array();
@@ -92,12 +89,10 @@ class DocumentNameHelperTest extends ProphecyTestCase
             $properties[$propertyName] = $property->reveal();
         }
 
-        $this->node->getProperties('lcon:*')->willReturn($properties);
+        $this->node->getProperties('lsys:*')->willReturn($properties);
 
-        $locales = $this->helper->getLocalesForPropertyName(
-            $this->node->reveal(),
-            $name,
-            'localized-content'
+        $locales = $this->helper->getLocales(
+            $this->node->reveal()
         );
 
         $this->assertEquals($expectedLocales, $locales);

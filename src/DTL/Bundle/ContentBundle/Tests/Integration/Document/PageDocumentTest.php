@@ -206,10 +206,38 @@ class PageDocumentTest extends SuluTestCase
 
         $page = $this->manager->find(null, '/cmf/sulu_io/contents/hello');
         $this->assertNotNull($page);
-        $result = $page->getEnabledShadowLocales();
+        $result = $page->getShadowLocales();
 
         $this->assertEquals(array(
             'en', 'fr',
+        ), $result);
+    }
+
+    public function testGetRealLocales()
+    {
+        $page = new PageDocument();
+        $page->setTitle('Hello');
+        $page->setParent($this->parent);
+        $page->setStructureType('contact');
+        $page->setResourceLocator('/foo');
+        $this->manager->persist($page);
+        $this->manager->bindTranslation($page, 'de');
+
+        foreach (array('en', 'fr') as $locale) {
+            $page->setShadowLocale($locale);
+            $page->setShadowLocaleEnabled(true);
+            $this->manager->bindTranslation($page, $locale);
+        }
+
+        $this->manager->flush();
+        $this->manager->clear();
+
+        $page = $this->manager->find(null, '/cmf/sulu_io/contents/hello');
+        $this->assertNotNull($page);
+        $result = $page->getRealLocales();
+
+        $this->assertEquals(array(
+            'de'
         ), $result);
     }
 }

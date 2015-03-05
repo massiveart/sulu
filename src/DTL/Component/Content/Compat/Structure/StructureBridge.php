@@ -338,7 +338,7 @@ class StructureBridge implements StructureInterface
 
         if ($complete) {
             $result = array(
-                'enabledShadowLanguages' => $this->document->getEnabledShadowLanguages(),
+                'enabledShadowLanguages' => $this->document->getShadowLocales(),
                 'shadowOn' => $this->document->getIsShadow(),
                 'shadowBaseLanguage' => $this->document->getShadowBaseLanguage() ? : false,
                 'template' => $this->structure->name,

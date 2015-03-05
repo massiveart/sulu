@@ -161,15 +161,24 @@ abstract class BasePageDocument extends Document implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function getEnabledShadowLocales()
+    public function getShadowLocales()
     {
-        if (null === $this->node) {
-            throw new \RuntimeException(
-                'Cannot retrieve enabled shadow locales on a non-persisted page. The PHPCR node ' .
-                'must be available'
-            );
-        }
+        $this->assertPersisted(__METHOD__);
 
         return $this->documentNodeHelper->getEnabledShadowLocales($this->node);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRealLocales()
+    {
+        $this->assertPersisted(__METHOD__);
+
+        $locales = $this->documentNodeHelper->getLocales($this->node);
+        $shadowLocales = $this->documentNodeHelper->getEnabledShadowLocales($this->node);
+        $realLocales = array_diff($locales, $shadowLocales);
+
+        return $realLocales;
     }
 }
