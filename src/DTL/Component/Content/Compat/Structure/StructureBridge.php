@@ -467,7 +467,7 @@ class StructureBridge implements StructureInterface
      */
     public function getNodeState()
     {
-        return $this->structure->getWorkflowStage();
+        return $this->structure->getLifecycleStage();
     }
 
     /**

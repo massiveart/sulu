@@ -113,6 +113,11 @@ abstract class Document implements DocumentInterface
     protected $depth;
 
     /**
+     * @var string
+     */
+    protected $lifecycleStage;
+
+    /**
      * {@inheritDoc}
      */
     public function getName()
@@ -355,6 +360,14 @@ abstract class Document implements DocumentInterface
         }
 
         $this->documentNodeHelper = $documentNodeHelper;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLifecycleStage() 
+    {
+        return $this->lifecycleStage;
     }
 
     public function __toString()

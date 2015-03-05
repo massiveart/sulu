@@ -14,6 +14,7 @@ class DataNormalizer
             'resourceLocator' => $this->getAndUnsetValue($data, 'url'),
             'redirectType' => $this->getAndUnsetValue($data, 'nodeType'),
             'navigationContexts' => $this->getAndUnsetValue($data, 'navContexts'),
+            'lifecycleStage' => $this->getAndUnsetValue($data, 'nodeState'),
             'content' => $data
         );
 

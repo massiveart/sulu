@@ -214,4 +214,16 @@ interface DocumentInterface
      *
      */
     public function setDocumentNodeHelper(DocumentNodeHelper $helper);
+
+    /**
+     * Return the current lifecycle stage
+     *
+     * Return value should represent lifecycle stages, e.g.
+     * testing, review, published, etc.
+     *
+     * Note the return value may also be a numeric value.
+     *
+     * @return string
+     */
+    public function getLifecycleStage();
 }

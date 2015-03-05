@@ -61,16 +61,6 @@ interface PageInterface extends DocumentInterface
     public function getPublished();
 
     /**
-     * Return the stage of the workflow
-     *
-     * Return value should represent workflow stages, e.g.
-     * testing, review, published, etc.
-     *
-     * @return mixed
-     */
-    public function getWorkflowStage();
-
-    /**
      * Return a list of all locales on this node which are shadows of another
      * locale.  Therefore, the return value of this method is independent of
      * the current locale.

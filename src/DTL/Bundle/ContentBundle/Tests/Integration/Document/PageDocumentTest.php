@@ -100,7 +100,8 @@ class PageDocumentTest extends SuluTestCase
 
             $this->assertEquals(
                 $expectedValue,
-                $document->{$getter}()
+                $document->{$getter}(),
+                sprintf('Field "%s" is correctly mapped', $field)
             );
         }
     }

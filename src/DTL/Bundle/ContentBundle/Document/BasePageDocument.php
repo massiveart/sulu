@@ -30,11 +30,6 @@ abstract class BasePageDocument extends Document implements PageInterface
     protected $published;
 
     /**
-     * @var integer
-     */
-    protected $workflowStage;
-
-    /**
      * @var array
      */
     protected $navigationContexts;
@@ -81,14 +76,6 @@ abstract class BasePageDocument extends Document implements PageInterface
     public function getPublished() 
     {
         return $this->published;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getWorkflowStage() 
-    {
-        return $this->workflowStage;
     }
 
     /**

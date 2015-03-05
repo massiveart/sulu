@@ -20,6 +20,7 @@ class DataNormalizerTest extends \PHPUnit_Framework_TestCase
                     'url' => '/path/to',
                     'nodeType' => 'external',
                     'navContexts' => array('one', 'two'),
+                    'nodeState' => 2,
                     'animal' => 'dog',
                     'car' => 'skoda',
                     'duck' => 'quack',
@@ -28,6 +29,7 @@ class DataNormalizerTest extends \PHPUnit_Framework_TestCase
                     'title' => 'Title',
                     'resourceLocator' => '/path/to',
                     'redirectType' => 'external',
+                    'lifecycleStage' => 2,
                     'navigationContexts' => array('one', 'two'),
                     'content' => array(
                         'animal' => 'dog',
