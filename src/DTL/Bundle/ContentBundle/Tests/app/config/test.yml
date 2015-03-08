@@ -11,7 +11,10 @@ doctrine_phpcr:
     odm:
         locales:
             de: [ 'en', 'fr' ]
-        translation_namespace: lsys
+            fr: [ 'en' ]
+        namespaces:
+            translation:
+                alias: lsys
         document_managers:
             default:
                 auto_mapping: true
