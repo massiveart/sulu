@@ -41,7 +41,7 @@ class XmlLoaderTest extends ProphecyTestCase
                         'de' => 'Übersicht',
                         'en' => 'Overview',
                     ),
-                    'properties' => array(
+                    'children' => array(
                         'title' => array(
                             'name' => 'title',
                             'type' => 'text_line',

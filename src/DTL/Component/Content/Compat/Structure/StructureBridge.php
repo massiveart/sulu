@@ -180,7 +180,7 @@ class StructureBridge implements StructureInterface
      */
     public function hasProperty($name)
     {
-        return $this->structure->hasProperty($name);
+        return $this->structure->hasChild($name);
     }
 
     /**
@@ -339,7 +339,7 @@ class StructureBridge implements StructureInterface
         if ($complete) {
             $result = array(
                 'enabledShadowLanguages' => $this->document->getShadowLocales(),
-                'shadowOn' => $this->document->isShadowLocaleEnabled(),
+                'shadowOn' => $this->document->isLocalizationState(DocumentInterface::LOCALIZATION_STATE_SHADOW),
                 'shadowBaseLanguage' => $this->document->getShadowLocale() ? : false,
                 'template' => $this->structure->name,
                 'creator' => $this->document->getCreator(),
@@ -348,14 +348,15 @@ class StructureBridge implements StructureInterface
                 'changed' => $this->document->getChanged()
             );
 
-            if ($this->type !== null) {
-                $result['type'] = $this->getType()->toArray();
+            if (false === $this->document->isLocalizationState(DocumentInterface::LOCALIZATION_STATE_LOCALIZED)) {
+                $result['type'] = array(
+                    'name' => $this->getLocalizationState(),
+                    'value' => $this->getLocale(),
+                );
             }
 
-            if ($this->structure->redirectType === self::NODE_TYPE_INTERNAL_LINK) {
-                $result['linked'] = 'internal';
-            } elseif ($this->redirectType === self::NODE_TYPE_EXTERNAL_LINK) {
-                $result['linked'] = 'external';
+            if ($this->document instanceof PageInterface) {
+                $result['linked'] = $this->document->getRedirectType();
             }
 
             foreach ($this->structure->properties as $property) {
@@ -536,6 +537,14 @@ class StructureBridge implements StructureInterface
             return $this->getBlockProperty($name, $property);
         }
 
+        if (null === $property->type) {
+            throw new \RuntimeException(sprintf(
+                'Property name "%s" in "%s" has no type.',
+                $property->name,
+                $this->structure->resource
+            ));
+        }
+
         $propertyBridge = new Property(
             $name,
             array(
@@ -553,7 +562,7 @@ class StructureBridge implements StructureInterface
         );
 
         foreach ($property->tags as $tag) {
-            $propertyBridge->addTag(new PropertyTag($tag->name, $tag->priority, $tag->attributes));
+            $propertyBridge->addTag(new PropertyTag($tag['name'], $tag['priority'], $tag['attributes']));
         }
 
         return $propertyBridge;

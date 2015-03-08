@@ -376,14 +376,29 @@ abstract class Document implements DocumentInterface
     public function getLocalizationState()
     {
         $locales = $this->getLocales();
-        var_dump($locales);
-        var_dump($this->getLocale());
 
         if (in_array($this->getLocale(), $locales)) {
             return DocumentInterface::LOCALIZATION_STATE_LOCALIZED;
         }
 
         return DocumentInterface::LOCALIZATION_STATE_GHOST;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isLocalizationState($state)
+    {
+        if (!in_array($state, static::getValidLocalizationStates())) {
+            throw new \InvalidArgumentException(sprintf(
+                'Localization state "%s" not valid for document type "%s", valid states are: "%s"',
+                $state, $this->getDocumentType(), implode('", "', static::getValidLocalizationStates())
+            ));
+        }
+
+        $currentState = $this->getLocalizationState();
+
+        return $currentState == $state;
     }
 
     /**
@@ -420,5 +435,16 @@ abstract class Document implements DocumentInterface
                 'available when document has been persisted.'
             ), $callingMethod);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    static public function getValidLocalizationStates()
+    {
+        return array(
+            DocumentInterface::LOCALIZATION_STATE_LOCALIZED,
+            DocumentInterface::LOCALIZATION_STATE_GHOST
+        );
     }
 }

@@ -23,13 +23,6 @@ class Structure extends Item
      */
     public $resource;
 
-    /**
-     * Properties for this structure
-     *
-     * @var Property
-     */
-    public $properties = array();
-
     public function __set($field, $value)
     {
         throw new \InvalidArgumentException(sprintf(
@@ -38,32 +31,30 @@ class Structure extends Item
         ));
     }
 
-    /**
-     * Return the named property
-     *
-     * @return string $name
-     */
-    public function getProperty($name)
+    protected function getItem()
     {
-        if (!isset($this->properties[$name])) {
-            throw new \InvalidArgumentException(sprintf(
-                'Unknown property "%s" in structure loaded from: "%s". Properties: "%s"',
-                 $name, $this->resource, implode('", "', array_keys($this->properties))
-            ));
-        }
-
-        return $this->properties[$name];
+        return new Structure('foobar');
     }
 
     /**
-     * Return true if this structure has the named property, false
-     * if it does not.
+     * Return all direct child properties of this structure, ignoring
+     * Sections
      *
-     * @param string $name
+     * @return Property[]
      */
-    public function hasProperty($name)
+    public function getProperties()
     {
-        return isset($this->properties[$name]);
+        $properties = array();
+        foreach ($this->children as $child) {
+            if ($child instanceof Section) {
+                $properties = array_merge($properties, $child->getChildren());
+                continue;
+            }
+
+            $properties[$child->name] = $child;
+        }
+
+        return $properties;
     }
 
     /**
@@ -73,7 +64,7 @@ class Structure extends Item
      */
     public function getLocalizedProperties()
     {
-        return array_filter($this->properties, function (Property $property) {
+        return array_filter($this->getProperties(), function (Property $property) {
             return $property->localized === true;
         });
     }
@@ -85,7 +76,7 @@ class Structure extends Item
      */
     public function getNonLocalizedProperties()
     {
-        return array_filter($this->properties, function (Property $property) {
+        return array_filter($this->getProperties(), function (Property $property) {
             return $property->localized === false;
         });
     }

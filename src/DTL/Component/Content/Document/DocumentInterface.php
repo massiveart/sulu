@@ -254,9 +254,18 @@ interface DocumentInterface
      *
      * Could be one of: localized, ghost or shadow
      *
-     * @return boolean
+     * @return string
      */
     public function getLocalizationState();
+
+    /**
+     * Check if the localization state is the given state
+     *
+     * @throws InvalidArgumentException When the state is not known
+     *
+     * @return boolean
+     */
+    public function isLocalizationState($state);
 
     /**
      * Return all of the localizations for this document, including
@@ -265,4 +274,12 @@ interface DocumentInterface
      * @return string[]
      */
     public function getLocales();
+
+    /**
+     * Static method to return the validation localization states for
+     * this document. One of DocumentInterface::LOCALIZATION_STATE_*
+     *
+     * @return string[]
+     */
+    public static function getValidLocalizationStates();
 }

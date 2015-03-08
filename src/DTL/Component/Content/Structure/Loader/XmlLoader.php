@@ -57,7 +57,7 @@ class XmlLoader implements LoaderInterface
         $structure->parameters['cache_lifetime'] = $this->getValueFromXPath('/x:template/x:cacheLifetime', $xpath);
         $structure->tags = $this->loadStructureTags('/x:template/x:tag', $xpath);
         $structure->title = $this->loadTitle('/x:template/x:meta/x:title', $xpath);
-        $structure->properties = $this->loadProperties('/x:template/x:properties/x:*', $tags, $xpath);
+        $structure->children = $this->loadProperties('/x:template/x:properties/x:*', $tags, $xpath);
 
         return $structure;
     }

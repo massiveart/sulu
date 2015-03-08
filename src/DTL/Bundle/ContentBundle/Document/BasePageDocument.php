@@ -194,4 +194,16 @@ abstract class BasePageDocument extends Document implements PageInterface
 
         return parent::getLocalizationState();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    static public function getValidLocalizationStates()
+    {
+        return array(
+            DocumentInterface::LOCALIZATION_STATE_LOCALIZED,
+            DocumentInterface::LOCALIZATION_STATE_GHOST,
+            DocumentInterface::LOCALIZATION_STATE_SHADOW,
+        );
+    }
 }

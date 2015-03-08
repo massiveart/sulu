@@ -56,14 +56,6 @@ class Property extends Item
     public $tags = array();
 
     /**
-     * Children of this property, could array of either Property or Structure
-     * objects.
-     *
-     * @var Property|Structure[]
-     */
-    public $children = array();
-
-    /**
      * @var integer
      */
     public $minOccurs = 1;

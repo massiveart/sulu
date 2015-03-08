@@ -25,11 +25,15 @@ interface PageInterface extends DocumentInterface
      * Return the type of redirection to perform when the
      * page is loaded. Returning null indicates no redirection.
      *
-     * Must return one of the self::REDIRECT_TYPE_* constants.
+     * Must return one of the PageInterface::REDIRECT_TYPE_* constants.
      *
      * @return string
      */
     public function getRedirectType();
+
+    /**
+     *
+    public function isRedirectType($type);
 
     /**
      * Return the resource locator (i.e. the URI)
