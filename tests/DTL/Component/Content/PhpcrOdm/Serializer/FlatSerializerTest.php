@@ -147,11 +147,11 @@ class FlatSerializerTest extends ProphecyTestCase
     private function loadMetadata($propertyMetadatas)
     {
         foreach ($propertyMetadatas as $propertyName => $propertyMetadata) {
-            $property = new Property();
+            $property = new Property($propertyName);
             foreach ($propertyMetadata as $attrName => $attrValue) {
                 $property->$attrName = $attrValue;
             }
-            $this->structure->properties[$propertyName] = $property;
+            $this->structure->addChild($property);
         }
     }
 }

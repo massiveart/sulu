@@ -25,18 +25,18 @@ class StructureBridgeTest extends \PHPUnit_Framework_TestCase
             'one' => 'one_value',
             'two' => 'two_value',
         );
-        $structure->properties['prop_1'] = new Property();
-        $structure->properties['prop_1']->name = 'title';
-        $structure->properties['prop_1']->localized = false;
-        $structure->properties['prop_1']->type = 'text_line';
-        $structure->properties['prop_1']->title = array('en' => 'Property One', 'de' => 'Eigenschaft eins');
-        $structure->properties['prop_1']->colSpan = 3;
-        $structure->properties['prop_1']->cssClass = 'blue-moon';
-        $structure->properties['prop_2'] = new Property();
-        $structure->properties['prop_2']->type = 'text_line';
-        $structure->properties['prop_2']->localized = false;
-        $structure->properties['prop_2']->colSpan = 3;
-        $structure->properties['prop_2']->cssClass = 'blue-moon';
+        $structure->children['prop_1'] = new Property();
+        $structure->children['prop_1']->name = 'title';
+        $structure->children['prop_1']->localized = false;
+        $structure->children['prop_1']->type = 'text_line';
+        $structure->children['prop_1']->title = array('en' => 'Property One', 'de' => 'Eigenschaft eins');
+        $structure->children['prop_1']->colSpan = 3;
+        $structure->children['prop_1']->cssClass = 'blue-moon';
+        $structure->children['prop_2'] = new Property();
+        $structure->children['prop_2']->type = 'text_line';
+        $structure->children['prop_2']->localized = false;
+        $structure->children['prop_2']->colSpan = 3;
+        $structure->children['prop_2']->cssClass = 'blue-moon';
 
         $this->structure = $structure;
         $this->page = $this->prophesize('DTL\Component\Content\Document\PageInterface');
@@ -93,7 +93,7 @@ class StructureBridgeTest extends \PHPUnit_Framework_TestCase
         foreach ($map as $method => $propName) {
             $this->assertEquals(
                 $this->bridge->getProperty('prop_1')->$method($propName),
-                $this->structure->properties['prop_1']->$propName
+                $this->structure->getChild('prop_1')->$propName
             );
         }
     }

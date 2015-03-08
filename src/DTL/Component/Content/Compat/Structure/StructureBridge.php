@@ -168,7 +168,7 @@ class StructureBridge implements StructureInterface
      */
     public function getProperty($name)
     {
-        $property = $this->structure->getProperty($name);
+        $property = $this->structure->getChild($name);
 
         $propertyBridge = $this->createBridgeFromProperty($name, $property);
 
@@ -188,8 +188,14 @@ class StructureBridge implements StructureInterface
      */
     public function getProperties($flatten = false)
     {
+        if ($flatten) {
+            $items = $this->structure->getProperties();
+        } else {
+            $items = $this->structure->getChildren();
+        }
+
         $propertyBridges = array();
-        foreach (array_keys($this->structure->properties) as $propertyName) {
+        foreach (array_keys($items) as $propertyName) {
             $propertyBridges[$propertyName] = $this->getProperty($propertyName);
         }
 
@@ -271,7 +277,7 @@ class StructureBridge implements StructureInterface
      */
     public function getPropertyNames()
     {
-        return array_keys($this->structure->properties);
+        return array_keys($this->structure->children);
     }
 
     /**
@@ -359,7 +365,7 @@ class StructureBridge implements StructureInterface
                 $result['linked'] = $this->document->getRedirectType();
             }
 
-            foreach ($this->structure->properties as $property) {
+            foreach ($this->structure->getProperties() as $property) {
                 // serialize properties
             }
 

@@ -62,21 +62,25 @@ class XmlLoaderTest extends ProphecyTestCase
                                 ),
                             ),
                         ),
-                        'smartcontent' => array(
-                            'name' => 'smartcontent',
-                            'type' => 'smart_content',
-                            'title' => array(
-                                'de' => 'Smart-Content',
-                                'en' => 'Smart-Content',
-                            ),
-                            'parameters' => array(
-                                'max_per_page' => 5,
-                                'properties' => array(
-                                    'title' => 'title',
-                                    'article' => 'article',
-                                    'ext_title' => 'excerpt.title',
-                                    'ext_tags' => 'excerpt.tags',
-                                    'ext_images' => 'excerpt.images',
+                        'section' => array(
+                            'children' => array(
+                                'smartcontent' => array(
+                                    'name' => 'smartcontent',
+                                    'type' => 'smart_content',
+                                    'title' => array(
+                                        'de' => 'Smart-Content',
+                                        'en' => 'Smart-Content',
+                                    ),
+                                    'parameters' => array(
+                                        'max_per_page' => 5,
+                                        'properties' => array(
+                                            'title' => 'title',
+                                            'article' => 'article',
+                                            'ext_title' => 'excerpt.title',
+                                            'ext_tags' => 'excerpt.tags',
+                                            'ext_images' => 'excerpt.images',
+                                        ),
+                                    ),
                                 ),
                             ),
                         ),

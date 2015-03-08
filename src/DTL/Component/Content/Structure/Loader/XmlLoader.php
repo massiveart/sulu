@@ -19,6 +19,8 @@ use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\Config\Util\XmlUtils;
 use DTL\Component\Content\Structure\Structure;
 use DTL\Component\Content\Structure\Property;
+use DTL\Component\Content\Structure\Item;
+use DTL\Component\Content\Structure\Section;
 
 /**
  * Load structure structure from an XML file
@@ -57,7 +59,7 @@ class XmlLoader implements LoaderInterface
         $structure->parameters['cache_lifetime'] = $this->getValueFromXPath('/x:template/x:cacheLifetime', $xpath);
         $structure->tags = $this->loadStructureTags('/x:template/x:tag', $xpath);
         $structure->title = $this->loadTitle('/x:template/x:meta/x:title', $xpath);
-        $structure->children = $this->loadProperties('/x:template/x:properties/x:*', $tags, $xpath);
+        $structure->children = $this->loadItems('/x:template/x:properties/x:*', $tags, $xpath);
 
         return $structure;
     }
@@ -76,26 +78,29 @@ class XmlLoader implements LoaderInterface
     /**
      * load properties from given context
      */
-    private function loadProperties($path, &$tags, \DOMXPath $xpath, \DOMNode $context = null)
+    private function loadItems($path, &$tags, \DOMXPath $xpath, \DOMNode $context = null)
     {
-        $properties = array();
+        $items = array();
 
         /** @var \DOMElement $node */
         foreach ($xpath->query($path, $context) as $node) {
-            $type = $node->tagName === 'property';
-            $property = $this->loadProperty($xpath, $node, $tags);
+            $type = $node->tagName;
 
-            if (isset($properties[$property->name])) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Cannot repeat property name "%s"',
-                    $property->name
-                ));
+            switch ($type) {
+                case 'property':
+                    $item = $this->loadProperty($xpath, $node, $tags);
+                    break;
+                case 'block':
+                    break;
+                case 'section':
+                    $item = $this->loadSection($xpath, $node, $tags);
+                    break;
             }
 
-            $properties[$property->name] = $property;
+            $items[$item->name] = $item;
         }
 
-        return $properties;
+        return $items;
     }
 
     /**
@@ -107,7 +112,7 @@ class XmlLoader implements LoaderInterface
         $property->required = $this->getBooleanValueFromXPath('@mandatory', $xpath, $node, false);
         $property->localized = $this->getBooleanValueFromXPath('@multilingual', $xpath, $node, true);
         $property->tags = $this->loadTags('x:tag', $tags, $xpath, $node);
-        $property->title = $this->loadTitle('x:meta/x:title', $xpath, $node);
+        $this->loadMetaForItem($property, $xpath, $node);
 
         $property->parameters = $this->loadParams('x:params/x:param', $xpath, $node);
         $property->name = $this->getValueFromXPath('@name', $xpath, $node);
@@ -128,9 +133,43 @@ class XmlLoader implements LoaderInterface
             $property['options']['cssClass'] = $cssClass;
         }
 
-        $property->children  = $this->loadProperties('x:properties/x:*', $tags, $xpath, $node);
+        $property->children  = $this->loadItems('x:properties/x:*', $tags, $xpath, $node);
 
         return $property;
+    }
+
+    private function loadMetaForItem(Item $property, \DOMXPath $xpath, \DOMNode $node)
+    {
+        $property->title = $this->loadTitle('x:meta/x:title', $xpath, $node);
+        $property->description = $this->loadTitle('x:meta/x:info_text', $xpath, $node);
+        $placeholder = $this->loadTitle('x:meta/x:info_text', $xpath, $node);
+
+        if ($placeholder) {
+            $property->parameters['placeholder'] = $placeholder;
+        }
+    }
+
+    /**
+     * Load a section
+     *
+     * @param \DOMXPath $xpath
+     * @param \DOMNode $node
+     * @param mixed $tags
+     */
+    private function loadSection(\DOMXPath $xpath, \DOMNode $node, &$tags)
+    {
+        $values = $this->loadValues(
+            $xpath,
+            $node,
+            array('name', 'colspan', 'cssClass')
+        );
+
+        $section = new Section($values['name']);
+        $section->parameters = $this->loadParams('x:params/x:param', $xpath, $node);
+        $this->loadMetaForItem($section, $xpath, $node);
+        $section->children = $this->loadItems('x:properties/x:*', $tags, $xpath, $node);
+
+        return $section;
     }
 
     /**
