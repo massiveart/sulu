@@ -8,6 +8,7 @@ use Sulu\Component\Webspace\Analyzer\RequestAnalyzerInterface;
 use Sulu\Component\Webspace\Manager\WebspaceManagerInterface;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use DTL\Component\Content\Document\DocumentInterface;
+use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
 
 class SuluLocaleChooser implements LocaleChooserInterface
 {
@@ -21,13 +22,20 @@ class SuluLocaleChooser implements LocaleChooserInterface
      */
     private $webspaceManager;
 
+    /**
+     * @var DocumentNodeHelper
+     */
+    private $documentNodeHelper;
+
     public function __construct(
         RequestAnalyzerInterface $requestAnalyzer,
-        WebspaceManagerInterface $webspaceManager
+        WebspaceManagerInterface $webspaceManager,
+        DocumentNodeHelper $documentNodeHelper
     )
     {
         $this->webspaceManager = $webspaceManager;
         $this->requestAnalyzer = $requestAnalyzer;
+        $this->documentNodeHelper = $documentNodeHelper;
     }
 
     /**
@@ -42,6 +50,35 @@ class SuluLocaleChooser implements LocaleChooserInterface
             ));
         }
 
+        if (null === $document->getPhpcrNode()) {
+            $document->setRequestedLocale($forLocale);
+            return array();
+        }
+
+        $this->setRequestedLocale($document, $forLocale);
+
+        return $this->doGetFallbackLocales($document, $metadata, $forLocale);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLocale()
+    {
+        return $this->requestAnalyzer->getCurrentLocalization();
+    }
+
+    private function setRequestedLocale($document, $forLocale)
+    {
+        $locales = $this->documentNodeHelper->getLocales($document->getPhpcrNode());
+
+        if (false === in_array($forLocale, $locales)) {
+            $document->setRequestedLocale($forLocale);
+        }
+    }
+
+    private function doGetFallbackLocales($document, ClassMetadata $metadata, $forLocale = null)
+    {
         $webspace = $this->requestAnalyzer->getWebspace();
 
         if (null === $webspace) {
@@ -53,7 +90,7 @@ class SuluLocaleChooser implements LocaleChooserInterface
         $locales = array_merge(
             $this->getParentLocalizations($localization),
             $this->getChildLocalizations($localization),
-            $document->getLocales()
+            $this->documentNodeHelper->getLocales($document->getPhpcrNode())
         );
 
         $locales = array_filter($locales, function ($locale) use ($forLocale) {
@@ -65,21 +102,13 @@ class SuluLocaleChooser implements LocaleChooserInterface
         return array_values($locales);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getLocale()
-    {
-        return $this->requestAnalyzer->getCurrentLocalization();
-    }
-
     private function getOtherLocales(DocumentInterface $document, $forLocale)
     {
-        $locales = $document->getLocales();
-
+        $locales = $this->documentNodeHelper->getLocales($document->getPhpcrNode());
         return array_filter($locales, function ($locale) use ($forLocale) {
             return $locale !== $forLocale;
         });
+
     }
 
     private function getParentLocalizations(Localization $localization)

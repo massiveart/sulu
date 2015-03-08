@@ -72,7 +72,7 @@ class StructureFormTypeFactory
             'auto_initialize' => false, // auto initialize should only be for root nodes
         ));
 
-        foreach ($structure->properties as $name => $property) {
+        foreach ($structure->getChildren() as $name => $property) {
             $builder->add($name, 'collection', array(
                 'type' => $property->type,
                 'options' => $property->parameters,

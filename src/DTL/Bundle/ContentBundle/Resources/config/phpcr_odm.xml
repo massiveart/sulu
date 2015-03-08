@@ -14,6 +14,7 @@
         <parameter key="dtl_content.phpcr_odm.event_subscriber.timestamp.class">DTL\Component\Content\PhpcrOdm\EventSubscriber\TimestampSubscriber</parameter>
         <parameter key="dtl_content.phpcr_odm.event_subscriber.blame.class">DTL\Component\Content\PhpcrOdm\EventSubscriber\BlameSubscriber</parameter>
         <parameter key="dtl_content.phpcr_odm.event_subscriber.document_node_helper.class">DTL\Component\Content\PhpcrOdm\EventSubscriber\DocumentNodeHelperSubscriber</parameter>
+        <parameter key="dtl_content.phpcr_odm.locale_chooser.class">DTL\Component\Content\PhpcrOdm\LocaleChooser\SuluLocaleChooser</parameter>
         <parameter key="dtl_content.initializer.class">DTL\Bundle\ContentBundle\Initializer\PhpcrOdmInitializer</parameter>
     </parameters>
 
@@ -63,6 +64,13 @@
         <service id="dtl_content.phpcr_odm.event_subscriber.document_node_helper" class="%dtl_content.phpcr_odm.event_subscriber.document_node_helper.class%">
             <argument type="service" id="dtl_content.phpcr_odm.document_node_helper" />
             <tag name="doctrine_phpcr.event_subscriber" />
+        </service>
+
+        <!-- Locale chooser -->
+        <service id="dtl_content.phpcr_odm.locale_chooser" class="%dtl_content.phpcr_odm.locale_chooser.class%">
+            <argument type="service" id="sulu_core.webspace.request_analyzer" />
+            <argument type="service" id="sulu_core.webspace.webspace_manager" />
+            <argument type="service" id="dtl_content.phpcr_odm.document_node_helper" />
         </service>
     </services>
 </container>

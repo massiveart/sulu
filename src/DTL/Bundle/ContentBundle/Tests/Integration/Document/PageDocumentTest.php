@@ -213,12 +213,12 @@ class PageDocumentTest extends SuluTestCase
     {
         return array(
             array(
-                'de', 'de', array(),
-                DocumentInterface::LOCALIZATION_STATE_LOCALIZED,
-            ),
-            array(
                 'de', 'fr', array(),
                 DocumentInterface::LOCALIZATION_STATE_GHOST,
+            ),
+            array(
+                'de', 'de', array(),
+                DocumentInterface::LOCALIZATION_STATE_LOCALIZED,
             ),
             array(
                 'de', 'fr', array('de'),
@@ -232,9 +232,14 @@ class PageDocumentTest extends SuluTestCase
      */
     public function testGetLocalizationState($requestedLocale, $locale, $shadowLocales, $expectedState)
     {
-        $page = $this->createLocalizedPage($locale, $shadowLocales);
-
+        $page = $this->createLocalizedPage($locale, $shadowLocales, $requestedLocale);
         $this->assertEquals($expectedState, $page->getLocalizationState());
+    }
+
+    public function testGetLocalizationStateDefault()
+    {
+        $page = $this->createLocalizedPage('de', array());
+        $this->assertEquals(DocumentInterface::LOCALIZATION_STATE_DEFAULT, $page->getLocalizationState());
     }
 
     private function createLocalizedPage($locale, array $shadowLocales, $loadInLocale = null)
@@ -256,7 +261,7 @@ class PageDocumentTest extends SuluTestCase
         $this->manager->flush();
         $this->manager->clear();
 
-        $page = $this->manager->findTranslation(null, '/cmf/sulu_io/contents/hello', $locale, true);
+        $page = $this->manager->findTranslation(null, '/cmf/sulu_io/contents/hello', $loadInLocale, true);
         $this->assertNotNull($page);
 
         return $page;

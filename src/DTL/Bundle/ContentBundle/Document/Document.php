@@ -60,6 +60,11 @@ abstract class Document implements DocumentInterface
     /**
      * @var string
      */
+    protected $requestedLocale;
+
+    /**
+     * @var string
+     */
     protected $title;
 
     /**
@@ -195,6 +200,11 @@ abstract class Document implements DocumentInterface
     public function setLocale($locale)
     {
         $this->locale = $locale;
+    }
+
+    public function setRequestedLocale($locale)
+    {
+        $this->requestedLocale = $locale;
     }
 
     /**
@@ -377,7 +387,12 @@ abstract class Document implements DocumentInterface
     {
         $locales = $this->getLocales();
 
-        if (in_array($this->getLocale(), $locales)) {
+        // if no requeted locale
+        if (null === $this->requestedLocale) {
+            return DocumentInterface::LOCALIZATION_STATE_DEFAULT;
+        }
+
+        if (in_array($this->requestedLocale, $locales)) {
             return DocumentInterface::LOCALIZATION_STATE_LOCALIZED;
         }
 
@@ -433,7 +448,7 @@ abstract class Document implements DocumentInterface
             throw new \RuntimeException(sprintf(
                 'Method "%s" requires access to the PHPCR node, which is only ' .
                 'available when document has been persisted.'
-            ), $callingMethod);
+            , $callingMethod));
         }
     }
 

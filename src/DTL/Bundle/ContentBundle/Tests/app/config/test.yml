@@ -9,12 +9,10 @@ twig:
 
 doctrine_phpcr:
     odm:
-        locales:
-            de: [ 'en', 'fr' ]
-            fr: [ 'en' ]
         namespaces:
             translation:
                 alias: lsys
+        locale_chooser: dtl_content.phpcr_odm.locale_chooser
         document_managers:
             default:
                 auto_mapping: true

@@ -26,6 +26,11 @@ interface DocumentInterface
     const LOCALIZATION_STATE_LOCALIZED = 'localized';
 
     /**
+     * The document was not requested in any specific locale
+     */
+    const LOCALIZATION_STATE_DEFAULT = 'default';
+
+    /**
      * The document is not available in the requested locale
      * and a fallback has been used instead.
      */

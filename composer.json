@@ -87,5 +87,10 @@
             "Sulu\\": "src/",
             "DTL\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "DTL\\": "tests/"
+        }
     }
 }
