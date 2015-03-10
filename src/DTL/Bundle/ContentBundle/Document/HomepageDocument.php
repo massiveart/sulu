@@ -18,14 +18,14 @@ use PHPCR\NodeInterface;
 /**
  * Represents the homepage for a webspace
  */
-class HomePageDocument extends BasePageDocument
+class HomepageDocument extends BasePageDocument
 {
     public function setName($name)
     {
         $this->name = $name;
     }
 
-    public function getStructureType()
+    public function getDocumentType()
     {
         return 'homepage';
     }

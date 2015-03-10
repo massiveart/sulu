@@ -18,6 +18,13 @@
             <tag name="form.type" alias="page" />
         </service>
 
+        <service id="dtl_content.form.type.homepage" class="DTL\Bundle\ContentBundle\Form\Type\Document\HomepageDocumentType">
+            <argument type="service" id="dtl_content.form.factory.structure_type"/>
+            <argument type="service" id="sulu.phpcr.session" />
+            <argument type="service" id="doctrine_phpcr.odm.document_manager" />
+            <tag name="form.type" alias="homepage" />
+        </service>
+
         <service id="dtl_content.form.type.snippet" class="DTL\Component\Content\Form\Type\SnippetType">
             <tag name="form.type" alias="snippet" />
         </service>

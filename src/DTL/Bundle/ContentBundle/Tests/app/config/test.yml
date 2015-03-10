@@ -28,3 +28,6 @@ dtl_content:
             -
                 path: "%kernel.root_dir%/Resources/pages"
                 type: "page"
+            -
+                path: "%kernel.root_dir%/Resources/pages"
+                type: "homepage"

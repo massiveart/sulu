@@ -103,6 +103,8 @@ class PageDocumentTest extends SuluTestCase
                 sprintf('Field "%s" is correctly mapped', $field)
             );
         }
+
+        $this->assertNotNull($page->getParent());
     }
 
     /**

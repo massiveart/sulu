@@ -12,7 +12,7 @@ use DTL\Component\Content\Document\PageInterface;
 use Sulu\Component\Webspace\Webspace;
 use Doctrine\ODM\PHPCR\DocumentManager;
 use DTL\Bundle\ContentBundle\Document\PageDocument;
-use DTL\Bundle\ContentBundle\Document\HomePageDocument;
+use DTL\Bundle\ContentBundle\Document\HomepageDocument;
 use DTL\Component\Content\Document\WorkflowState;
 
 class PhpcrOdmInitializer implements InitializerInterface
@@ -72,7 +72,7 @@ class PhpcrOdmInitializer implements InitializerInterface
 
     private function createHomepage(DocumentManager $manager, Webspace $webspace, $webspaceDocument)
     {
-        $page = new HomePageDocument();
+        $page = new HomepageDocument();
         $page->setName($this->paths['content']);
         $page->setParent($webspaceDocument);
         $manager->persist($page);

@@ -68,9 +68,7 @@ class SuluPhpcrAdapter extends PhpcrOdmAdapter
     public function createAutoRoute(UriContext $uriContext, $contentDocument, $autoRouteTag)
     {
         $path = $this->generateRoutePath($contentDocument->getWebspaceKey(), $uriContext->getLocale());
-
         $uri = $uriContext->getUri();
-
         $parentDocument = $this->documentManager->find(null, $path);
 
         if (null === $parentDocument) {

@@ -6,7 +6,7 @@
         https://github.com/doctrine/phpcr-odm/raw/master/doctrine-phpcr-odm-mapping.xsd"
 >
 
-    <document name="DTL\Bundle\ContentBundle\Document\HomePageDocument">
+    <document name="DTL\Bundle\ContentBundle\Document\HomepageDocument">
     </document>
 
 </doctrine-mapping>

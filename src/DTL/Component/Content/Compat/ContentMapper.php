@@ -94,7 +94,7 @@ class ContentMapper implements ContentMapperInterface
             'locale' => $locale,
             'structure_name' => $structureName,
         ));
-        $form->submit($data);
+        $form->submit($data, false);
 
         if (!$form->isValid()) {
             throw new InvalidFormException($form);
@@ -122,7 +122,6 @@ class ContentMapper implements ContentMapperInterface
         ));
     }
 
-
     public function saveStartPage(
         $data,
         $structureName,
@@ -137,12 +136,14 @@ class ContentMapper implements ContentMapperInterface
         $uuid = $this->getContentDocument($webspaceKey, $locale)->getUuid();
         $request = ContentMapperRequest::create('page')
             ->setTemplateKey($structureName)
-            ->setWebspaceKey($structureName)
+            ->setType('homepage')
+            ->setWebspaceKey($webspaceKey)
             ->setLocale($locale)
             ->setUuid($uuid)
             ->setUserId($userId)
             ->setPartialUpdate($partialUpdate)
             ->setIsShadow($isShadow)
+            ->setData($data)
             ->setShadowBaseLanguage($shadowBaseLanguage);
 
         return $this->saveRequest($request);
@@ -172,6 +173,10 @@ class ContentMapper implements ContentMapperInterface
 
     public function load($uuid, $webspaceKey, $locale, $loadGhostContent = false)
     {
+        return $this->loadByDocument(
+            $this->getDocument($uuid, $locale),
+            $locale, $webspaceKey, false, $loadGhostContent, false
+        );
     }
 
     public function loadByNode(
@@ -185,7 +190,7 @@ class ContentMapper implements ContentMapperInterface
     {
         return $this->loadByDocument(
             $this->getDocument($uuid, $locale),
-            $locale, $webspaceKey, $excludeGhost, $loadGhostContent, $excludeShadow
+            $locale, $webspaceKey, false, $loadGhostContent, $excludeShadow
         );
     }
 
@@ -277,7 +282,7 @@ class ContentMapper implements ContentMapperInterface
         return $result;
     }
 
-    public function loadBreadcrumb($uuid, $languageCode, $webspaceKey)
+    public function loadBreadcrumb($uuid, $locale, $webspaceKey)
     {
         // switch to PHPCR-ODM QB?
         $sql = sprintf(
@@ -565,11 +570,12 @@ class ContentMapper implements ContentMapperInterface
     private function getContentDocument($webspaceKey, $locale = null)
     {
         $contentPath = $this->sessionManager->getContentPath($webspaceKey);
+        $class = 'DTL\Component\Content\Document\DocumentInterface';
 
         if ($locale) {
-            $document = $this->documentManager->findTranslation(null, $contentPath, $locale);
+            $document = $this->documentManager->findTranslation($class, $contentPath, $locale);
         } else {
-            $document = $this->documentManager->find(null, $contentPath);
+            $document = $this->documentManager->find($class, $contentPath);
         }
 
         if (null === $document) {
@@ -601,7 +607,7 @@ class ContentMapper implements ContentMapperInterface
             );
         }
 
-        if ($document->isShadowEnabled()) {
+        if ($document->isLocalizationState('shadow')) {
             $resolvedLocale = $document->getShadowLocale();
         }
 
@@ -614,8 +620,7 @@ class ContentMapper implements ContentMapperInterface
             return null;
         }
 
-        $document->setLocale($resolvedLocale);
-        $this->documentManager->refresh($document);
+        $this->documentManager->findTranslation(null, $document->getUuid(), $locale);
 
         return $this->documentToStructure($document);
     }

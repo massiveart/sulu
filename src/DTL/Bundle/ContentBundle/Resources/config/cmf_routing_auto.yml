@@ -1,4 +1,4 @@
-DTL\Bundle\ContentBundle\Document\HomePageDocument:
+DTL\Bundle\ContentBundle\Document\HomepageDocument:
     uri_schema: "/"
     conflict_resolver: throw_exception
 

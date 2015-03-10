@@ -6,26 +6,27 @@ use Sulu\Bundle\TestBundle\Testing\SuluTestCase;
 use Sulu\Component\Content\Mapper\ContentMapperRequest;
 use Sulu\Component\Content\StructureInterface;
 use PHPCR\Util\NodeHelper;
+use DTL\Bundle\ContentBundle\Tests\Integration\BaseTestCase;
 
-class StructureBridgeToArrayTest extends SuluTestCase
+class StructureBridgeToArrayTest extends BaseTestCase
 {
     private $manager;
 
     public function setUp()
     {
-        $this->manager = $this->getContainer()->get('doctrine_phpcr.odm.document_manager');
-        NodeHelper::purgeWorkspace($this->manager->getPhpcrSession());
-        $this->manager->getPhpcrSession()->save();
+        $this->getDm() = $this->getContainer()->get('doctrine_phpcr.odm.document_manager');
+        NodeHelper::purgeWorkspace($this->getDm()->getPhpcrSession());
+        $this->getDm()->getPhpcrSession()->save();
         $this->getContainer()->get('doctrine_phpcr.initializer_manager')->initialize();
-        $this->manager->flush();
-        $this->manager->clear();
+        $this->getDm()->flush();
+        $this->getDm()->clear();
 
         $this->contentMapper = $this->getContainer()->get('dtl_content.compat.content_mapper');
     }
 
     public function testHomepage()
     {
-        $startDocument = $this->manager->findTranslation(null, '/cmf/sulu_io/contents', 'en');
+        $startDocument = $this->getDm()->findTranslation(null, '/cmf/sulu_io/contents', 'en');
         $startPage = $this->contentMapper->loadStartPage('sulu_io', 'en');
 
         $expected = array(

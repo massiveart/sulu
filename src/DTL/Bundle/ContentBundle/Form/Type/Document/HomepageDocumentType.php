@@ -18,37 +18,18 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Abstract test class for all content types
- *
- * @author Daniel Leech <daniel@dantleech.com>
  */
-class PageDocumentType extends AbstractDocumentType
+class HomepageDocumentType extends PageDocumentType
 {
     /**
      * {@inheritDoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $options)
     {
-        $options->setDefaults(array(
-            'data_class' => 'DTL\Bundle\ContentBundle\Document\PageDocument',
-        ));
-
         parent::setDefaultOptions($options);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder->add('resourceLocator', 'text');
-        $builder->add('navigationContexts', 'collection', array(
-            'type' => 'text',
+        $options->setDefaults(array(
+            'data_class' => 'DTL\Bundle\ContentBundle\Document\HomepageDocument',
         ));
-        $builder->add('redirectType', 'text');
-        $builder->add('workflowState', 'text');
-
-        parent::buildForm($builder, $options);
     }
 
     /**
@@ -56,6 +37,6 @@ class PageDocumentType extends AbstractDocumentType
      */
     public function getName()
     {
-        return 'page';
+        return 'homepage';
     }
 }

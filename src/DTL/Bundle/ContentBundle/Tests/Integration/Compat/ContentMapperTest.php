@@ -2,17 +2,18 @@
 
 namespace DTL\Bundle\ContentBundle\Tests\Integration\Compat;
 
-use Sulu\Bundle\TestBundle\Testing\SuluTestCase;
 use Sulu\Component\Content\Mapper\ContentMapperRequest;
 use Sulu\Component\Content\StructureInterface;
+use DTL\Bundle\ContentBundle\Tests\Integration\BaseTestCase;
 
-class ContentMapperTest extends SuluTestCase
+class ContentMapperTest extends BaseTestCase
 {
+    private $contentMapper;
+
     public function setUp()
     {
-        $this->manager = $this->getContainer()->get('doctrine_phpcr.odm.document_manager');
         $this->initPhpcr();
-        $this->parent = $this->manager->find(null, '/cmf/sulu_io/contents');
+        $this->parent = $this->getDm()->find(null, '/cmf/sulu_io/contents');
         $this->contentMapper = $this->getContainer()->get('dtl_content.compat.content_mapper');
     }
 
@@ -43,6 +44,51 @@ class ContentMapperTest extends SuluTestCase
     public function testSave($request)
     {
         $this->contentMapper->saveRequest($request);
+    }
+
+    public function testSaveStartPage()
+    {
+        // this is actually the data sent for mapping ...
+        $data = json_decode('
+            {
+                "_embedded": {
+                    "nodes": []
+                },
+                "_links": {
+                    "children": "/admin/api/nodes?parent=8f817a80-d48f-4181-9319-96ecc9ad33b6&depth=1&webspace=sulu_io&language=de",
+                    "self": "/admin/api/nodes/8f817a80-d48f-4181-9319-96ecc9ad33b6"
+                },
+                "changed": "2015-03-10T13:59:16+0100",
+                "concreteLanguages": [
+                    "en",
+                    "de"
+                ],
+                "created": "2015-03-10T13:59:16+0100",
+                "enabledShadowLanguages": [],
+                "hasSub": false,
+                "id": "index",
+                "internal": false,
+                "navigation": true,
+                "nodeState": 2,
+                "nodeType": 1,
+                "originTemplate": "prototype",
+                "path": "/cmf/sulu_io/contents",
+                "published": "2015-03-10T13:59:16+0100",
+                "shadowBaseLanguage": false,
+                "shadowOn": false,
+                "template": "contact",
+                "title": "asdHomepage",
+                "url": "/"
+            }
+        ', true);
+
+        $this->contentMapper->saveStartPage(
+            $data,
+            'contact',
+            'sulu_io',
+            'en',
+            1
+        );
     }
 
     public function testSaveMultiple()
