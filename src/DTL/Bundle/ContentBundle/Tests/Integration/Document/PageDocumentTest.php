@@ -17,6 +17,7 @@ use DTL\Bundle\ContentBundle\Document\PageDocument;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 use Symfony\Component\HttpFoundation\Request;
 use DTL\Component\Content\Document\DocumentInterface;
+use DTL\Component\Content\Document\LocalizationState;
 
 class PageDocumentTest extends SuluTestCase
 {
@@ -214,15 +215,15 @@ class PageDocumentTest extends SuluTestCase
         return array(
             array(
                 'de', 'fr', array(),
-                DocumentInterface::LOCALIZATION_STATE_GHOST,
+                LocalizationState::GHOST,
             ),
             array(
                 'de', 'de', array(),
-                DocumentInterface::LOCALIZATION_STATE_LOCALIZED,
+                LocalizationState::LOCALIZED,
             ),
             array(
                 'de', 'fr', array('de'),
-                DocumentInterface::LOCALIZATION_STATE_SHADOW,
+                LocalizationState::SHADOW,
             ),
         );
     }
@@ -239,7 +240,7 @@ class PageDocumentTest extends SuluTestCase
     public function testGetLocalizationStateDefault()
     {
         $page = $this->createLocalizedPage('de', array());
-        $this->assertEquals(DocumentInterface::LOCALIZATION_STATE_DEFAULT, $page->getLocalizationState());
+        $this->assertEquals(LocalizationState::AUTO, $page->getLocalizationState());
     }
 
     private function createLocalizedPage($locale, array $shadowLocales, $loadInLocale = null)

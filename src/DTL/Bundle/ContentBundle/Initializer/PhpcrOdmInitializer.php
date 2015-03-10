@@ -13,6 +13,7 @@ use Sulu\Component\Webspace\Webspace;
 use Doctrine\ODM\PHPCR\DocumentManager;
 use DTL\Bundle\ContentBundle\Document\PageDocument;
 use DTL\Bundle\ContentBundle\Document\HomePageDocument;
+use DTL\Component\Content\Document\WorkflowState;
 
 class PhpcrOdmInitializer implements InitializerInterface
 {
@@ -81,7 +82,7 @@ class PhpcrOdmInitializer implements InitializerInterface
             $page->setStructureType('overview');
             $page->setResourceLocator('');
             $page->setLocale('en');
-            $page->setWorkflowStage(StructureInterface::STATE_PUBLISHED);
+            $page->setWorkflowState(WorkflowState::PUBLISHED);
             $manager->bindTranslation($page, $localization->getLocalization());
         }
 

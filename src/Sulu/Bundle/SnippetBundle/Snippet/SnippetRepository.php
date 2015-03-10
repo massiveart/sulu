@@ -16,6 +16,7 @@ use Sulu\Component\Content\Structure\Snippet;
 use Sulu\Component\PHPCR\SessionManager\SessionManager;
 use PHPCR\Util\QOM\QueryBuilder;
 use PHPCR\Query\QOM\QueryObjectModelConstantsInterface;
+use Sulu\Component\Content\Mapper\ContentMapperInterface;
 
 /**
  * Repository class for snippets
@@ -38,7 +39,7 @@ class SnippetRepository
      * @param SessionManager $sessionManager
      * @param ContentMapper $contentMapper
      */
-    public function __construct(SessionManager $sessionManager, ContentMapper $contentMapper)
+    public function __construct(SessionManager $sessionManager, ContentMapperInterface $contentMapper)
     {
         $this->contentMapper = $contentMapper;
         $this->sessionManager = $sessionManager;

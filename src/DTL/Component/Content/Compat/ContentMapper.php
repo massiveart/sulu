@@ -81,12 +81,12 @@ class ContentMapper implements ContentMapperInterface
         $structureType = Structure::TYPE_PAGE
     )
     {
-        $data = $this->dataNormalizer->normalize($data);
+        $data = $this->dataNormalizer->normalize($data, $state);
 
         $document = null;
 
         if ($uuid) {
-            $this->getDocument($uuid);
+            $document = $this->getDocument($uuid, $locale);
         }
 
         $form = $this->formFactory->create($structureType, $document, array(
@@ -127,17 +127,17 @@ class ContentMapper implements ContentMapperInterface
         $data,
         $structureName,
         $webspaceKey,
-        $languageCode,
+        $locale,
         $userId,
         $partialUpdate = true,
         $isShadow = null,
         $shadowBaseLanguage = null
     )
     {
-        $uuid = $this->getContentNode($webspaceKey)->getIdentifier();
+        $uuid = $this->getContentDocument($webspaceKey, $locale)->getUuid();
         $request = ContentMapperRequest::create('page')
-            ->setTemplateKey($templateKey)
-            ->setWebspaceKey($webspaceKey)
+            ->setTemplateKey($structureName)
+            ->setWebspaceKey($structureName)
             ->setLocale($locale)
             ->setUuid($uuid)
             ->setUserId($userId)
@@ -184,7 +184,7 @@ class ContentMapper implements ContentMapperInterface
     )
     {
         return $this->loadByDocument(
-            $this->getDocument($uuid),
+            $this->getDocument($uuid, $locale),
             $locale, $webspaceKey, $excludeGhost, $loadGhostContent, $excludeShadow
         );
     }
@@ -205,7 +205,7 @@ class ContentMapper implements ContentMapperInterface
             $locale
         );
 
-        $document = $this->getDocument($uuid);
+        $document = $this->getDocument($uuid, $locale);
 
         return $this->loadByDocument($document, $locale, $webspaceKey, true, false, false);
     }
@@ -243,7 +243,7 @@ class ContentMapper implements ContentMapperInterface
         $loadGhostContent = false
     )
     {
-        $document = $this->getDocument($uuid);
+        $document = $this->getDocument($uuid, $locale);
 
         list($result) = $this->loadTreeByDocument(
             $document, $locale, $webspaceKey, $excludeGhost, $loadGhostContent
@@ -269,7 +269,7 @@ class ContentMapper implements ContentMapperInterface
                 '%s/%s',
                 $this->sessionManager->getContentPath($webspaceKey),
                 $path
-            ));
+            ), $locale);
         }
 
         list($result) = $this->loadTreeByDocument($document, $locale, $webspaceKey, $excludeGhost, $loadGhostContent);
@@ -542,9 +542,9 @@ class ContentMapper implements ContentMapperInterface
      *
      * @return DocumentInterface
      */
-    private function getDocument($id)
+    private function getDocument($id, $locale)
     {
-        $document = $this->documentManager->find(null, $id);
+        $document = $this->documentManager->findTranslation(null, $id, $locale);
 
         if (null === $document) {
             throw new \RuntimeException(sprintf(

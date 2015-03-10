@@ -27,6 +27,7 @@ use Sulu\Component\Content\Mapper\ContentMapperRequest;
 use Sulu\Component\Security\SecuredControllerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use FOS\RestBundle\Controller\Annotations\Get;
+use Sulu\Component\Content\Mapper\ContentMapperInterface;
 
 /**
  * handles snippets
@@ -73,7 +74,7 @@ class SnippetController implements SecuredControllerInterface
      */
     public function __construct(
         ViewHandler $viewHandler,
-        ContentMapper $contentMapper,
+        ContentMapperInterface $contentMapper,
         StructureManagerInterface $structureManager,
         SnippetRepository $snippetRepository,
         SecurityContext $securityContext,

@@ -19,7 +19,7 @@
         <field name="changer" type="long" translated="true" nullable="true" />
         <field name="created" type="date" translated="true" />
         <field name="changed" type="date" translated="true" />
-        <field name="lifecycleStage" property="lifecycle-stage" type="long" translated="true" nullable="true"/>
+        <field name="workflowState" property="workflow-state" type="long" translated="true" nullable="true"/>
     </mapped-superclass>
 
 </doctrine-mapping>

@@ -13,7 +13,8 @@ namespace DTL\Bundle\ContentBundle\Document;
 use Doctrine\ODM\PHPCR\Mapping\Annotations as PHPCR;
 use Sulu\Component\Content\StructureInterface;
 use DTL\Component\Content\Document\PageInterface;
-use DTL\Component\Content\Document\DocumentInterface;
+use DTL\Component\Content\Document\WorkflowState;
+use DTL\Component\Content\Document\LocalizationState;
 
 /**
  * Page document class
@@ -52,25 +53,17 @@ abstract class BasePageDocument extends Document implements PageInterface
 
     public function __construct()
     {
-        $this->workflowStage = StructureInterface::STATE_TEST;
+        $this->workflowState = WorkflowState::TEST;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getPublishedState() 
+    public function isPublished() 
     {
-        return $this->publishedState;
+        return WorkflowState::isPublished($this->workflowState);
     }
     
-    /**
-     * {@inheritDoc}
-     */
-    public function setPublishedState($publishedState)
-    {
-        $this->publishedState = $publishedState;
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -82,9 +75,10 @@ abstract class BasePageDocument extends Document implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function setWorkflowStage($workflowStage)
+    public function setWorkflowState($workflowState)
     {
-        $this->workflowStage = $workflowStage;
+        $this->updatePublishedDate($workflowState);
+        $this->workflowState = $workflowState;
     }
 
     /**
@@ -189,7 +183,7 @@ abstract class BasePageDocument extends Document implements PageInterface
     public function getLocalizationState()
     {
         if (true === $this->shadowLocaleEnabled) {
-            return DocumentInterface::LOCALIZATION_STATE_SHADOW;
+            return LocalizationState::SHADOW;
         }
 
         return parent::getLocalizationState();
@@ -201,9 +195,26 @@ abstract class BasePageDocument extends Document implements PageInterface
     static public function getValidLocalizationStates()
     {
         return array(
-            DocumentInterface::LOCALIZATION_STATE_LOCALIZED,
-            DocumentInterface::LOCALIZATION_STATE_GHOST,
-            DocumentInterface::LOCALIZATION_STATE_SHADOW,
+            LocalizationState::LOCALIZED,
+            LocalizationState::GHOST,
+            LocalizationState::SHADOW
         );
+    }
+
+    /**
+     * If the current workflow state is not published, and the
+     * new one is published, set the published date.
+     *
+     * @param string $workflowState
+     */
+    private function updatePublishedDate($workflowState)
+    {
+        WorkflowState::validateState($workflowState);
+        $newPublished = WorkflowState::isPublished($workflowState);
+
+        // Set the published date
+        if (false === $this->isPublished() && true === $newPublished) {
+            $this->published = new \DateTime();
+        }
     }
 }

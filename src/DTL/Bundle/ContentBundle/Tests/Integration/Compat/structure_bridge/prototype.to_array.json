@@ -1,0 +1,55 @@
+{
+    "id": "<uuid>",
+    "nodeType": 1,
+    "internal": false,
+    "enabledShadowLanguages": [ ],
+    "concreteLanguages": [
+        "en",
+        "en_us",
+        "de",
+        "de_at"
+    ],
+    "shadowOn": false,
+    "shadowBaseLanguage": false,
+    "template": "prototype",
+    "hasSub": false,
+    "creator": 1,
+    "changer": 1,
+    "created": "<date>",
+    "changed": "<date>",
+    "title": "Homepage",
+    "url": "/",
+    "path": "",
+    "nodeState": 2,
+    "publishedState": true,
+    "navContexts": [ ],
+    "originTemplate": "prototype",
+    "published": "<date>",
+    "ext": {
+        "seo": {
+            "title": "",
+            "description": "",
+            "keywords": "",
+            "canonicalUrl": "",
+            "noIndex": false,
+            "noFollow": false,
+            "hideInSitemap": false
+        },
+        "excerpt": {
+            "title": "",
+            "more": "",
+            "description": "",
+            "categories": [ ],
+            "tags": [ ],
+            "icon": [ ],
+            "images": [ ]
+        }
+    },
+    "_embedded": {
+        "nodes": [ ]
+    },
+    "_links": {
+        "self": "/admin/api/nodes/<uuid>",
+        "children": "/admin/api/nodes?parent=<uuid>&depth=1&webspace=sulu_io&language=en"
+    }
+}

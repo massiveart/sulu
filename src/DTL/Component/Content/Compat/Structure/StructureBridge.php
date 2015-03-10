@@ -14,6 +14,8 @@ use Sulu\Component\Content\Section\SectionProperty;
 use Sulu\Component\Content\Block\BlockProperty;
 use Sulu\Component\Content\Block\BlockPropertyType;
 use DTL\Component\Content\Document\DocumentInterface;
+use DTL\Component\Content\Document\LocalizationState;
+use DTL\Component\Content\Document\WorkflowState;
 
 class StructureBridge implements StructureInterface
 {
@@ -161,6 +163,14 @@ class StructureBridge implements StructureInterface
     public function getKey()
     {
         return $this->structure->name;
+    }
+
+    /**
+     * TODO: Implement this
+     */
+    public function getInternal()
+    {
+        return false;
     }
 
     /**
@@ -336,28 +346,34 @@ class StructureBridge implements StructureInterface
     {
         $result = array(
             'id' => $this->getUuid(),
+            'path' => $this->document->getPath(),
             'nodeType' => $this->getNodeType(),
+            'nodeState' => $this->getNodeState(),
             'internal' => false,
             'concreteLanguages' => $this->document->getRealLocales(),
             'hasSub' => false,
+            'published' => $this->document->getPublished(),
         );
 
         if ($complete) {
-            $result = array(
+            $result = array_merge($result, array(
                 'enabledShadowLanguages' => $this->document->getShadowLocales(),
-                'shadowOn' => $this->document->isLocalizationState(DocumentInterface::LOCALIZATION_STATE_SHADOW),
+                'shadowOn' => $this->document->isLocalizationState(LocalizationState::SHADOW),
                 'shadowBaseLanguage' => $this->document->getShadowLocale() ? : false,
                 'template' => $this->structure->name,
+                'originTemplate' => $this->structure->name,
                 'creator' => $this->document->getCreator(),
                 'changer' => $this->document->getChanger(),
                 'created' => $this->document->getCreated(),
-                'changed' => $this->document->getChanged()
-            );
+                'changed' => $this->document->getChanged(),
+                'title' => $this->document->getTitle(),
+                'url' => '/' . $this->document->getResourceLocator(),
+            ));
 
-            if (false === $this->document->isLocalizationState(DocumentInterface::LOCALIZATION_STATE_LOCALIZED)) {
+            if (false === $this->document->isLocalizationState(LocalizationState::LOCALIZED)) {
                 $result['type'] = array(
-                    'name' => $this->getLocalizationState(),
-                    'value' => $this->getLocale(),
+                    'name' => $this->document->getLocalizationState(),
+                    'value' => $this->document->getLocale(),
                 );
             }
 
@@ -365,16 +381,13 @@ class StructureBridge implements StructureInterface
                 $result['linked'] = $this->document->getRedirectType();
             }
 
-            foreach ($this->structure->getProperties() as $property) {
-                // serialize properties
-            }
+            $result = array_merge($this->document->getContent(), $result);
 
             return $result;
         }
 
         $result = array(
-            'path' => $this->path,
-            'title' => $this->getProperty('title')->toArray()
+            'title' => $this->getProperty('title')->toArray(), // legacy system returns diffent fields for title depending on $complete
         );
 
         if ($this->type !== null) {
@@ -474,7 +487,13 @@ class StructureBridge implements StructureInterface
      */
     public function getNodeState()
     {
-        return $this->structure->getLifecycleStage();
+        $state = $this->document->getWorkflowState();
+
+        if ($state == WorkflowState::PUBLISHED) {
+            return StructureInterface::STATE_PUBLISHED;
+        }
+
+        return StructureInterface::STATE_TEST;
     }
 
     /**

@@ -54,6 +54,7 @@ class XmlLoader implements LoaderInterface
     private function loadStructure(\DOMXPath $xpath)
     {
         $structure = new Structure();
+        $structure->name = $this->getValueFromXPath('/x:template/x:key', $xpath);
         $structure->parameters['template'] = $this->getValueFromXPath('/x:template/x:view', $xpath);
         $structure->parameters['controller'] = $this->getValueFromXPath('/x:template/x:controller', $xpath);
         $structure->parameters['cache_lifetime'] = $this->getValueFromXPath('/x:template/x:cacheLifetime', $xpath);

@@ -45,7 +45,7 @@ class PageDocumentType extends AbstractDocumentType
             'type' => 'text',
         ));
         $builder->add('redirectType', 'text');
-        $builder->add('lifecycleStage', 'text');
+        $builder->add('workflowState', 'text');
 
         parent::buildForm($builder, $options);
     }

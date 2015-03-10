@@ -3,11 +3,12 @@
 namespace DTL\Component\Content\Compat\Structure;
 
 use Sulu\Component\Content\StructureManagerInterface;
-use DTL\Component\Content\Structure\Structure;
 use Sulu\Component\Content\StructureExtension\StructureExtensionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use DTL\Component\Content\Structure\Factory\StructureFactoryInterface;
 use DTL\Component\Content\Compat\Structure\StructureBridge;
+use Sulu\Component\Content\Structure as LegacyStructure;
+use DTL\Component\Content\Structure\Structure;
 
 class StructureManager implements StructureManagerInterface
 {
@@ -43,10 +44,10 @@ class StructureManager implements StructureManagerInterface
      * @param string $type
      * @return StructureInterface[]
      */
-    public function getStructures($type = Structure::TYPE_PAGE)
+    public function getStructures($type = LegacyStructure::TYPE_PAGE)
     {
         $compatStructures = array();
-        foreach ($this->structureFactory->getStructures() as $structure) {
+        foreach ($this->structureFactory->getStructures($type) as $structure) {
             $compatStructures[] = new StructureBridge($structure);
         }
 

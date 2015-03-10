@@ -24,5 +24,9 @@ class HomePageDocument extends BasePageDocument
     {
         $this->name = $name;
     }
-}
 
+    public function getStructureType()
+    {
+        return 'homepage';
+    }
+}

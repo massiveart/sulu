@@ -16,6 +16,7 @@ use DTL\Component\Content\Document\PageInterface;
 use PHPCR\NodeInterface;
 use DTL\Component\Content\PhpcrOdm\NamespaceRoleRegistry;
 use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
+use DTL\Component\Content\Document\LocalizationState;
 
 /**
  * Base document class.
@@ -120,7 +121,7 @@ abstract class Document implements DocumentInterface
     /**
      * @var string
      */
-    protected $lifecycleStage;
+    protected $workflowState;
 
     /**
      * {@inheritDoc}
@@ -375,9 +376,9 @@ abstract class Document implements DocumentInterface
     /**
      * {@inheritDoc}
      */
-    public function getLifecycleStage() 
+    public function getWorkflowState() 
     {
-        return $this->lifecycleStage;
+        return $this->workflowState;
     }
 
     /**
@@ -389,14 +390,14 @@ abstract class Document implements DocumentInterface
 
         // if no requeted locale
         if (null === $this->requestedLocale) {
-            return DocumentInterface::LOCALIZATION_STATE_DEFAULT;
+            return LocalizationState::AUTO;
         }
 
         if (in_array($this->requestedLocale, $locales)) {
-            return DocumentInterface::LOCALIZATION_STATE_LOCALIZED;
+            return LocalizationState::LOCALIZED;
         }
 
-        return DocumentInterface::LOCALIZATION_STATE_GHOST;
+        return LocalizationState::GHOST;
     }
 
     /**
@@ -458,8 +459,8 @@ abstract class Document implements DocumentInterface
     static public function getValidLocalizationStates()
     {
         return array(
-            DocumentInterface::LOCALIZATION_STATE_LOCALIZED,
-            DocumentInterface::LOCALIZATION_STATE_GHOST
+            LocalizationState::LOCALIZED,
+            LocalizationState::GHOST
         );
     }
 }

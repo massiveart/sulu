@@ -21,31 +21,6 @@ use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
 interface DocumentInterface
 {
     /**
-     * The document is loaded in the requested locale,
-     */
-    const LOCALIZATION_STATE_LOCALIZED = 'localized';
-
-    /**
-     * The document was not requested in any specific locale
-     */
-    const LOCALIZATION_STATE_DEFAULT = 'default';
-
-    /**
-     * The document is not available in the requested locale
-     * and a fallback has been used instead.
-     */
-    const LOCALIZATION_STATE_GHOST = 'ghost';
-
-    /**
-     * The document specified its own fallback for the requested
-     * locale.
-     *
-     * This status does not apply to non-primary document types such
-     * as snippets.
-     */
-    const LOCALIZATION_STATE_SHADOW = 'shadow';
-
-    /**
      * Return the (node) name of this document
      *
      * @return string
@@ -228,7 +203,7 @@ interface DocumentInterface
 
     /**
      * Set the document node helper. This should be set by an event
-     * subscriber on the onLoad lifecycle event.
+     * subscriber on the onLoad workflow event.
      *
      * This should only be set one time and would ideally be a cosntuctor
      * argument. The implementing class should throw an exception if
@@ -242,16 +217,16 @@ interface DocumentInterface
     public function setDocumentNodeHelper(DocumentNodeHelper $helper);
 
     /**
-     * Return the current lifecycle stage
+     * Return the current workflow state
      *
-     * Return value should represent lifecycle stages, e.g.
+     * Return value should represent workflow states, e.g.
      * testing, review, published, etc.
      *
      * Note the return value may also be a numeric value.
      *
      * @return string
      */
-    public function getLifecycleStage();
+    public function getWorkflowState();
 
     /**
      * Return the localization state of the document, possible
