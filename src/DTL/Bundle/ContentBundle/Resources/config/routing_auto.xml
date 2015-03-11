@@ -5,7 +5,7 @@
     >
 
     <parameters>
-        <parameter key="dtl_content.routing_auto.adapter.sulu_phpcr.class">DTL\Bundle\ContentBundle\RoutingAuto\SuluPhpcrAdapter</parameter>
+        <parameter key="dtl_content.routing_auto.adapter.sulu_phpcr.class">DTL\Component\Content\RoutingAuto\SuluPhpcrAdapter</parameter>
     </parameters>
 
     <services>
