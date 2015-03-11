@@ -75,6 +75,10 @@ class DataNormalizer
 
     private function getAndUnsetRedirectType(&$data)
     {
+        if (!isset($data['nodeType'])) {
+            return null;
+        }
+
         $nodeType = $data['nodeType'];
         unset($data['nodeType']);
 

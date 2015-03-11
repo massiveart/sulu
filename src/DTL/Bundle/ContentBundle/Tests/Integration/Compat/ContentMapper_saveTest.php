@@ -6,7 +6,7 @@ use Sulu\Component\Content\Mapper\ContentMapperRequest;
 use Sulu\Component\Content\StructureInterface;
 use DTL\Bundle\ContentBundle\Tests\Integration\BaseTestCase;
 
-class ContentMapperTest extends BaseTestCase
+class ContentMapper_saveTest extends BaseTestCase
 {
     private $contentMapper;
 
@@ -43,6 +43,44 @@ class ContentMapperTest extends BaseTestCase
      */
     public function testSave($request)
     {
+        $this->contentMapper->saveRequest($request);
+    }
+
+    /**
+     * Updates the node with a different language
+     */
+    public function testSaveUpdate()
+    {
+        $request = ContentMapperRequest::create('page')
+            ->setTemplateKey('contact')
+            ->setWebspaceKey('sulu_io')
+            ->setUserId(1)
+            ->setState(StructureInterface::STATE_PUBLISHED)
+            ->setLocale('en')
+            ->setData(array(
+                'title' => 'This is a test',
+                'url' => '/url/to/content',
+                'name' => 'Daniel Leech',
+                'email' => 'daniel@dantleech.com',
+                'telephone' => '123123',
+            ));
+
+        $structure = $this->contentMapper->saveRequest($request);
+
+        $request = ContentMapperRequest::create('page')
+            ->setTemplateKey('contact')
+            ->setWebspaceKey('sulu_io')
+            ->setUuid($structure->getUuid())
+            ->setUserId(1)
+            ->setState(StructureInterface::STATE_PUBLISHED)
+            ->setLocale('de')
+            ->setData(array(
+                'title' => 'Ceci est une test',
+                'url' => '/url/to/content',
+                'name' => 'Danièl le Français',
+                'email' => 'daniel@dantleech.com',
+                'telephone' => '123123',
+            ));
         $this->contentMapper->saveRequest($request);
     }
 
@@ -89,40 +127,5 @@ class ContentMapperTest extends BaseTestCase
             'en',
             1
         );
-    }
-
-    public function testSaveMultiple()
-    {
-        $request = ContentMapperRequest::create('page')
-            ->setTemplateKey('contact')
-            ->setWebspaceKey('sulu_io')
-            ->setUserId(1)
-            ->setState(StructureInterface::STATE_PUBLISHED)
-            ->setLocale('en')
-            ->setData(array(
-                'title' => 'This is a test',
-                'url' => '/url/to/content',
-                'name' => 'Daniel Leech',
-                'email' => 'daniel@dantleech.com',
-                'telephone' => '123123',
-            ));
-
-        $structure = $this->contentMapper->saveRequest($request);
-
-        $request = ContentMapperRequest::create('page')
-            ->setTemplateKey('contact')
-            ->setWebspaceKey('sulu_io')
-            ->setUuid($structure->getUuid())
-            ->setUserId(1)
-            ->setState(StructureInterface::STATE_PUBLISHED)
-            ->setLocale('de')
-            ->setData(array(
-                'title' => 'Ceci est une test',
-                'url' => '/url/to/content',
-                'name' => 'Danièl le Français',
-                'email' => 'daniel@dantleech.com',
-                'telephone' => '123123',
-            ));
-        $this->contentMapper->saveRequest($request);
     }
 }

@@ -424,7 +424,7 @@ abstract class Document implements DocumentInterface
     {
         $this->assertPersisted(__METHOD__);
 
-        return $this->documentNodeHelper->getLocales($this->node);
+        return $this->getDocumentNodeHelper()->getLocales($this->node);
     }
 
     /**
@@ -462,5 +462,17 @@ abstract class Document implements DocumentInterface
             LocalizationState::LOCALIZED,
             LocalizationState::GHOST
         );
+    }
+
+    protected function getDocumentNodeHelper()
+    {
+        if (null === $this->documentNodeHelper) {
+            throw new \RuntimeException(sprintf(
+                'Document node helper has not been set on document: "%s" (%s)',
+                $this->getPath(), spl_object_hash($this)
+            ));
+        }
+
+        return $this->documentNodeHelper;
     }
 }

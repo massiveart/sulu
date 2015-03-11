@@ -27,7 +27,8 @@ class DocumentNodeHelperSubscriber implements EventSubscriber
     public function getSubscribedEvents()
     {
         return array(
-            Event::postLoad
+            Event::postLoad,
+            Event::postPersist,
         );
     }
 
@@ -51,5 +52,10 @@ class DocumentNodeHelperSubscriber implements EventSubscriber
         }
 
         $document->setDocumentNodeHelper($this->helper);
+    }
+
+    public function postPersist(LifecycleEventArgs $event)
+    {
+        $this->postLoad($event);
     }
 }

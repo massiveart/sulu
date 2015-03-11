@@ -4,6 +4,7 @@ namespace DTL\Component\Content\Compat;
 
 use Sulu\Component\Content\Mapper\ContentMapperInterface;
 use PHPCR\Query\QueryInterface;
+use PHPCR\NodeInterface;
 use PHPCR\Query\QueryResultInterface;
 use Sulu\Component\Content\Mapper\ContentMapperRequest;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -13,6 +14,7 @@ use DTL\Component\Content\Compat\Structure\StructureManager;
 use DTL\Component\Content\Document\DocumentInterface;
 use Sulu\Component\Content\Types\ResourceLocator;
 use Sulu\Component\PHPCR\SessionManager\SessionManagerInterface;
+use DTL\Component\Content\Document\LocalizationState;
 
 class ContentMapper implements ContentMapperInterface
 {
@@ -161,14 +163,39 @@ class ContentMapper implements ContentMapperInterface
     {
         $parent = null;
         if ($uuid) {
-            $parent = $this->getDocument($uuid);
+            $parent = $this->getDocument($uuid, $languageCode);
         }
 
         if (null === $parent) {
-            $parent = $this->getContentDocument($webspaceKey);
+            $parent = $this->getContentDocument($webspaceKey, $languageCode);
         }
 
-        throw new \InvalidArgumentException('Implement me');
+        $fetchDepth = -1;
+        if (false === $flat) {
+            $fetchDepth = $depth;
+        }
+
+        $children = $this->documentManager->getChildren($parent, null, $fetchDepth, $languageCode);
+        $structures = $this->documentsToStructureCollection($children);
+
+        if ($flat) {
+            foreach ($children as $child) {
+                if ($depth === null || $depth > 1) {
+                    $childChildren = $this->loadByParent(
+                        $child->getUuid(),
+                        $webspaceKey,
+                        $languageCode,
+                        $depth - 1,
+                        $flat,
+                        $ignoreExceptions,
+                        $excludeGhosts
+                    );
+                    $structures = array_merge($structures, $childChildren);
+                }
+            }
+        }
+
+        return $structures;
     }
 
     public function load($uuid, $webspaceKey, $locale, $loadGhostContent = false)
@@ -189,8 +216,8 @@ class ContentMapper implements ContentMapperInterface
     )
     {
         return $this->loadByDocument(
-            $this->getDocument($uuid, $locale),
-            $locale, $webspaceKey, false, $loadGhostContent, $excludeShadow
+            $this->getDocument($node->getIdentifier(), $locale),
+            $locale, $webspaceKey, $excludeGhost, $loadGhostContent, $excludeShadow
         );
     }
 
@@ -538,6 +565,16 @@ class ContentMapper implements ContentMapperInterface
         return $structureBridge;
     }
 
+    private function documentsToStructureCollection($documents)
+    {
+        $collection = array();
+        foreach ($documents as $document) {
+            $collection[] = $this->documentToStructure($document);
+        }
+
+        return $collection;
+    }
+
     /**
      * Return the document by path or UUID or throw an exception if it 
      * does not exist.
@@ -597,26 +634,13 @@ class ContentMapper implements ContentMapperInterface
         $excludeShadow = true
     ) 
     {
-        $resolvedLocale = $locale;
-
-        if (true === $loadGhostContent) {
-            $resolvedLocale = $this->localizationFinder->getAvailableLocalization(
-                $document->getPhpcrNode(),
-                $locale,
-                $webspaceKey
-            );
-        }
-
-        if ($document->isLocalizationState('shadow')) {
-            $resolvedLocale = $document->getShadowLocale();
-        }
-
         // TODO: Deprecate passing the webspace key
         if (!$webspaceKey) {
             $webspaceKey = $document->getWebspaceKey();
         }
 
-        if (($excludeGhost && $excludeShadow) && $resolvedLocale != $locale) {
+        $isShadowOrGhost = $document->isLocalizationState(LocalizationState::GHOST) || $document->isLocalizationState(LocalizationState::SHADOW);
+        if (($excludeGhost && $excludeShadow) && $isShadowOrGhost) {
             return null;
         }
 
