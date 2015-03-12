@@ -15,6 +15,9 @@ use DTL\Component\Content\Document\DocumentInterface;
 use Sulu\Component\Content\Types\ResourceLocator;
 use Sulu\Component\PHPCR\SessionManager\SessionManagerInterface;
 use DTL\Component\Content\Document\LocalizationState;
+use Sulu\Component\Content\Exception\ResourceLocatorNotFoundException;
+use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
+use Sulu\Component\Content\BreadcrumbItem;
 
 class ContentMapper implements ContentMapperInterface
 {
@@ -202,7 +205,12 @@ class ContentMapper implements ContentMapperInterface
     {
         return $this->loadByDocument(
             $this->getDocument($uuid, $locale),
-            $locale, $webspaceKey, false, $loadGhostContent, false
+            $locale,
+            array(
+                'load_ghost_content' => $loadGhostContent,
+                'exclude_ghost' => false,
+                'exclude_shadow' => false,
+            )
         );
     }
 
@@ -217,7 +225,12 @@ class ContentMapper implements ContentMapperInterface
     {
         return $this->loadByDocument(
             $this->getDocument($node->getIdentifier(), $locale),
-            $locale, $webspaceKey, $excludeGhost, $loadGhostContent, $excludeShadow
+            $locale,
+            array(
+                'load_ghost_content' => $loadGhostContent,
+                'exclude_ghost' => $excludeGhost,
+                'exclude_shadow' => $excludeShadow,
+            )
         );
     }
 
@@ -231,15 +244,28 @@ class ContentMapper implements ContentMapperInterface
 
     public function loadByResourceLocator($resourceLocator, $webspaceKey, $locale, $segmentKey = null)
     {
-        $uuid = $this->resourceLocator->loadContentNodeUuid(
-            $resourceLocator,
-            $webspaceKey,
-            $locale
+        $path = $this->sessionManager->getRoutePath($webspaceKey, $locale);
+
+        if ('/' !== $resourceLocator) {
+            $path = sprintf('%s%s', $path, $resourceLocator);
+        }
+
+        $route = $this->getDocument($path, $locale);
+
+        if (!$route instanceof AutoRouteInterface) {
+            throw new ResourceLocatorNotFoundException(sprintf(
+                'Expected to find route at path "%s" but got "%s"',
+                $path, is_object($route) ? get_class($route) : gettype($route)
+            ));
+        }
+
+        return $this->loadByDocument(
+            $route->getContent(), 
+            $locale,
+            array(
+                'exclude_shadow' => false,
+            )
         );
-
-        $document = $this->getDocument($uuid, $locale);
-
-        return $this->loadByDocument($document, $locale, $webspaceKey, true, false, false);
     }
 
     public function loadBySql2($sql2, $locale, $webspaceKey, $limit = null)
@@ -260,6 +286,10 @@ class ContentMapper implements ContentMapperInterface
         $structures = array();
 
         foreach ($documents as $document) {
+            if ($excludeGhost && $document->isLocalizationState(LocalizationState::GHOST)) {
+                continue;
+            }
+
             $structure = $this->documentToStructure($document);
             $structures[] = $structure;
         }
@@ -267,6 +297,10 @@ class ContentMapper implements ContentMapperInterface
         return $structures;
     }
 
+    /**
+     * TODO: I expect we will need to filter the children somehow
+     * NOTE: UUID is not required
+     */
     public function loadTreeByUuid(
         $uuid,
         $locale,
@@ -275,15 +309,21 @@ class ContentMapper implements ContentMapperInterface
         $loadGhostContent = false
     )
     {
-        $document = $this->getDocument($uuid, $locale);
+        $contentChildren = $this->getContentDocument($webspaceKey, $locale)->getChildren();
 
-        list($result) = $this->loadTreeByDocument(
-            $document, $locale, $webspaceKey, $excludeGhost, $loadGhostContent
+        return $this->loadCollectionByDocuments(
+            $contentChildren,
+            $locale,
+            array(
+                'load_ghost_content' => $loadGhostContent,
+                'exclude_ghost' => $excludeGhost,
+            )
         );
-
-        return $result;
     }
 
+    /**
+     * NOTE: UUID and webspacekey are no longer required.
+     */
     public function loadTreeByPath(
         $path,
         $locale,
@@ -292,56 +332,33 @@ class ContentMapper implements ContentMapperInterface
         $loadGhostContent = false
     )
     {
-        $path = ltrim($path, '/');
-
-        if ($path === '') {
-            $document = $this->getContentNode($webspaceKey);
-        } else {
-            $document = $this->getDocument(sprintf(
-                '%s/%s',
-                $this->sessionManager->getContentPath($webspaceKey),
-                $path
-            ), $locale);
-        }
-
-        list($result) = $this->loadTreeByDocument($document, $locale, $webspaceKey, $excludeGhost, $loadGhostContent);
-
-        return $result;
+        return $this->loadTreeByUuid(null, $locale, null, $excludeGhost, $loadGhostContent);
     }
 
     public function loadBreadcrumb($uuid, $locale, $webspaceKey)
     {
-        // switch to PHPCR-ODM QB?
-        $sql = sprintf(
-            "SELECT parent.[jcr:uuid], child.[jcr:uuid]
-             FROM [nt:unstructured] AS child INNER JOIN [nt:unstructured] AS parent
-                 ON ISDESCENDANTNODE(child, parent)
-             WHERE child.[jcr:uuid]='%s'",
-            $uuid
-        );
+        $document = $this->getDocument($uuid, $locale);
 
-        $query = $this->documentManager->createPhpcrQuery($sql, QueryInterface::JCR_SQL2);
-        $nodes = $query->execute();
+        $documents = array();
+        $contentDocument = $this->getContentDocument($webspaceKey, $locale);
 
-        $result = array();
-        $groundDepth = $this->getContentDocument($webspaceKey)->getDepth();
+        do {
+            $documents[] = $document;
+            $document = $document->getParent();
+        } while ($document instanceof DocumentInterface && $document->getDepth() >= $contentDocument->getDepth());
 
-        /** @var Row $row */
-        foreach ($nodes->getRows() as $row) {
-            $node = $row->getNode('parent');
-            $nodeUuid = $node->getIdentifier();
-            $depth = $node->getDepth() - $groundDepth;
-            if ($depth >= 0) {
-                $document = $this->documentManager->getUnitOfWork()->getOrCreateDocument(null, $node, array(
-                    'locale' => $locale
-                ));
-                $result[$depth] = new BreadcrumbItem($depth, $nodeUuid, $document->getTitle());
-            }
+        $items = array();
+        foreach ($documents as $document) {
+            $items[] = new BreadcrumbItem(
+                $document->getDepth() - $contentDocument->getDepth(),
+                $document->getUuid(),
+                $document->getTitle()
+            );
         }
 
-        ksort($result);
+        $items = array_reverse($items);
 
-        return $result;
+        return $items;
     }
 
     public function delete($uuid, $webspaceKey)
@@ -488,8 +505,7 @@ class ContentMapper implements ContentMapperInterface
             $documents = $this->documentManager->findMany($ids);
 
             foreach ($documents as $document) {
-                $document->setLocale($locale);
-                $this->documentManager->refresh($document);
+                $this->documentManager->loadTranslation(null, $document->getUuid(), $locale);
 
                 $pageDepth = substr_count($row->getPath('page'), '/') - $rootDepth;
 
@@ -591,7 +607,7 @@ class ContentMapper implements ContentMapperInterface
         if (null === $document) {
             throw new \RuntimeException(sprintf(
                 'Could not find document with ID "%s"',
-                $uuid
+                $id
             ));
         }
 
@@ -604,7 +620,7 @@ class ContentMapper implements ContentMapperInterface
      *
      * @param mixed $webspaceKey
      */
-    private function getContentDocument($webspaceKey, $locale = null)
+    private function getContentDocument($webspaceKey, $locale)
     {
         $contentPath = $this->sessionManager->getContentPath($webspaceKey);
         $class = 'DTL\Component\Content\Document\DocumentInterface';
@@ -625,73 +641,31 @@ class ContentMapper implements ContentMapperInterface
         return $document;
     }
 
-    private function loadByDocument(
-        DocumentInterface $document,
-        $locale,
-        $webspaceKey,
-        $excludeGhost = true,
-        $loadGhostContent = false,
-        $excludeShadow = true
-    ) 
+    private function loadCollectionByDocuments($documents, $locale, $options)
     {
-        // TODO: Deprecate passing the webspace key
-        if (!$webspaceKey) {
-            $webspaceKey = $document->getWebspaceKey();
+        $collection = array();
+        foreach ($documents as $document) {
+            $collection[] = $this->loadByDocument($document, $locale, $options);
         }
 
+        return $collection;
+    }
+
+    private function loadByDocument(DocumentInterface $document, $locale, $options)
+    {
+        $options = array_merge(array(
+            'load_ghost_content' => false,
+            'exclude_ghost' => true,
+            'exclude_shadow' => true,
+        ), $options);
+
         $isShadowOrGhost = $document->isLocalizationState(LocalizationState::GHOST) || $document->isLocalizationState(LocalizationState::SHADOW);
-        if (($excludeGhost && $excludeShadow) && $isShadowOrGhost) {
+        if (($options['exclude_ghost'] && $options['exclude_shadow']) && $isShadowOrGhost) {
             return null;
         }
 
         $this->documentManager->findTranslation(null, $document->getUuid(), $locale);
 
         return $this->documentToStructure($document);
-    }
-
-    private function loadTreeByDocument(
-        DocumentInterface $document,
-        $locale,
-        $webspaceKey,
-        $excludeGhost = true,
-        $loadGhostContent = false,
-        DocumentInterface $childDocument
-    ) {
-        // go up to content node
-        if ($document->getDepth() > $this->getContentDocument($webspaceKey)->getDepth()) {
-            list($globalResult, $nodeStructure) = $this->loadTreeByDocument(
-                $node->getParent(),
-                $locale,
-                $webspaceKey,
-                $excludeGhost,
-                $loadGhostContent,
-                $document
-            );
-        }
-
-        // load children of node
-        $result = array();
-        $childStructure = null;
-        foreach ($node as $child) {
-            $structure = $this->loadByNode($child, $languageCode, $webspaceKey, $excludeGhost, $loadGhostContent);
-
-            if ($structure === null) {
-                continue;
-            }
-
-            $result[] = $structure;
-
-            // search structure for child node
-            if ($childNode !== null && $childNode === $child) {
-                $childStructure = $structure;
-            }
-        }
-
-        // set global result once
-        if (!isset($globalResult)) {
-            $globalResult = $result;
-        }
-
-        return array($globalResult, $childStructure);
     }
 }

@@ -365,9 +365,8 @@ abstract class Document implements DocumentInterface
     public function setDocumentNodeHelper(DocumentNodeHelper $documentNodeHelper)
     {
         if (null !== $this->documentNodeHelper) {
-            throw new \RuntimeException(
-                'Document helper has already been set. Cannot replace it.'
-            );
+            // todo: this should not be mutable, but how can we tell the subscriber not
+            //       to re-set this?
         }
 
         $this->documentNodeHelper = $documentNodeHelper;

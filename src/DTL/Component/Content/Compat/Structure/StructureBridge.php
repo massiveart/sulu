@@ -370,7 +370,13 @@ class StructureBridge implements StructureInterface
                 'url' => '/' . $this->document->getResourceLocator(),
             ));
 
-            if (false === $this->document->isLocalizationState(LocalizationState::LOCALIZED)) {
+            if (in_array(
+                $this->document->getLocalizationState(),
+                array(
+                    LocalizationState::GHOST,
+                    LocalizationState::SHADOW,
+                )
+            )) {
                 $result['type'] = array(
                     'name' => $this->document->getLocalizationState(),
                     'value' => $this->document->getLocale(),
@@ -390,7 +396,7 @@ class StructureBridge implements StructureInterface
             'title' => $this->getProperty('title')->toArray(), // legacy system returns diffent fields for title depending on $complete
         );
 
-        if ($this->type !== null) {
+        if ($this->document->getLocalizationState() !== LocalizationState::AUTO) {
             $result['type'] = $this->getType()->toArray();
         }
 

@@ -72,7 +72,6 @@ class ContentSerializerSubscriber implements EventSubscriber
             return;
         }
 
-        $node = $this->documentManager->getNodeForDocument($document);
         $data = $this->serializer->deserialize($document);
         $document->setContent($data);
     }
@@ -114,7 +113,6 @@ class ContentSerializerSubscriber implements EventSubscriber
         $session = $event->getObjectManager()->getPhpcrSession();
 
         foreach ($this->serializationStack as $document) {
-            $node = $this->documentManager->getNodeForDocument($document);
             $this->serializer->serialize($document);
         }
 

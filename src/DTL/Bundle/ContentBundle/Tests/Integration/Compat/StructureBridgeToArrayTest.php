@@ -14,13 +14,7 @@ class StructureBridgeToArrayTest extends BaseTestCase
 
     public function setUp()
     {
-        $this->getDm() = $this->getContainer()->get('doctrine_phpcr.odm.document_manager');
-        NodeHelper::purgeWorkspace($this->getDm()->getPhpcrSession());
-        $this->getDm()->getPhpcrSession()->save();
-        $this->getContainer()->get('doctrine_phpcr.initializer_manager')->initialize();
-        $this->getDm()->flush();
-        $this->getDm()->clear();
-
+        $this->initPhpcr();
         $this->contentMapper = $this->getContainer()->get('dtl_content.compat.content_mapper');
     }
 

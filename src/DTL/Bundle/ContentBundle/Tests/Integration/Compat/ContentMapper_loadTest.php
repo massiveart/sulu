@@ -7,6 +7,7 @@ use Sulu\Component\Content\StructureInterface;
 use DTL\Bundle\ContentBundle\Tests\Integration\BaseTestCase;
 use PHPCR\Util\PathHelper;
 use DTL\Bundle\ContentBundle\Document\PageDocument;
+use DTL\Component\Content\Compat\Structure\StructureBridge;
 
 class ContentMapper_loadTest extends BaseTestCase
 {
@@ -145,34 +146,192 @@ class ContentMapper_loadTest extends BaseTestCase
         $this->assertEquals('/cmf/sulu_io/contents', $startPage->getPath());
     }
 
+    public function testLoadByResourceLocator_startPage()
+    {
+        $content = $this->contentMapper->loadByResourceLocator('/', 'sulu_io', 'de');
+        $this->assertEquals('/cmf/sulu_io/contents', $content->getPath());
+    }
+
     public function testLoadByResourceLocator()
     {
-        $this->contentMapper->loadByResourceLocator('/', 'sulu_io', 'de');
+        $this->createDocument('/cmf/sulu_io/contents/foo-bar', 'de');
+        $this->manager->flush();
+
+        $content = $this->contentMapper->loadByResourceLocator('/foo-bar/foo-bar', 'sulu_io', 'de');
+        $this->assertEquals('/cmf/sulu_io/contents/foo-bar', $content->getPath());
     }
 
     public function testLoadBySql2()
     {
-        $this->markTestSkipped('todo');
+        $locale = 'fr';
+        $limit = 2;
+
+        $this->createDocument('/cmf/sulu_io/contents/foo-bar', 'fr');
+        $this->createDocument('/cmf/sulu_io/contents/foo-bar/bar', 'fr');
+        $this->createDocument('/cmf/sulu_io/contents/foo-bar/bar/baz', 'fr');
+
+        $this->manager->flush();
+
+        $query = 'SELECT * FROM [nt:unstructured] AS a WHERE ISDESCENDANTNODE("a", "/cmf/sulu_io/contents")';
+        $structures = $this->contentMapper->loadBySql2($query, $locale, 'sulu_io', $limit);
+        $this->assertCount(2, $structures);
     }
 
-    public function testLoadByQuery()
+    public function provideLoadByQuery()
     {
-        $this->markTestSkipped('todo');
+        return array(
+            // exclude ghost content with two documents, one of which would be a ghost
+            array(
+                'fr', 
+                array(
+                    'foo-bar' => 'fr',
+                    'foo-bar/foo' => 'de',
+                ),
+                true, true,
+                1
+            ),
+            // both documents are in the requested locale
+            array(
+                'fr', 
+                array(
+                    'foo-bar' => 'fr',
+                    'foo-bar/foo' => 'fr',
+                ),
+                false, true,
+                2
+            ),
+            // documents are in different locales but ghost content is allowed
+            array(
+                'fr', 
+                array(
+                    'foo-bar' => 'fr',
+                    'foo-bar/foo' => 'de',
+                ),
+                false, true,
+                2
+            ),
+        );
     }
 
-    public function testLoadTreeByUuid()
+    /**
+     * @dataProvider provideLoadByQuery
+     */
+    public function testLoadByQuery($requestedLocale, $documents, $excludeGhost, $loadGhostContent, $expectedNbResults)
     {
-        $this->markTestSkipped('todo');
+        foreach ($documents as $name => $locale) {
+            $this->createDocument('/cmf/sulu_io/contents/' . $name, $locale);
+        }
+
+        $this->manager->flush();
+
+        $qb = $this->manager->createQueryBuilder();
+        $qb->from()->document(PageDocument::class, 'p');
+
+        $structures = $this->contentMapper->loadByQuery(
+            $qb->getQuery()->getPhpcrQuery(),
+            $requestedLocale,
+            'sulu_io',
+            $excludeGhost,
+            $loadGhostContent
+        );
+
+        $this->assertCount(2, $structures);
     }
 
-    public function testLoadTreeByPath()
+    public function provideLoadTreeByUuid()
     {
-        $this->markTestSkipped('todo');
+        return array(
+            // exclude ghost content with two documents, one of which would be a ghost
+            array(
+                array(
+                    'foo-bar' => 'fr',
+                    'foo-boo' => 'fr',
+                    'foo-bar/foo' => 'de',
+                    'foo-bar/baz' => 'de',
+                    'foo-bar/bar' => 'de',
+                    'foo-bar/foo/foo' => 'de',
+                ),
+                'fr', 
+                false, true,
+                2
+            ),
+        );
+    }
+
+    /**
+     * Load tree by UUID should return all the children of the webspace content document
+     *
+     * @dataProvider provideLoadTreeByUuid
+     */
+    public function testLoadTreeByUuid($documents, $requestedLocale, $excludeGhost, $loadGhostContent, $expectedNbResults)
+    {
+        $childDocument = null;
+        foreach ($documents as $name => $locale) {
+            $document = $this->createDocument('/cmf/sulu_io/contents/' . $name, $locale);
+        }
+
+        $this->manager->flush();
+        $this->manager->clear();
+
+        $results = $this->contentMapper->loadTreeByUuid(
+            null,
+            $requestedLocale, 'sulu_io', $excludeGhost, $loadGhostContent
+        );
+
+        $this->assertCount($expectedNbResults, $results);
+    }
+
+    /**
+     * Now the same operation as load tree by UUID
+     *
+     * @dataProvider provideLoadTreeByUuid
+     */
+    public function testLoadTreeByPath($documents, $requestLocale, $excludeGhost, $loadGhostContent, $expectedNbResults)
+    {
+        $this->testLoadtreeByUuid($documents, $requestLocale, $excludeGhost, $loadGhostContent, $expectedNbResults);
     }
 
     public function testLoadBreadcrumb()
     {
-        $this->markTestSkipped('todo');
+        $root = $this->manager->find(null, '/cmf/sulu_io/contents');
+        $descendant1 = $this->createDocument('/cmf/sulu_io/contents/foo-bar', 'fr');
+        $descendant2 = $this->createDocument('/cmf/sulu_io/contents/foo-bar/bar', 'fr');
+        $descendant3 = $this->createDocument('/cmf/sulu_io/contents/foo-bar/bar/baz', 'fr');
+
+        $expectedCrumbs = array(
+            array(
+                'depth' => 0,
+                'title' => 'Homepage',
+                'uuid' => $root->getUuid(),
+            ),
+            array(
+                'depth' => 1,
+                'title' => 'foo-bar',
+                'uuid' => $descendant1->getUuid(),
+            ),
+            array(
+                'depth' => 2,
+                'title' => 'bar',
+                'uuid' => $descendant2->getUuid(),
+            ),
+            array(
+                'depth' => 3,
+                'title' => 'baz',
+                'uuid' => $descendant3->getUuid(),
+            ),
+        );
+
+        $this->manager->flush();
+        $this->manager->clear();
+
+        $breadcrumb = $this->contentMapper->loadBreadcrumb($descendant3->getUuid(), 'fr', 'sulu_io');
+
+        $crumbs = array();
+        foreach ($breadcrumb as $item) {
+            $crumbs[] = $item->toArray();
+        }
+
+        $this->assertEquals($expectedCrumbs, $crumbs);
     }
 
     private function createDocument($path, $locale)
@@ -189,7 +348,7 @@ class ContentMapper_loadTest extends BaseTestCase
         $document->setParent($parent);
         $document->setStructureType('contact');
         $document->setResourceLocator('/' . $name);
-        $document->setLocale('fr');
+        $document->setLocale($locale);
 
         $this->manager->persist($document);
 
