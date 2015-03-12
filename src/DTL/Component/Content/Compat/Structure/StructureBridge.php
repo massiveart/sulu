@@ -16,6 +16,7 @@ use Sulu\Component\Content\Block\BlockPropertyType;
 use DTL\Component\Content\Document\DocumentInterface;
 use DTL\Component\Content\Document\LocalizationState;
 use DTL\Component\Content\Document\WorkflowState;
+use Sulu\Component\Content\StructureType;
 
 class StructureBridge implements StructureInterface
 {
@@ -303,8 +304,13 @@ class StructureBridge implements StructureInterface
      */
     public function getType()
     {
-        // should return either page or snippet ..
-        $this->notImplemented(__METHOD__);
+        if ($this->document->getLocalizationState() === LocalizationState::GHOST) {
+            return StructureType::getGhost($this->document->getLocale());
+        }
+
+        if ($this->document->getLocalizationState() === LocalizationState::SHADOW) {
+            return StructureType::getShadow($this->document->getLocale());
+        }
     }
 
     /**
@@ -353,6 +359,7 @@ class StructureBridge implements StructureInterface
             'concreteLanguages' => $this->document->getRealLocales(),
             'hasSub' => false,
             'published' => $this->document->getPublished(),
+            'title' => $this->document->getTitle(), // legacy system returns diffent fields for title depending on $complete
         );
 
         if ($complete) {
@@ -367,7 +374,7 @@ class StructureBridge implements StructureInterface
                 'created' => $this->document->getCreated(),
                 'changed' => $this->document->getChanged(),
                 'title' => $this->document->getTitle(),
-                'url' => '/' . $this->document->getResourceLocator(),
+                'url' => $this->document->getResourceLocator(),
             ));
 
             if (in_array(
@@ -392,17 +399,13 @@ class StructureBridge implements StructureInterface
             return $result;
         }
 
-        $result = array(
-            'title' => $this->getProperty('title')->toArray(), // legacy system returns diffent fields for title depending on $complete
-        );
-
-        if ($this->document->getLocalizationState() !== LocalizationState::AUTO) {
+        if (null !== $this->getType()) {
             $result['type'] = $this->getType()->toArray();
         }
 
-        if ($this->nodeType === self::NODE_TYPE_INTERNAL_LINK) {
+        if ($this->document->getRedirectType() == PageInterface::REDIRECT_TYPE_INTERNAL) {
             $result['linked'] = 'internal';
-        } elseif ($this->nodeType === self::NODE_TYPE_EXTERNAL_LINK) {
+        } elseif ($this->document->getRedirectType() == PageInterface::REDIRECT_TYPE_EXTERNAL) {
             $result['linked'] = 'external';
         }
 

@@ -68,7 +68,7 @@ abstract class AbstractDocumentType extends AbstractType
     {
         $builder->add('title', 'text');
         $builder->add('parent', 'phpcr_document', array(
-            'class' => $options['data_class'],
+            'class' => 'DTL\Bundle\ContentBundle\Document\Document',
         ));
         $builder->setAttribute('webspace_key', $options['webspace_key']);
         $builder->setAttribute('structure_name', $options['structure_name']);

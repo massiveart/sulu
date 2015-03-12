@@ -65,7 +65,13 @@ class SuluLocaleChooser implements LocaleChooserInterface
      */
     public function getLocale()
     {
-        return $this->requestAnalyzer->getCurrentLocalization();
+        $currentLocalization = $this->requestAnalyzer->getCurrentLocalization();
+
+        if (!$currentLocalization) {
+            return null;
+        }
+
+        return $currentLocalization->getLocalization();
     }
 
     private function setRequestedLocale($document, $forLocale)

@@ -9,12 +9,14 @@ use DTL\Bundle\ContentBundle\Tests\Integration\BaseTestCase;
 class ContentMapper_saveTest extends BaseTestCase
 {
     private $contentMapper;
+    private $documentManager;
 
     public function setUp()
     {
         $this->initPhpcr();
         $this->parent = $this->getDm()->find(null, '/cmf/sulu_io/contents');
         $this->contentMapper = $this->getContainer()->get('dtl_content.compat.content_mapper');
+        $this->documentManager = $this->getContainer()->get('doctrine_phpcr.odm.document_manager');
     }
 
     public function provideSave()
@@ -82,6 +84,44 @@ class ContentMapper_saveTest extends BaseTestCase
                 'telephone' => '123123',
             ));
         $this->contentMapper->saveRequest($request);
+    }
+
+    public function testSaveParent()
+    {
+        $request = ContentMapperRequest::create('page')
+            ->setTemplateKey('contact')
+            ->setWebspaceKey('sulu_io')
+            ->setUserId(1)
+            ->setState(StructureInterface::STATE_PUBLISHED)
+            ->setLocale('en')
+            ->setData(array(
+                'title' => 'This is a test',
+                'url' => '/url/to/content',
+                'name' => 'Daniel Leech',
+                'email' => 'daniel@dantleech.com',
+                'telephone' => '123123',
+            ));
+
+        $structure = $this->contentMapper->saveRequest($request);
+
+        $request = ContentMapperRequest::create('page')
+            ->setTemplateKey('contact')
+            ->setWebspaceKey('sulu_io')
+            ->setParentUuid($structure->getUuid())
+            ->setUserId(1)
+            ->setState(StructureInterface::STATE_PUBLISHED)
+            ->setLocale('de')
+            ->setData(array(
+                'title' => 'Ceci est une test',
+                'url' => '/url/to/content',
+                'name' => 'Danièl le Français',
+                'email' => 'daniel@dantleech.com',
+                'telephone' => '123123',
+            ));
+        $this->contentMapper->saveRequest($request);
+
+        $leafDocument = $this->documentManager->find(null, '/cmf/sulu_io/contents/this-is-a-test/ceci-est-une-test');
+        $this->assertNotNull($leafDocument);
     }
 
     public function testSaveStartPage()

@@ -17,9 +17,10 @@ class DataNormalizer
      * @param mixed $data
      * @param mixed $state Translates to the workflow state
      */
-    public function normalize($data, $state)
+    public function normalize($data, $state, $parentUuid)
     {
         unset(
+            $data['breadcrumb'],
             $data['template'],
             $data['originTemplate'],
             $data['changed'],
@@ -47,6 +48,7 @@ class DataNormalizer
             'navigationContexts' => $this->getAndUnsetValue($data, 'navContexts'),
             'workflowState' => $this->getWorkflowState($state),
             'content' => $data,
+            'parent' => $parentUuid,
         );
 
         return $normalized;

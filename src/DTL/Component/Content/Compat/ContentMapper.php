@@ -86,7 +86,7 @@ class ContentMapper implements ContentMapperInterface
         $structureType = Structure::TYPE_PAGE
     )
     {
-        $data = $this->dataNormalizer->normalize($data, $state);
+        $data = $this->dataNormalizer->normalize($data, $state, $parent);
 
         $document = null;
 
