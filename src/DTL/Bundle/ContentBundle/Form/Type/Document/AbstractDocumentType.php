@@ -67,9 +67,7 @@ abstract class AbstractDocumentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('title', 'text');
-        $builder->add('parent', 'phpcr_document', array(
-            'class' => 'DTL\Bundle\ContentBundle\Document\Document',
-        ));
+        $builder->add('parent', 'document_object');
         $builder->setAttribute('webspace_key', $options['webspace_key']);
         $builder->setAttribute('structure_name', $options['structure_name']);
         $builder->setAttribute('locale', $options['locale']);

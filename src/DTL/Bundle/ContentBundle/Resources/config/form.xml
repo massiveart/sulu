@@ -4,6 +4,12 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <!-- document field type -->
+        <service id="dtl_content.form.factory.document_type" class="DTL\Bundle\ContentBundle\Form\Type\Base\DocumentObjectType">
+            <argument type="service" id="doctrine_phpcr.odm.document_manager" />
+            <tag name="form.type" alias="document_object" />
+        </service>
+
         <!-- Structure form type factory -->
         <service id="dtl_content.form.factory.structure_type" class="DTL\Component\Content\Structure\Form\StructureFormTypeFactory">
             <argument type="service" id="dtl_content.structure.factory" />
