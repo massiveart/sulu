@@ -33,9 +33,10 @@ class StructureBridge implements StructureInterface
     /**
      * @param Structure $structure
      */
-    public function __construct(Structure $structure)
+    public function __construct(Structure $structure, DocumentInterface $document = null)
     {
         $this->structure = $structure;
+        $this->document = $document;
     }
 
     /**

@@ -375,6 +375,7 @@ class ContentMapper implements ContentMapperInterface
 
         $this->documentManager->deleteRecursively($document);
         $this->documentManager->flush();
+
     }
 
     public function move($uuid, $destParentUuid, $userId, $webspaceKey, $languageCode)

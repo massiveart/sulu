@@ -20,6 +20,8 @@ class DataNormalizer
     public function normalize($data, $state, $parentUuid)
     {
         unset(
+            $data['creator'],
+            $data['changer'],
             $data['breadcrumb'],
             $data['template'],
             $data['originTemplate'],
