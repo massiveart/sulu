@@ -39,7 +39,7 @@ class DocumentToUuidTransformer implements DataTransformerInterface
     public function reverseTransform($uuid)
     {
         if (!$uuid) {
-            return;
+            return null;
         }
 
         if (!UUIDHelper::isUuid($uuid)) {

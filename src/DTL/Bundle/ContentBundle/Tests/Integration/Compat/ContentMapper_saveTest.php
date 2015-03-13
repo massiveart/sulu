@@ -5,6 +5,7 @@ namespace DTL\Bundle\ContentBundle\Tests\Integration\Compat;
 use Sulu\Component\Content\Mapper\ContentMapperRequest;
 use Sulu\Component\Content\StructureInterface;
 use DTL\Bundle\ContentBundle\Tests\Integration\BaseTestCase;
+use DTL\Bundle\ContentBundle\Document\PageDocument;
 
 class ContentMapper_saveTest extends BaseTestCase
 {
@@ -121,7 +122,27 @@ class ContentMapper_saveTest extends BaseTestCase
         $this->contentMapper->saveRequest($request);
 
         $leafDocument = $this->documentManager->find(null, '/cmf/sulu_io/contents/this-is-a-test/ceci-est-une-test');
-        $this->assertNotNull($leafDocument);
+        $this->assertNotNull($leafDocument, 'Persisting new document with parent');
+
+        // now when we update this document we can leave parent as NULL
+        $request = ContentMapperRequest::create('page')
+            ->setTemplateKey('contact')
+            ->setWebspaceKey('sulu_io')
+            ->setUuid($leafDocument->getUuid())
+            ->setUserId(1)
+            ->setState(StructureInterface::STATE_PUBLISHED)
+            ->setLocale('de')
+            ->setData(array(
+                'title' => 'Bonjour le monde',
+                'url' => '/url/to/content',
+                'name' => 'Danièl le Français',
+                'email' => 'daniel@dantleech.com',
+                'telephone' => '123123',
+            ));
+        $this->contentMapper->saveRequest($request);
+
+        $leafDocument = $this->documentManager->find(null, '/cmf/sulu_io/contents/this-is-a-test/bonjour-le-monde');
+        $this->assertNotNull($leafDocument, 'Updating existing document no parent specified');
     }
 
     public function testSaveStartPage()

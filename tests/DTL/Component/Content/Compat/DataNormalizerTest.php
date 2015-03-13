@@ -3,6 +3,7 @@
 namespace vendor\sulu\sulu\tests\DTL\Component\Content\Compat;
 
 use DTL\Component\Content\Compat\DataNormalizer;
+use Sulu\Component\Content\StructureInterface;
 
 class DataNormalizerTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,19 +19,23 @@ class DataNormalizerTest extends \PHPUnit_Framework_TestCase
                 array(
                     'title' => 'Title',
                     'url' => '/path/to',
-                    'nodeType' => 'external',
+                    'nodeType' => 4,
                     'navContexts' => array('one', 'two'),
                     'nodeState' => 2,
                     'animal' => 'dog',
                     'car' => 'skoda',
                     'duck' => 'quack',
                 ),
+                StructureInterface::STATE_PUBLISHED,
+                1234,
                 array(
                     'title' => 'Title',
                     'resourceLocator' => '/path/to',
                     'redirectType' => 'external',
-                    'lifecycleStage' => 2,
+                    'workflowState' => 'published',
                     'navigationContexts' => array('one', 'two'),
+                    'parent' => 1234,
+                    'workflowState' => 'published',
                     'content' => array(
                         'animal' => 'dog',
                         'car' => 'skoda',
@@ -44,11 +49,11 @@ class DataNormalizerTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideNormalizer
      */
-    public function testNormalizer($data, $expectedNormalizedData)
+    public function testNormalizer($data, $workflowState, $parentUuid, $expectedNormalizedData)
     {
         $this->assertEquals(
             $expectedNormalizedData,
-            $this->normalizer->normalize($data)
+            $this->normalizer->normalize($data, $workflowState, $parentUuid)
         );
     }
 }

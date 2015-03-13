@@ -136,9 +136,14 @@ class NameSubscriber implements EventSubscriber
 
         $i = 0;
         do {
-            $path = $this->getPath($parentPath, $slug, $i++);
-            $document = $this->documentManager->find(null, $path);
-        } while ($document);
+            $path = $this->getPath($parentPath, $slug, $i);
+            $foundDocument = $this->documentManager->find(null, $path);
+            $i++;
+
+            if ($foundDocument === $document) {
+                break;
+            }
+        } while ($foundDocument);
 
         return basename($path);
     }

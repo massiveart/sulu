@@ -5,6 +5,7 @@ namespace DTL\Component\Content\Compat;
 use Sulu\Component\Content\StructureInterface;
 use DTL\Component\Content\Document\WorkflowState;
 use Sulu\Component\Content\Structure as LegacyStructure;
+use DTL\Component\Content\Document\PageInterface;
 
 /**
  * Normalizes the legacy Sulu request data
@@ -36,6 +37,7 @@ class DataNormalizer
             $data['enabledShadowLanguages'],
             $data['shadowOn'],
             $data['shadowBaseLanguage'],
+            $data['publishedState'],
             $data['created'],
             $data['_embedded'],
             $data['_links'],
@@ -50,8 +52,11 @@ class DataNormalizer
             'navigationContexts' => $this->getAndUnsetValue($data, 'navContexts'),
             'workflowState' => $this->getWorkflowState($state),
             'content' => $data,
-            'parent' => $parentUuid,
         );
+
+        if ($parentUuid) {
+            $normalized['parent'] = $parentUuid;
+        }
 
         return $normalized;
     }

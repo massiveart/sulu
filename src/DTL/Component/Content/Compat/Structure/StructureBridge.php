@@ -358,10 +358,16 @@ class StructureBridge implements StructureInterface
             'nodeState' => $this->getNodeState(),
             'internal' => false,
             'concreteLanguages' => $this->document->getRealLocales(),
-            'hasSub' => false,
+            'hasSub' => count($this->document->getChildren()) ? true : false,
             'published' => $this->document->getPublished(),
             'title' => $this->document->getTitle(), // legacy system returns diffent fields for title depending on $complete
         );
+
+        if ($this->document instanceof PageInterface) {
+            $result['linked'] = $this->document->getRedirectType();
+            $result['publishedState'] = $this->document->getWorkflowState() === WorkflowState::PUBLISHED;
+            $result['navContexts'] = array();
+        }
 
         if ($complete) {
             $result = array_merge($result, array(
@@ -389,10 +395,6 @@ class StructureBridge implements StructureInterface
                     'name' => $this->document->getLocalizationState(),
                     'value' => $this->document->getLocale(),
                 );
-            }
-
-            if ($this->document instanceof PageInterface) {
-                $result['linked'] = $this->document->getRedirectType();
             }
 
             $result = array_merge($this->document->getContent(), $result);
