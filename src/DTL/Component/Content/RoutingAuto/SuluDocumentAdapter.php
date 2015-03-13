@@ -31,7 +31,7 @@ use PHPCR\Util\PathHelper;
 /**
  * Sulu adapter for the RoutingAuto Symfony CMF component
  */
-class SuluPhpcrAdapter extends PhpcrOdmAdapter
+class SuluDocumentAdapter extends PhpcrOdmAdapter
 {
     const TAG_NO_MULTILANG = '_no_lang';
 

@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class SuluPhpcrAdapterTest extends SuluTestCase
+class SuluDocumentAdapterTest extends SuluTestCase
 {
     private $content;
     private $documentManager;
@@ -38,6 +38,11 @@ class SuluPhpcrAdapterTest extends SuluTestCase
     public function provideAdapter()
     {
         return array(
+            array(
+                '/',
+                'This is a base document',
+                '/this-is-a-base-document',
+            ),
             array(
                 '/resource/locator',
                 'This is my title',

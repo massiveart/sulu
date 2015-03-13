@@ -3,8 +3,8 @@ DTL\Bundle\ContentBundle\Document\HomepageDocument:
     conflict_resolver: throw_exception
 
 DTL\Bundle\ContentBundle\Document\PageDocument:
-    uri_schema: "{url}/{title}"
+    uri_schema: "{resource_locator}/{title}"
     token_providers:
-        url: [content_method, { method: getResourceLocator, slugify: false  }]
+        resource_locator: [content_method, { method: getResourceLocator, slugify: false  }]
         title: [content_method, { method: getTitle }]
     conflict_resolver: auto_increment
