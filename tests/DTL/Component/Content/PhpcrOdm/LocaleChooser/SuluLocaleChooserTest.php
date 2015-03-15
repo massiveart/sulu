@@ -18,6 +18,7 @@ use DTL\Component\Content\Document\DocumentInterface;
 use Sulu\Component\Webspace\Manager\WebspaceManagerInterface;
 use Sulu\Component\Webspace\Analyzer\RequestAnalyzerInterface;
 use Sulu\Component\Localization\Localization;
+use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
 
 class SuluLocaleChooserTest extends ProphecyTestCase
 {
@@ -29,10 +30,12 @@ class SuluLocaleChooserTest extends ProphecyTestCase
         $this->webspace = $this->prophesize(Webspace::class);
         $this->document = $this->prophesize(DocumentInterface::class);
         $this->classMetadata = $this->prophesize(ClassMetadata::class);
+        $this->documentNodeHelper = $this->prophesize(DocumentNodeHelper::class);
 
         $this->chooser = new SuluLocaleChooser(
             $this->requestAnalyzer->reveal(),
-            $this->webspaceManager->reveal()
+            $this->webspaceManager->reveal(),
+            $this->documentNodeHelper->reveal()
         );
 
     }

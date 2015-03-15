@@ -92,6 +92,7 @@ class ContentMapper implements ContentMapperInterface
 
         if ($uuid) {
             $document = $this->getDocument($uuid, $locale);
+            $structureType = $document->getDocumentType();
         }
 
         $form = $this->formFactory->create($structureType, $document, array(

@@ -42,6 +42,16 @@ abstract class BasePageDocument extends Document implements PageInterface
     protected $redirectType;
 
     /**
+     * @var PageInterface
+     */
+    protected $redirectTarget;
+
+    /**
+     * @var string
+     */
+    protected $redirectExternal;
+
+    /**
      * @var boolean
      */
     protected $shadowLocaleEnabled = false;
@@ -108,9 +118,41 @@ abstract class BasePageDocument extends Document implements PageInterface
     /**
      * {@inheritDoc}
      */
-    public function setRedirectType($redirectType)
+    public function setRedirectType($redirectType = null)
     {
         $this->redirectType = $redirectType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRedirectExternal() 
+    {
+        return $this->redirectExternal;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setRedirectExternal($redirectExternal = null)
+    {
+        $this->redirectExternal = $redirectExternal;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRedirectTarget() 
+    {
+        return $this->redirectTarget;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setRedirectTarget(PageInterface $redirectTarget = null)
+    {
+        $this->redirectTarget = $redirectTarget;
     }
     
     /**

@@ -44,9 +44,15 @@ class PageDocumentType extends AbstractDocumentType
         $builder->add('resourceLocator', 'text');
         $builder->add('navigationContexts', 'collection', array(
             'type' => 'text',
+            'allow_add' => true,
+            'allow_remove' => true,
         ));
         $builder->add('redirectType', 'text');
+        $builder->add('redirectTarget', 'document_object');
+        $builder->add('redirectExternal', 'text');
         $builder->add('workflowState', 'text');
+        $builder->add('shadowLocaleEnabled', 'checkbox');
+        $builder->add('shadowLocale', 'text'); // TODO: Should be choice of available shadow locales
 
         parent::buildForm($builder, $options);
     }

@@ -94,17 +94,6 @@ class NameSubscriberTest extends ProphecyTestCase
         $this->subscriber->prePersist($this->event->reveal());
     }
 
-    private function initNewParent()
-    {
-        $this->event->getObject()->willReturn($this->document->reveal());
-        $this->document->getTitle()->willReturn('foo');
-        $this->document->getParent()->willReturn($this->parentDocument);
-        $this->documentManager->getClassMetadata(
-            get_class($this->document->reveal())
-        )->willReturn($this->classMetadata->reveal());
-        $this->slugifier->slugify('foo')->willReturn('foo');
-    }
-
     public function testNewParent()
     {
         $this->initNewParent();
@@ -154,5 +143,16 @@ class NameSubscriberTest extends ProphecyTestCase
         )->shouldBeCalled();
 
         $this->subscriber->prePersist($this->event->reveal());
+    }
+
+    private function initNewParent()
+    {
+        $this->event->getObject()->willReturn($this->document->reveal());
+        $this->document->getTitle()->willReturn('foo');
+        $this->document->getParent()->willReturn($this->parentDocument);
+        $this->documentManager->getClassMetadata(
+            get_class($this->document->reveal())
+        )->willReturn($this->classMetadata->reveal());
+        $this->slugifier->slugify('foo')->willReturn('foo');
     }
 }

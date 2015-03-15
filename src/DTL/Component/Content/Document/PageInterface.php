@@ -32,6 +32,20 @@ interface PageInterface extends DocumentInterface
     public function getRedirectType();
 
     /**
+     * Return the target for the redirect.
+     *
+     * @return PageInterface
+     */
+    public function getRedirectTarget();
+
+    /**
+     * Return external link for external redirects
+     *
+     * @return string
+     */
+    public function getRedirectExternal();
+
+    /**
      *
     public function isRedirectType($type);
 

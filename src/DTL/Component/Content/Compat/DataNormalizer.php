@@ -21,7 +21,9 @@ class DataNormalizer
     public function normalize($data, $state, $parentUuid)
     {
         unset(
+            $data['type'],
             $data['creator'],
+            $data['linked'],
             $data['changer'],
             $data['breadcrumb'],
             $data['template'],
@@ -35,8 +37,7 @@ class DataNormalizer
             $data['hasSub'],
             $data['published'],
             $data['enabledShadowLanguages'],
-            $data['shadowOn'],
-            $data['shadowBaseLanguage'],
+            $data['shadowEnabled'],
             $data['publishedState'],
             $data['created'],
             $data['_embedded'],
@@ -49,8 +50,12 @@ class DataNormalizer
             'title' => $this->getAndUnsetValue($data, 'title'),
             'resourceLocator' => $this->getAndUnsetValue($data, 'url'),
             'redirectType' => $this->getAndUnsetRedirectType($data),
+            'redirectTarget' => $this->getAndUnsetValue($data, 'internal_link'),
+            'redirectExternal' => $this->getAndUnsetValue($data, 'external'),
             'navigationContexts' => $this->getAndUnsetValue($data, 'navContexts'),
             'workflowState' => $this->getWorkflowState($state),
+            'shadowLocaleEnabled' => (boolean) $this->getAndUnsetValue($data, 'shadowOn'),
+            'shadowLocale' => $this->getAndUnsetValue($data, 'shadowBaseLanguage'),
             'content' => $data,
         );
 

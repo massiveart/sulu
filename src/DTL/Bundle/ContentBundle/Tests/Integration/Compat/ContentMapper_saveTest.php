@@ -6,6 +6,8 @@ use Sulu\Component\Content\Mapper\ContentMapperRequest;
 use Sulu\Component\Content\StructureInterface;
 use DTL\Bundle\ContentBundle\Tests\Integration\BaseTestCase;
 use DTL\Bundle\ContentBundle\Document\PageDocument;
+use Sulu\Component\Content\Structure;
+use DTL\Component\Content\Document\PageInterface;
 
 class ContentMapper_saveTest extends BaseTestCase
 {
@@ -188,5 +190,63 @@ class ContentMapper_saveTest extends BaseTestCase
             'en',
             1
         );
+    }
+
+    /**
+     * Can save set the redirect type to internal and specify
+     * an internal link target.
+     */
+    public function testSaveRedirectInternal()
+    {
+        $target = $this->saveTestPageWithData(array(
+            'title' => 'Hello world',
+            'url' => '/hello',
+        ));
+
+        $structure = $this->saveTestPageWithData(array(
+            'title' => 'My redirect',
+            'nodeType' => Structure::NODE_TYPE_INTERNAL_LINK,
+            'internal_link' => $target->getUuid(),
+            'url' => '/redirect',
+        ));
+
+        $this->documentManager->clear();
+        $document = $this->documentManager->find(null, $structure->getUuid());
+
+        $this->assertEquals(PageInterface::REDIRECT_TYPE_INTERNAL, $document->getRedirectType());
+        $this->assertInstanceOf('DTL\Component\Content\Document\DocumentInterface', $document->getRedirectTarget());
+        $this->assertEquals($target->getUuid(), $document->getRedirectTarget()->getUuid());
+    }
+
+    /**
+     * Can save set the redirect type to external and specify
+     * an external link target.
+     */
+    public function testSaveRedirectExternal()
+    {
+        $structure = $this->saveTestPageWithData(array(
+            'title' => 'My redirect',
+            'nodeType' => Structure::NODE_TYPE_EXTERNAL_LINK,
+            'external' => 'http://www.dantleech.com',
+            'url' => '/redirect',
+        ));
+
+        $this->documentManager->clear();
+        $document = $this->documentManager->find(null, $structure->getUuid());
+
+        $this->assertEquals(PageInterface::REDIRECT_TYPE_EXTERNAL, $document->getRedirectType());
+        $this->assertEquals('http://www.dantleech.com', $document->getRedirectExternal());
+    }
+
+    private function saveTestPageWithData($data)
+    {
+        $request = ContentMapperRequest::create('page')
+            ->setTemplateKey('contact')
+            ->setWebspaceKey('sulu_io')
+            ->setUserId(1)
+            ->setState(StructureInterface::STATE_PUBLISHED)
+            ->setLocale('de')
+            ->setData($data);
+        return $this->contentMapper->saveRequest($request);
     }
 }

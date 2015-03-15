@@ -8,9 +8,12 @@
 
     <mapped-superclass name="DTL\Bundle\ContentBundle\Document\BasePageDocument">
         <field name="published" type="date" translated="true" nullable="true"/>
-        <field name="navigationContexts" property="nav_contexts" type="string" multivalue="true" translated="true" nullable="true" />
-        <field name="shadowLocaleEnabled" property="shadow_on" type="boolean" translated="true" />
-        <field name="shadowLocale" property="shadow_locale" type="string" nullable="true" translated="true"/>
+        <field name="navigationContexts" property="nav-contexts" type="string" multivalue="true" translated="true" nullable="true" />
+        <field name="shadowLocaleEnabled" property="shadow-on" type="boolean" translated="true" />
+        <field name="shadowLocale" property="shadow-locale" type="string" nullable="true" translated="true"/>
+        <field name="redirectType" property="redirect-type" type="string" nullable="true" translated="true"/>
+        <field name="redirectExternal" property="redirect-external" type="string" nullable="true" translated="true"/>
+        <reference-one name="redirectTarget" property="nsys:redirect-target" translated="true"/>
     </mapped-superclass>
 
 </doctrine-mapping>
