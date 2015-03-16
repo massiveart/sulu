@@ -44,6 +44,8 @@ class ContentMapper_saveTest extends BaseTestCase
     }
 
     /**
+     * Can save without crashing
+     *
      * @dataProvider provideSave
      */
     public function testSave($request)
@@ -52,7 +54,7 @@ class ContentMapper_saveTest extends BaseTestCase
     }
 
     /**
-     * Updates the node with a different language
+     * Can update a node in a different locale
      */
     public function testSaveUpdate()
     {
@@ -89,6 +91,9 @@ class ContentMapper_saveTest extends BaseTestCase
         $this->contentMapper->saveRequest($request);
     }
 
+    /**
+     * Can save a document with an assigned parent
+     */
     public function testSaveParent()
     {
         $request = ContentMapperRequest::create('page')
@@ -147,6 +152,10 @@ class ContentMapper_saveTest extends BaseTestCase
         $this->assertNotNull($leafDocument, 'Updating existing document no parent specified');
     }
 
+    /**
+     * Can save the start page using the dedicated ContentMapper
+     * saveStartPage method.
+     */
     public function testSaveStartPage()
     {
         // this is actually the data sent for mapping ...
@@ -238,6 +247,47 @@ class ContentMapper_saveTest extends BaseTestCase
         $this->assertEquals('http://www.dantleech.com', $document->getRedirectExternal());
     }
 
+    /**
+     * Can save a shadow page
+     */
+    public function testSaveShadow()
+    {
+        $structure = $this->saveTestPageWithData(array(
+            'title' => 'Shadow',
+            'nodeType' => Structure::NODE_TYPE_INTERNAL_LINK,
+            'url' => '/shadow',
+            'shadowOn' => true,
+            'shadowBaseLanguage' => 'fr',
+        ));
+
+        $this->documentManager->clear();
+        $document = $this->documentManager->find(null, $structure->getUuid());
+
+        $this->assertTrue($document->getShadowLocaleEnabled());
+        $this->assertEquals('fr', $document->getShadowLocale());
+    }
+
+    /**
+     * Can set navigation contexts
+     */
+    public function testSaveNavigationContexts()
+    {
+        $structure = $this->saveTestPageWithData(array(
+            'title' => 'Navigation',
+            'nodeType' => Structure::NODE_TYPE_INTERNAL_LINK,
+            'url' => '/navigation',
+            'navContexts' => array('footer', 'navigation'),
+        ));
+
+        $this->documentManager->clear();
+        $document = $this->documentManager->find(null, $structure->getUuid());
+
+        $this->assertEquals(array('footer', 'navigation'), $document->getNavigationContexts());
+    }
+
+    /**
+     * Create a simple page with the given data
+     */
     private function saveTestPageWithData($data)
     {
         $request = ContentMapperRequest::create('page')

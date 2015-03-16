@@ -12,11 +12,11 @@ namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Property;
 
 use DTL\Bundle\ContentBundle\Form\Type\Content\ResizeableType;
 
-class CollectionTypeTest extends AbstractPropertyTypeTestCase
+class PropertyCollectionTypeTest extends AbstractPropertyTypeTestCase
 {
     public function getPropertyAlias()
     {
-        return 'collection';
+        return 'property_collection';
     }
 
     /**

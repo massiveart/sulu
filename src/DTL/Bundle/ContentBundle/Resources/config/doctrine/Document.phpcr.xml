@@ -20,6 +20,10 @@
         <field name="created" type="date" translated="true" />
         <field name="changed" type="date" translated="true" />
         <field name="workflowState" property="workflow-state" type="long" translated="true" nullable="true"/>
+
+        <!-- Note this is only here so that the UnitOfWork dispatches the PrePersist/PreUpdate events.
+             We can remove it once https://github.com/doctrine/phpcr-odm/issues/417 is implemented. -->
+        <field name="content" property="content" type="array" translated="true" nullable="true"/>
     </mapped-superclass>
 
 </doctrine-mapping>

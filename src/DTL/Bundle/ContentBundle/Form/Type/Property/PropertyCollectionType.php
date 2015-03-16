@@ -24,7 +24,7 @@ use DTL\Bundle\ContentBundle\Form\EventListener\ResizeableListener;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class CollectionType extends AbstractType implements PropertyTypeInterface
+class PropertyCollectionType extends AbstractType implements PropertyTypeInterface
 {
     /**
      * {@inheritdoc}
@@ -85,6 +85,6 @@ class CollectionType extends AbstractType implements PropertyTypeInterface
      */
     public function getName()
     {
-        return 'collection';
+        return 'property_collection';
     }
 }

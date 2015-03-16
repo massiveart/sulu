@@ -8,8 +8,8 @@
             <tag name="form.type" alias="property" />
         </service>
 
-        <service id="dtl_content.form.type.collection" class="DTL\Bundle\ContentBundle\Form\Type\Property\CollectionType">
-            <tag name="form.type" alias="collection" />
+        <service id="dtl_content.form.type.property_collection" class="DTL\Bundle\ContentBundle\Form\Type\Property\PropertyCollectionType">
+            <tag name="form.type" alias="property_collection" />
         </service>
 
         <service id="dtl_content.form.type.resource_locator" class="DTL\Bundle\ContentBundle\Form\Type\Property\ResourceLocatorType">

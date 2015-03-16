@@ -73,7 +73,7 @@ class StructureFormTypeFactory
         ));
 
         foreach ($structure->getChildren() as $name => $property) {
-            $builder->add($name, 'collection', array(
+            $builder->add($name, 'property_collection', array(
                 'type' => $property->type,
                 'options' => $property->parameters,
                 'label' => $property->title,

@@ -45,7 +45,7 @@ class PageDocumentType extends AbstractDocumentType
         $builder->add('navigationContexts', 'collection', array(
             'type' => 'text',
             'allow_add' => true,
-            'allow_remove' => true,
+            'allow_delete' => true,
         ));
         $builder->add('redirectType', 'text');
         $builder->add('redirectTarget', 'document_object');
