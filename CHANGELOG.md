@@ -2,6 +2,7 @@ CHANGELOG for Sulu
 ==================
 
 * dev-develop
+    * BUGFIX      #922 [ContentBundle]   Fixed URL Generation after copying language of a child node
     * FEATURE     #732 [All]             Automatic mapping and assignation of changer, creator, changed and changer.
     * FEATURE     #891 [All]             Added (css) class property to field descriptors, updated husky and fixed an issue when merging settings with matchings
     * FEATURE     #884 [MediaBundle]     Loaders on media delete and media edit
