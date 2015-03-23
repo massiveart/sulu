@@ -2,6 +2,14 @@
 
 ## dev-develop
 
+### Contact
+
+CRM-Components moved to a new bundle. If you enable the new Bundle everything should work as before.
+
+BC-Breaks are:
+
+ * AccountCategory replaced with standard Categories here is a migration needed
+
 ### Security
 
 The names of some classes have changed like shown in the following table:
