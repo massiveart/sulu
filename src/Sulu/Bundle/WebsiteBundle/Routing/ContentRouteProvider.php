@@ -66,12 +66,13 @@ class ContentRouteProvider implements RouteProviderInterface
 
         if ($this->requestAnalyzer->getMatchType() == RequestAnalyzerInterface::MATCH_TYPE_REDIRECT
             || $this->requestAnalyzer->getMatchType() == RequestAnalyzerInterface::MATCH_TYPE_PARTIAL
+            || preg_match('/\/$/', $resourceLocator)
         ) {
             // redirect by information from webspace config
             $route = new Route(
-                $request->getRequestUri(), array(
+                $request->getPathInfo(), array(
                     '_controller' => 'SuluWebsiteBundle:Default:redirectWebspace',
-                    'url' => $this->requestAnalyzer->getPortalUrl(),
+                    'url' => $this->requestAnalyzer->getRedirect(),
                     'redirect' => $this->requestAnalyzer->getRedirect()
                 )
             );
@@ -87,8 +88,9 @@ class ContentRouteProvider implements RouteProviderInterface
             );
 
             // redirect *.html to * (without url)
+
             $route = new Route(
-                $request->getRequestUri(), array(
+                $request->getPathInfo(), array(
                     '_controller' => 'SuluWebsiteBundle:Default:redirect',
                     'url' => $url
                 )
@@ -113,7 +115,7 @@ class ContentRouteProvider implements RouteProviderInterface
                 ) {
                     // redirect to linked page
                     $route = new Route(
-                        $request->getRequestUri(), array(
+                        $request->getPathInfo(), array(
                             '_controller' => 'SuluWebsiteBundle:Default:redirect',
                             'url' => $this->requestAnalyzer->getResourceLocatorPrefix() . $content->getResourceLocator()
                         )
@@ -143,7 +145,7 @@ class ContentRouteProvider implements RouteProviderInterface
 
                 // redirect to new url
                 $route = new Route(
-                    $request->getRequestUri(), array(
+                    $request->getPathInfo(), array(
                         '_controller' => 'SuluWebsiteBundle:Default:redirect',
                         'url' => $newUrl
                     )

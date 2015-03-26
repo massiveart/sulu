@@ -73,17 +73,21 @@ class DefaultController extends WebsiteController
      */
     protected function resolveRedirectUrl($redirectUrl, $requestUri)
     {
-        $redirectInfo = $this->parseUrl($redirectUrl);
         $requestInfo = $this->parseUrl($requestUri);
 
-        $url = sprintf('%s://%s', $requestInfo['scheme'], $redirectInfo['host']);
+        $url = '';
 
-        if (isset($requestInfo['port'])) {
-            $url .= ':' . $requestInfo['port'];
-        }
+        if ($redirectUrl) {
+            $redirectInfo = $this->parseUrl($redirectUrl);
+            $url .= sprintf('%s://%s', $requestInfo['scheme'], $redirectInfo['host']);
 
-        if (isset($redirectInfo['path'])) {
-            $url .= $redirectInfo['path'];
+            if (isset($requestInfo['port'])) {
+                $url .= ':' . $requestInfo['port'];
+            }
+
+            if (isset($redirectInfo['path'])) {
+                $url .= $redirectInfo['path'];
+            }
         }
 
         if (isset($requestInfo['path'])) {
@@ -98,7 +102,6 @@ class DefaultController extends WebsiteController
         if (isset($requestInfo['fragment'])) {
             $url .= '#' . $requestInfo['fragment'];
         }
-
 
         return $url;
     }
