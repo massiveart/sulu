@@ -62,7 +62,6 @@ class DefaultControllerTest extends \PHPUnit_Framework_TestCase
             array('sulu-redirect.lo/', 'sulu-redirect.lo', 'sulu.lo', 'http://sulu.lo'),
             array('http://sulu.lo:8002/', 'sulu.lo', 'sulu.lo/en', 'http://sulu.lo:8002/en'),
             array('http://sulu.lo/articles', 'sulu.lo/en', 'sulu.lo/de', 'http://sulu.lo/de/articles'),
-            array('http://sulu.lo/de/articles/', 'sulu.lo/en', 'sulu.lo/de', 'http://sulu.lo/de/articles'),
         );
     }
 
