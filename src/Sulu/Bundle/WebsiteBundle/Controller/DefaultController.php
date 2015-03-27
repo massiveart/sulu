@@ -75,11 +75,15 @@ class DefaultController extends WebsiteController
     {
         $requestInfo = $this->parseUrl($requestUri);
 
-        $url = '';
+        $url = sprintf('%s://%s', $requestInfo['scheme'], $requestInfo['host']);
+
+        if (isset($requestInfo['port'])) {
+            $url .= ':' . $requestInfo['port'];
+        }
 
         if ($redirectUrl) {
             $redirectInfo = $this->parseUrl($redirectUrl);
-            $url .= sprintf('%s://%s', $requestInfo['scheme'], $redirectInfo['host']);
+            $url = sprintf('%s://%s', $requestInfo['scheme'], $redirectInfo['host']);
 
             if (isset($requestInfo['port'])) {
                 $url .= ':' . $requestInfo['port'];
