@@ -22,6 +22,7 @@ class ScaleCommand implements CommandInterface
         $size = $image->getSize();
 
         $retina = isset($parameters['retina']) && $parameters['retina'] != 'false' ? 2 : 1;
+        $forceRatio = !isset($parameters['forceRatio']) || $parameters['forceRatio'] != 'false' ? true : false;
 
         $newWidth = isset($parameters['x']) ? intval($parameters['x']) * $retina : null;
         $newHeight = isset($parameters['y']) ? intval($parameters['y']) * $retina : null;
@@ -32,6 +33,24 @@ class ScaleCommand implements CommandInterface
         }
         if ($newWidth == null) {
             $newWidth = $size->getWidth() / $size->getHeight() * $newHeight;
+        }
+
+        if ($forceRatio) {
+            if ($newWidth > $size->getWidth()) {
+                if ($newHeight) {
+                    $newHeight = $newHeight / $newWidth * $size->getWidth();
+                }
+
+                $newWidth = $size->getWidth();
+            }
+
+            if ($newHeight > $size->getHeight()) {
+                if ($newWidth) {
+                    $newWidth = $newWidth / $newHeight * $size->getHeight();
+                }
+
+                $newHeight = $size->getHeight();
+            }
         }
 
         $image = $image->thumbnail(new Box($newWidth, $newHeight), $mode);
