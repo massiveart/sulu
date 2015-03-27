@@ -2,6 +2,7 @@ CHANGELOG for Sulu
 ==================
 
 * dev-develop
+    * BUGFIX      #948 [MediaBundle]     Add ForceRation Parameter to Scale Command
     * FEATURE     #931 [MediaBundle]     Version History Tab
     * FEATURE     #732 [All]             Automatic mapping and assignation of changer, creator, changed and changer.
     * FEATURE     #891 [All]             Added (css) class property to field descriptors, updated husky and fixed an issue when merging settings with matchings
