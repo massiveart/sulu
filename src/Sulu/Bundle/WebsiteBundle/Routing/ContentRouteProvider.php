@@ -272,6 +272,6 @@ class ContentRouteProvider implements RouteProviderInterface
      */
     protected function urlHasEndingTrailingSlash($resourceLocator)
     {
-        return preg_match('/\/$/', $resourceLocator);
+        return preg_match('/\/$/', $resourceLocator) && $resourceLocator != '/';
     }
 }
