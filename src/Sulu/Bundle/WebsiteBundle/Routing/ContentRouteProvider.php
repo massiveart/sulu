@@ -213,7 +213,7 @@ class ContentRouteProvider implements RouteProviderInterface
         $route = new Route(
             $request->getPathInfo(), array(
                 '_controller' => 'SuluWebsiteBundle:Default:redirectWebspace',
-                'url' => $this->requestAnalyzer->getRedirect(),
+                'url' => $this->requestAnalyzer->getPortalUrl(),
                 'redirect' => $this->requestAnalyzer->getRedirect()
             )
         );
