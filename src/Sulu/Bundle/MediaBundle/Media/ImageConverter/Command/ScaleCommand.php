@@ -59,7 +59,7 @@ class ScaleCommand implements CommandInterface
         }
 
         // if image is smaller keep ratio
-        // e.g. when a square image is requested (200x200) a square and the original image is smaller (150x100)
+        // e.g. when a square image is requested (200x200) and the original image is smaller (150x100)
         //      it still returns a squared image (100x100)
         if ($parameters['forceRatio']) {
             if ($newWidth > $size->getWidth()) {
