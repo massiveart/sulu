@@ -210,15 +210,13 @@ class ContentRouteProvider implements RouteProviderInterface
     protected function getRedirectWebSpaceRoute(Request $request)
     {
         // redirect by information from webspace config
-        $route = new Route(
+        return new Route(
             $request->getPathInfo(), array(
                 '_controller' => 'SuluWebsiteBundle:Default:redirectWebspace',
                 'url' => $this->requestAnalyzer->getPortalUrl(),
                 'redirect' => $this->requestAnalyzer->getRedirect()
             )
         );
-
-        return $route;
     }
 
     /**
@@ -229,14 +227,12 @@ class ContentRouteProvider implements RouteProviderInterface
     protected function getRedirectRoute(Request $request, $url)
     {
         // redirect to linked page
-        $route = new Route(
+        return new Route(
             $request->getPathInfo(), array(
                 '_controller' => 'SuluWebsiteBundle:Default:redirect',
                 'url' => $url
             )
         );
-
-        return $route;
     }
 
     /**
