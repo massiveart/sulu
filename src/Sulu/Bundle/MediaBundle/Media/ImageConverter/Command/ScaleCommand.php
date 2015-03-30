@@ -21,8 +21,8 @@ class ScaleCommand implements CommandInterface
     {
         $size = $image->getSize();
 
-        $retina = isset($parameters['retina']) && $parameters['retina'] != 'false' ? 2 : 1;
-        $forceRatio = !isset($parameters['forceRatio']) || $parameters['forceRatio'] != 'false' ? true : false;
+        $retina = isset($parameters['retina']) && $parameters['retina'] ? 2 : 1;
+        $forceRatio = !isset($parameters['forceRatio']) ? true : $parameters['forceRatio'];
 
         $newWidth = isset($parameters['x']) ? intval($parameters['x']) * $retina : null;
         $newHeight = isset($parameters['y']) ? intval($parameters['y']) * $retina : null;
