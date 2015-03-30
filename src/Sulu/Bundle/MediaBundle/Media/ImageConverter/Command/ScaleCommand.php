@@ -64,10 +64,10 @@ class ScaleCommand implements CommandInterface
         if ($parameters['forceRatio']) {
             if ($newWidth > $size->getWidth()) {
                 list($newHeight, $newWidth) = $this->getSizeInSameRatio(
-                                                        $newHeight,
-                                                        $newWidth,
-                                                        $size->getWidth()
-                                                    );
+                    $newHeight,
+                    $newWidth,
+                    $size->getWidth()
+                );
             }
 
             if ($newHeight > $size->getHeight()) {
