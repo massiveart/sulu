@@ -13,12 +13,8 @@ namespace Sulu\Bundle\MediaBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-/**
- * This is the class that validates and merges configuration from your app/config files.
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
- */
 class Configuration implements ConfigurationInterface
 {
     /**
@@ -159,6 +155,32 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end();
 
+        $this->addObjectsSection($rootNode);
+
         return $treeBuilder;
+    }
+
+    /**
+     * Adds `objects` section.
+     *
+     * @param ArrayNodeDefinition $node
+     */
+    private function addObjectsSection(ArrayNodeDefinition $node)
+    {
+        $node
+            ->children()
+                ->arrayNode('objects')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->arrayNode('media')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('model')->defaultValue('Sulu\Bundle\MediaBundle\Entity\Media')->end()
+                                ->scalarNode('repository')->defaultValue('Sulu\Bundle\MediaBundle\Entity\MediaRepository')->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
     }
 }

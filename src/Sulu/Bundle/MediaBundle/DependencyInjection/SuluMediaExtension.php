@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Sulu\Bundle\PersistenceBundle\DependencyInjection\PersistenceExtensionTrait;
 
 /**
  * This is the class that loads and manages your bundle configuration.
@@ -24,6 +25,8 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  */
 class SuluMediaExtension extends Extension implements PrependExtensionInterface
 {
+    use PersistenceExtensionTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -146,5 +149,7 @@ class SuluMediaExtension extends Extension implements PrependExtensionInterface
 
             $loader->load('search.xml');
         }
+
+        $this->configurePersistence($config['objects'], $container);
     }
 }
